@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Bakalarka pokus</string>
+    <string name="open"> Open</string>
+    <string name="close"> Close</string>
+    <string name="Search"> Hledat</string>
+    <string name="Add">Přidat</string>
+    <string name="rationale_camera">Tato aplikace potřebuje přístup k fotoaparátu</string>
+</resources>
