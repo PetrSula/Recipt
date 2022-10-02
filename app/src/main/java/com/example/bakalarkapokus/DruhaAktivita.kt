@@ -34,6 +34,8 @@ class DruhaAktivita :AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.spiz)
 
+        println("Do something!")
+
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navView = findViewById<NavigationView>(R.id.navView)
 

@@ -54,7 +54,7 @@ class ReceptActivita: AppCompatActivity() {
             val intent = Intent(this, AddRecept::class.java)
             startActivity(intent)
         }
-        showRecept(2)
+        //showRecept(2)
 
 
        /* tvPostup.text = "Maso poprašte mletou paprikou a vmasírujte ji do něj ze všech stran. Poté maso osolte a opepřete (asi 1/4 lžičkou od každého).\n" +

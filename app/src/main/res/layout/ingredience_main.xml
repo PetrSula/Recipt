@@ -9,7 +9,7 @@
     android:visibility="visible"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".DruhaAktivita"
-    tools:showIn="@layout/Spiz"
+    tools:showIn="@layout/spiz"
     tools:visibility="visible">
 
     <LinearLayout
@@ -22,7 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.25"
-            android:text="Name"
+            android:text="Název"
             android:textSize="18sp" />
 
         <AutoCompleteTextView
@@ -30,7 +30,55 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.75"
-            android:hint="Surovina" />
+            android:hint="Suroviny" />
+
+    </LinearLayout>
+
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="horizontal"-->
+<!--        style="@style/Widget.AppCompat.Spinner.DropDown.ActionBar">-->
+
+<!--        <TextView-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="0.25"-->
+<!--            android:text="Množství"-->
+<!--            android:textSize="18sp" />-->
+
+<!--        <AutoCompleteTextView-->
+<!--            android:id="@+id/mnozstvi"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="0.75"-->
+<!--            android:text="kg"-->
+<!--            />-->
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:text="Množství"
+                    android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/at_pridatmnozstvi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:hint="Množství" />
+
     </LinearLayout>
 
 

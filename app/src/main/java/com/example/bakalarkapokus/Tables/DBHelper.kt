@@ -133,7 +133,7 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
     }
 
     fun selectItemSPIZ(name: String): String{
-        val selecQuery = "SELECT NAME FROM " + TABLE_SPIZ  +"where NAME =" + "'" + name + "'"
+        val selecQuery = "SELECT NAME FROM " + TABLE_SPIZ  +" where NAME =" + "'" + name + "'"
         val DB = this.readableDatabase
         var result :String = ""
 
@@ -303,9 +303,9 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
         return succes
     }
 
-    fun selectSUROVINYrecept(int: Int): ArrayList<SQLdata.SurovinyRecept>{
-
-    }
+//    fun selectSUROVINYrecept(int: Int): ArrayList<SQLdata.SurovinyRecept>{
+//
+//    }
 
     companion object{
         private val DATABASE_NAME = "MyDB"
