@@ -22,8 +22,7 @@ import kotlinx.android.synthetic.main.spiz.*
 import kotlinx.android.synthetic.main.dialog_update.*
 import kotlinx.android.synthetic.main.ingredience_main.*
 import android.content.DialogInterface
-
-
+import android.widget.Spinner
 
 
 class DruhaAktivita :AppCompatActivity(){
@@ -34,10 +33,10 @@ class DruhaAktivita :AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.spiz)
 
-        println("Do something!")
-
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navView = findViewById<NavigationView>(R.id.navView)
+//        val spinner: Spinner = (findViewById(R.id.sp_pridatmnozstvi))
+        val autoTextView : AutoCompleteTextView = findViewById(R.id.at_pridatsurovinu)
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open,R.string.close )
         drawerLayout.addDrawerListener(toggle)
@@ -61,8 +60,14 @@ class DruhaAktivita :AppCompatActivity(){
             }
         }
         //AutoCompleteTeextView
+        // Naplnění SPINNERu
+//        ArrayAdapter.createFromResource(
+//            this,R.array.quantity,android.R.layout.simple_spinner_item).also { adapter ->
+//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//            spinner.adapter = adapter
+//        }
         //ArrayAdapter<>
-        val autoTextView : AutoCompleteTextView = findViewById(R.id.at_pridatsurovinu)
+
         val neco = getIngrediences()
         val adapter = ArrayAdapter(this,android.R.layout.simple_list_item_1,neco)
         autoTextView.threshold=1

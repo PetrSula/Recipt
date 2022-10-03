@@ -71,13 +71,19 @@
                     android:layout_weight="0.25"
                     android:text="Množství"
                     android:textSize="18sp" />
-
-        <Spinner
+        <AutoCompleteTextView
             android:id="@+id/at_pridatmnozstvi"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.75"
+            android:layout_weight="0.5"
             android:hint="Množství" />
+
+        <Spinner
+            android:id="@+id/sp_pridatmnozstvi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/quantity"
+            android:layout_weight="0.25" />
 
     </LinearLayout>
 
