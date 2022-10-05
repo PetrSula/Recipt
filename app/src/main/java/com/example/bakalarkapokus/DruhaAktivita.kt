@@ -35,7 +35,7 @@ class DruhaAktivita :AppCompatActivity(){
 
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navView = findViewById<NavigationView>(R.id.navView)
-//        val spinner: Spinner = (findViewById(R.id.sp_pridatmnozstvi))
+        val spinner: Spinner = (findViewById(R.id.sp_pridatmnozstvi))
         val autoTextView : AutoCompleteTextView = findViewById(R.id.at_pridatsurovinu)
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open,R.string.close )
@@ -60,7 +60,8 @@ class DruhaAktivita :AppCompatActivity(){
             }
         }
         //AutoCompleteTeextView
-        // Naplnění SPINNERu
+
+
 //        ArrayAdapter.createFromResource(
 //            this,R.array.quantity,android.R.layout.simple_spinner_item).also { adapter ->
 //            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -74,23 +75,30 @@ class DruhaAktivita :AppCompatActivity(){
         autoTextView.setAdapter(adapter)
 
 
+
+
         getIngrediences()
 
         // Lister pro Přidat záznam surovina
         btn_AddSpiz.setOnClickListener{
             val name = at_pridatsurovinu.text.toString().trim()
-            val addOK = DBHelper(this).selectItemSPIZ(name)
-            if (addOK.isEmpty()){
-                pridatZaznam()
-            }else{
-                val alertDialog = AlertDialog.Builder(this).create()
-                alertDialog.setTitle("Alert")
-                alertDialog.setMessage("Ingredience je již ve Spíži")
-                alertDialog.setButton(
-                    AlertDialog.BUTTON_NEUTRAL, "OK"
-                ) { dialog, which -> dialog.dismiss() }
-                alertDialog.show()
-            }
+            // Naplnění SPINNERu
+            val typeQuantity: String = spinner.selectedItem.toString()
+            val quantity = at_pridatmnozstvi.text.toString().trim()
+//            val addOK = DBHelper(this).selectItemSPIZ(name)
+            val final_quaintity = quantity  + ' ' + typeQuantity
+            Toast.makeText(applicationContext, final_quaintity, Toast.LENGTH_LONG).show()
+//            if (addOK.isEmpty()){
+//                pridatZaznam()
+//            }else{
+//                val alertDialog = AlertDialog.Builder(this).create()
+//                alertDialog.setTitle("Alert")
+//                alertDialog.setMessage("Ingredience je již ve Spíži")
+//                alertDialog.setButton(
+//                    AlertDialog.BUTTON_NEUTRAL, "OK"
+//                ) { dialog, which -> dialog.dismiss() }
+//                alertDialog.show()
+//            }
 
         }
         // volání funkce pro naplnění RecicleView
