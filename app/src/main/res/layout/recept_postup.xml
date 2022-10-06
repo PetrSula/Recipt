@@ -12,8 +12,10 @@
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -47,6 +49,7 @@
                     android:padding="16dp"
                     android:src="@drawable/ic_add_a_photo" />
             </FrameLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_title"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -56,13 +59,13 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Title"
-                app:hintTextColor="@color/black"
-                app:helperText="Povinné*"
                 app:counterEnabled="true"
                 app:counterMaxLength="50"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/ic_error"
+                app:helperText="Povinné*"
                 app:helperTextTextColor="@color/background"
+                app:hintTextColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fl_select_image">
@@ -72,8 +75,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:textColor="@color/purple_200"
                     android:maxLength="50"
+                    android:textColor="@color/purple_200"
                     android:textSize="15dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -147,7 +150,8 @@
                 android:padding="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/til_category"
                 tools:layout_editor_absoluteX="340dp"
-                tools:visibility="gone"/>
+                tools:visibility="gone" />
+
             <TextView
                 android:id="@+id/tvNoRecordsAvailable"
                 android:layout_width="match_parent"
@@ -182,8 +186,6 @@
                     android:textSize="15dp" />
 
 
-
-
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -192,7 +194,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:hint="množství"
                 app:hintTextColor="@color/purple_700"
@@ -202,25 +204,37 @@
 
                 <EditText
                     android:id="@+id/et_quantyti"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="top"
                     android:textColor="@color/purple_200"
-                    android:textSize="15dp"/>
+                    android:textSize="15dp"
+                    android:layout_weight="0.75"/>
 
-                <Button
-                    android:id="@+id/btn_addSurivina"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="24dp"
-                    android:text="Přidat Surovinu"
+                <Spinner
+                    android:id="@+id/sp_pridatmnozstvi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/quantity"
+                    android:layout_weight="0.25"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/et_quantyti" />
+                    app:layout_constraintLeft_toRightOf="@id/et_quantyti"
+                    android:textSize="15dp"/>
+
+
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btn_addSurivina"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:text="Přidat Surovinu"
+                app:layout_constraintTop_toBottomOf="@+id/tvaddQuantyti" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_cooking_time"
@@ -234,7 +248,7 @@
                 app:hintTextColor="@color/purple_700"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvaddQuantyti">
+                app:layout_constraintTop_toBottomOf="@id/btn_addSurivina">
 
                 <EditText
                     android:id="@+id/et_cooking_time"
@@ -264,12 +278,12 @@
 
                 <EditText
                     android:id="@+id/et_direction_to_cook"
-                    android:lines="8"
-                    android:minLines="4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
                     android:inputType="text"
+                    android:lines="8"
+                    android:minLines="4"
                     android:textColor="@color/purple_200"
                     android:textSize="15dp" />
 

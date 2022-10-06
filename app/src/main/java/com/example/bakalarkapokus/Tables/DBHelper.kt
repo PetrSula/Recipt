@@ -133,7 +133,7 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
     }
 
     fun selectItemSPIZ(name: String): String{
-        val selecQuery = "SELECT NAME FROM " + TABLE_SPIZ  +"where NAME =" + "'" + name + "'"
+        val selecQuery = "SELECT NAME FROM " + TABLE_SPIZ  +" where NAME =" + "'" + name + "'"
         val DB = this.readableDatabase
         var result :String = ""
 

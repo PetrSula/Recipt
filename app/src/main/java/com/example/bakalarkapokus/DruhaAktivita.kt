@@ -1,6 +1,7 @@
 package com.example.bakalarkapokus
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -22,6 +23,7 @@ import kotlinx.android.synthetic.main.spiz.*
 import kotlinx.android.synthetic.main.dialog_update.*
 import kotlinx.android.synthetic.main.ingredience_main.*
 import android.content.DialogInterface
+import android.view.inputmethod.InputMethodManager
 import android.widget.Spinner
 
 
@@ -85,20 +87,20 @@ class DruhaAktivita :AppCompatActivity(){
             // Naplnění SPINNERu
             val typeQuantity: String = spinner.selectedItem.toString()
             val quantity = at_pridatmnozstvi.text.toString().trim()
-//            val addOK = DBHelper(this).selectItemSPIZ(name)
+            val addOK = DBHelper(this).selectItemSPIZ(name)
             val final_quaintity = quantity  + ' ' + typeQuantity
-            Toast.makeText(applicationContext, final_quaintity, Toast.LENGTH_LONG).show()
-//            if (addOK.isEmpty()){
-//                pridatZaznam()
-//            }else{
-//                val alertDialog = AlertDialog.Builder(this).create()
-//                alertDialog.setTitle("Alert")
-//                alertDialog.setMessage("Ingredience je již ve Spíži")
-//                alertDialog.setButton(
-//                    AlertDialog.BUTTON_NEUTRAL, "OK"
-//                ) { dialog, which -> dialog.dismiss() }
-//                alertDialog.show()
-//            }
+            closeKeyboard(at_pridatmnozstvi)
+            if (addOK.isEmpty()){
+                pridatZaznam()
+            }else{
+                val alertDialog = AlertDialog.Builder(this).create()
+                alertDialog.setTitle("Alert")
+                alertDialog.setMessage("Ingredience je již ve Spíži")
+                alertDialog.setButton(
+                    AlertDialog.BUTTON_NEUTRAL, "OK"
+                ) { dialog, which -> dialog.dismiss() }
+                alertDialog.show()
+            }
 
         }
         // volání funkce pro naplnění RecicleView
@@ -110,6 +112,12 @@ class DruhaAktivita :AppCompatActivity(){
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun closeKeyboard(view: View){
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken,0)
+
     }
 
     private fun setupListofDataIntoRecyclerView(){
