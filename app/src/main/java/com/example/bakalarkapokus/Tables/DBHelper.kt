@@ -23,9 +23,17 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
                                                         "IMG BLOB)"
         val Create_table_INGREDIENCE =" CREATE TABLE INGREDIENCE (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                                                                     "NAME TEXT)"
+        val Create_table_SUROVINY_RECEPT = "CREATE TABLE " + TABLE_SUROVINY_RECEPT +
+                                                    "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                                                    INGREDIENCE_ID + " INTEGER,"+
+                                                    RECEPT_ID + " INTEGER,"+
+                                                    QUANTITY + " TEXT,"+
+                                                    "FOREIGN KEY" + "(" + INGREDIENCE_ID + ")" + " REFERENCES "+ TABLE_INGREDIENCE +"(" + ID + "),"+
+                                                    "FOREIGN KEY" + "(" + RECEPT_ID + ")" + " REFERENCES "+ TABLE_RECEPT +"(" + ID + ")"+ ")"
         db!!.execSQL(Create_table_SPIZ)
         db!!.execSQL(Create_table_INGREDIENCE)
-        db.execSQL(Create_table_RECEPT)
+        db!!.execSQL(Create_table_RECEPT)
+        db.execSQL(Create_table_SUROVINY_RECEPT)
 
     }
 

@@ -162,6 +162,8 @@
                 android:visibility="gone"
                 tools:visibility="visible" />
 
+
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tvAddSurovina"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -176,10 +178,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rv_addSuroviny">
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/et_AddSurovina"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="55dp"
                     android:gravity="top"
                     android:inputType="textMultiLine"
                     android:textColor="@color/purple_200"
@@ -188,44 +190,56 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tvaddQuantyti"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <LinearLayout
+                android:id="@+id/llquantity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:hint="množství"
-                app:hintTextColor="@color/purple_700"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvAddSurovina">
 
-                <EditText
-                    android:id="@+id/et_quantyti"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tvaddQuantyti"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="top"
-                    android:textColor="@color/purple_200"
-                    android:textSize="15dp"
-                    android:layout_weight="0.75"/>
+                    android:layout_weight="0.75"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="množství"
+                    app:hintTextColor="@color/purple_700">
+
+                    <EditText
+                        android:id="@+id/et_quantyti"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:textColor="@color/purple_200"
+                        android:textSize="15dp"
+                        android:layout_weight="0.75"/>
+
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Spinner
                     android:id="@+id/sp_pridatmnozstvi"
+                    style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:entries="@array/quantity"
                     android:layout_weight="0.25"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:spinnerMode="dropdown"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintLeft_toRightOf="@id/et_quantyti"
+                    app:layout_constraintLeft_toRightOf="@id/tvaddQuantyti"
                     android:textSize="15dp"/>
-
-
-
-            </com.google.android.material.textfield.TextInputLayout>
-
+            </LinearLayout>
             <Button
                 android:id="@+id/btn_addSurivina"
                 android:layout_width="match_parent"
@@ -234,7 +248,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:text="Přidat Surovinu"
-                app:layout_constraintTop_toBottomOf="@+id/tvaddQuantyti" />
+                app:layout_constraintTop_toBottomOf="@+id/llquantity" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_cooking_time"

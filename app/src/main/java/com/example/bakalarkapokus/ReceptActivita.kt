@@ -87,12 +87,12 @@ class ReceptActivita: AppCompatActivity() {
             .load(imgURI)
             .into(ivPicture)
 
-        val sur = ArrayList<SQLdata.Suroviny>()
-        sur.add(SQLdata.Suroviny(0,"kuřecí prsa",""))
-        sur.add(SQLdata.Suroviny(1,"červená mletá paprika",""))
-        sur.add(SQLdata.Suroviny(2,"sul",""))
-        sur.add(SQLdata.Suroviny(3,"máslo",""))
-        sur.add(SQLdata.Suroviny(4,"špenát",""))
+        val sur = ArrayList<SQLdata.RvSurovinyRecept>()
+        sur.add(SQLdata.RvSurovinyRecept(0,"kuřecí prsa","1000g"))
+        sur.add(SQLdata.RvSurovinyRecept(1,"červená mletá paprika","špetka"))
+        sur.add(SQLdata.RvSurovinyRecept(2,"sul",""))
+        sur.add(SQLdata.RvSurovinyRecept(3,"máslo","250g"))
+        sur.add(SQLdata.RvSurovinyRecept(4,"špenát","500g"))
 
         val adapter = ReceptAdapter(sur)
         rv_recept.adapter = adapter

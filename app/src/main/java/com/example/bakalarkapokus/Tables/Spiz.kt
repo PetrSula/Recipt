@@ -13,6 +13,7 @@ sealed class SQLdata {
         val id: Int,
         val title: String,
         val postup: String,
+//        val quantity: String = "",
         val img: String
     )
     data class Suroviny(
@@ -28,6 +29,11 @@ sealed class SQLdata {
         val id: Int,
         val ingredience_id : Int,
         val recept_id:Int,
+        val quantity: String
+    )
+    data class RvSurovinyRecept(
+        val id: Int,
+        val name: String,
         val quantity: String
     )
 }

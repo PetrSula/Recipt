@@ -7,19 +7,18 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.TextView
+import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -28,14 +27,10 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import com.example.bakalarkapokus.Recept.ReceptAdapter
 import com.example.bakalarkapokus.Recept.surovinyAdapter
 import com.example.bakalarkapokus.Tables.DBHelper
-import com.example.bakalarkapokus.Tables.Ingredience
 import com.example.bakalarkapokus.Tables.SQLdata
 import kotlinx.android.synthetic.main.dialog_img.*
-import kotlinx.android.synthetic.main.ingredience_main.*
-import kotlinx.android.synthetic.main.recept_main.*
 import kotlinx.android.synthetic.main.recept_postup.*
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
@@ -44,6 +39,7 @@ import java.io.IOException
 import java.io.OutputStream
 import java.util.*
 import kotlin.collections.ArrayList
+import com.example.bakalarkapokus.DruhaAktivita as DruhaAktivita
 
 val data = ArrayList<SQLdata.Suroviny>()
 var id_addSurovin = 0
@@ -56,7 +52,6 @@ class AddRecept: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.recept_postup)
-
 
         iv_add_dish_image.setOnClickListener{
             customImageSelectionDialog()
@@ -75,6 +70,10 @@ class AddRecept: AppCompatActivity() {
         rv_addSuroviny.adapter = adapter
 
     }
+
+    val adapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, data)
+    autoTextView.threshold=1
+    autoTextView.setAdapter(adapter)
 
 
     private fun customImageSelectionDialog() {
@@ -205,16 +204,32 @@ class AddRecept: AppCompatActivity() {
     }
 
     private fun addSurovina () {
+        val spinner: Spinner = (findViewById(R.id.sp_pridatmnozstvi))
         val name = et_AddSurovina.text.toString().trim()
         val quantyti = et_quantyti.text.toString().trim()
+        val typeQuantity: String = spinner.selectedItem.toString()
+        val final_quaintity = quantyti  + ' ' + typeQuantity
+        hideKeyboard(this)
         if (name.isNotEmpty()){
-            println(id_addSurovin)
-            id_addSurovin = id_addSurovin.inc()
-            data.add(SQLdata.Suroviny(id_addSurovin,name,quantyti))
-            et_AddSurovina.text.clear()
-            et_quantyti.text.clear()
-            //("přídat autocoplete ")
-            showSuroviny()
+            val addOK = data.any { it.name == name }
+            if (!addOK) {
+                pridatIngredien(name)
+                id_addSurovin = id_addSurovin.inc()
+                data.add(SQLdata.Suroviny(id_addSurovin,name,final_quaintity))
+                et_AddSurovina.text.clear()
+                et_quantyti.text.clear()
+                //("přídat autocoplete ")
+                showSuroviny()
+            }else{
+                val alertDialog = AlertDialog.Builder(this).create()
+                alertDialog.setTitle("Alert")
+                alertDialog.setMessage("Surovina se již nachází v receptu")
+                alertDialog.setButton(
+                    AlertDialog.BUTTON_NEUTRAL, "OK"
+                ) { dialog, which -> dialog.dismiss() }
+                alertDialog.show()
+            }
+
         }
     }
 
@@ -243,6 +258,17 @@ class AddRecept: AppCompatActivity() {
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(true)
         alertDialog.show()
+    }
+
+    fun pridatIngredien(name: String ) {
+//        val name = at_pridatsurovinu.text.toString().trim()
+        val DB = DBHelper(this)
+        val add = DB.selectINGREDIENCE(name)
+        if (add.isEmpty()){
+            val status = DB.insertDataINGREDIENCE(SQLdata.Ingredience(0,name))
+            if (status >1){
+            }
+        }
     }
 
     fun addRecept(){
@@ -286,11 +312,6 @@ class AddRecept: AppCompatActivity() {
             }
         }
 
-
-
-
-
-
         //("přidání ukládání surovin do tabulky ingredience")
         //("ošetřit přidání bez titulu, postupu či ingrediencí")
     }
@@ -319,6 +340,16 @@ class AddRecept: AppCompatActivity() {
         }
         return file.absolutePath
     }
+//    fun hideKeyboard() {
+//        val imm = this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+//        //Find the currently focused view, so we can grab the correct window token from it.
+//        var view = this.currentFocus
+//        //If no view currently has focus, create a new one, just so we can grab a window token from it
+//        if (view == null) {
+//            view = View(this)
+//        }
+//        imm.hideSoftInputFromWindow(view.windowToken, 0)
+//    }
 
 
     companion object {

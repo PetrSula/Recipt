@@ -1,5 +1,6 @@
 package com.example.bakalarkapokus
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -7,8 +8,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
@@ -19,12 +22,8 @@ import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.ItemAdapter
 import com.example.bakalarkapokus.Tables.SQLdata
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.spiz.*
 import kotlinx.android.synthetic.main.dialog_update.*
 import kotlinx.android.synthetic.main.ingredience_main.*
-import android.content.DialogInterface
-import android.view.inputmethod.InputMethodManager
-import android.widget.Spinner
 
 
 class DruhaAktivita :AppCompatActivity(){
@@ -139,7 +138,7 @@ class DruhaAktivita :AppCompatActivity(){
         val name = at_pridatsurovinu.text.toString().trim()
         val db= DBHelper(this)
         if (name.isNotEmpty()) {
-            pridatIngredienci()
+            pridatIngredienci(name)
             val Ingredience: ArrayList<SQLdata.Ingredience>
             Ingredience = db.selectINGREDIENCE(name)
             val status = db.insertDataSpiz(SQLdata.Spiz(0,Ingredience[0].id, name))
@@ -155,8 +154,8 @@ class DruhaAktivita :AppCompatActivity(){
         }
     }
 
-    fun pridatIngredienci(){
-        val name = at_pridatsurovinu.text.toString().trim()
+    fun pridatIngredienci(name: String ) {
+//        val name = at_pridatsurovinu.text.toString().trim()
         val DB = DBHelper(this)
         val add = DB.selectINGREDIENCE(name)
         if (add.isEmpty()){
@@ -241,5 +240,14 @@ class DruhaAktivita :AppCompatActivity(){
         return listOfIngredience
     }
 
-
+    fun hideKeyboard() {
+        val imm = this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        //Find the currently focused view, so we can grab the correct window token from it.
+        var view = this.currentFocus
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = View(this)
+        }
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 }
