@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import kotlin.collections.ArrayList
 
 
-class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null,4) {
+class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null,5) {
 
     override fun onCreate(db: SQLiteDatabase?) {
         val Create_table_SPIZ = "CREATE TABLE SPIZ (ID INTEGER PRIMARY KEY AUTOINCREMENT ," +

@@ -11,4 +11,19 @@
         <item>ks</item>
         <item>lžička</item>
     </string-array>
+    <string-array name="typeOfRecept">
+        <item>hlavní chod</item>
+        <item>moučník</item>
+        <item>polevka</item>
+        <item>svačina</item>
+        <item>snídaně</item>
+        <item>večeře</item>
+    </string-array>
+    <string-array name="categoryRecept">
+        <item>fitt</item>
+        <item>vegetarianské</item>
+        <item>veganské</item>
+        <item>lowcarb</item>
+        <item>tradiční</item>
+    </string-array>
 </resources>

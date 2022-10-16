@@ -11,9 +11,8 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -39,8 +38,13 @@ import java.io.IOException
 import java.io.OutputStream
 import java.util.*
 import kotlin.collections.ArrayList
-import com.example.bakalarkapokus.DruhaAktivita as DruhaAktivita
 
+
+/* ToDo  - Ohraničení pro dropdow menu
+         - drop down pro TYP a KATEGORII
+         - edit suroviny v receptu
+         - Přidat nějaký seznam pro více kategorií zároveň
+*/
 val data = ArrayList<SQLdata.Suroviny>()
 var id_addSurovin = 0
 
@@ -63,17 +67,35 @@ class AddRecept: AppCompatActivity() {
         btn_add_dish.setOnClickListener{
             addRecept()
         }
+        val autoTextView : AutoCompleteTextView = findViewById(R.id.at_AddSurovina)
+        var listOfIngredience = DBHelper(this).selectallIngredience()
+        // REciclewiew
+        val Autoadapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, listOfIngredience)
+        autoTextView.threshold=1
+        autoTextView.setAdapter(Autoadapter)
 
         rv_addSuroviny.layoutManager = LinearLayoutManager(this)
 
         val adapter = surovinyAdapter(this, data)
         rv_addSuroviny.adapter = adapter
-
+//         adapter pro dropdawn Suroviny druhy
+        val stringTypeQuantity = resources.getStringArray(R.array.quantity)
+        val quantityAdapter = ArrayAdapter(this,R.layout.dropdown_item, stringTypeQuantity)
+        val quantityAC = findViewById<AutoCompleteTextView>(R.id.ac_typequantity)
+        quantityAC.setAdapter(quantityAdapter)
+//        adapter pro dropdown Kategorie
+        val stringCategory = resources.getStringArray(R.array.categoryRecept)
+        val categoryAdapter = ArrayAdapter(this,R.layout.dropdown_item,stringCategory)
+        val categoryAC = findViewById<AutoCompleteTextView>(R.id.ac_category)
+        categoryAC.setAdapter(categoryAdapter)
+//        adapter pro dropdown Typ
+        val stringType = resources.getStringArray(R.array.typeOfRecept)
+        val typeAdapter = ArrayAdapter(this, R.layout.dropdown_item, stringType)
+        val typeAC = findViewById<AutoCompleteTextView>(R.id.ac_type)
+        typeAC.setAdapter(typeAdapter)
     }
 
-    val adapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, data)
-    autoTextView.threshold=1
-    autoTextView.setAdapter(adapter)
+
 
 
     private fun customImageSelectionDialog() {
@@ -204,10 +226,11 @@ class AddRecept: AppCompatActivity() {
     }
 
     private fun addSurovina () {
-        val spinner: Spinner = (findViewById(R.id.sp_pridatmnozstvi))
-        val name = et_AddSurovina.text.toString().trim()
+//        val spinner: Spinner = (findViewById(R.id.ac_typequantity))
+        val typeQuantity = ac_typequantity.text.toString().trim()
+        val name = at_AddSurovina.text.toString().trim()
         val quantyti = et_quantyti.text.toString().trim()
-        val typeQuantity: String = spinner.selectedItem.toString()
+//        val typeQuantity: String = spinner.selectedItem.toString()
         val final_quaintity = quantyti  + ' ' + typeQuantity
         hideKeyboard(this)
         if (name.isNotEmpty()){
@@ -216,7 +239,7 @@ class AddRecept: AppCompatActivity() {
                 pridatIngredien(name)
                 id_addSurovin = id_addSurovin.inc()
                 data.add(SQLdata.Suroviny(id_addSurovin,name,final_quaintity))
-                et_AddSurovina.text.clear()
+                at_AddSurovina.text.clear()
                 et_quantyti.text.clear()
                 //("přídat autocoplete ")
                 showSuroviny()

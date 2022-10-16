@@ -12,10 +12,10 @@
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -82,7 +82,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_type"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -94,8 +94,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/til_title">
 
-                <EditText
-                    android:id="@+id/et_type"
+                <AutoCompleteTextView
+                    android:id="@+id/ac_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -107,7 +107,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_category"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -119,8 +119,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/til_type">
 
-                <EditText
-                    android:id="@+id/et_category"
+                <AutoCompleteTextView
+                    android:id="@+id/ac_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -163,7 +163,6 @@
                 tools:visibility="visible" />
 
 
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tvAddSurovina"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -179,11 +178,11 @@
                 app:layout_constraintTop_toBottomOf="@id/rv_addSuroviny">
 
                 <AutoCompleteTextView
-                    android:id="@+id/et_AddSurovina"
+                    android:id="@+id/at_AddSurovina"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:gravity="top"
                     android:inputType="textMultiLine"
+                    android:paddingLeft="10dp"
                     android:textColor="@color/purple_200"
                     android:textSize="15dp" />
 
@@ -205,10 +204,10 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.75"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
+                    android:layout_weight="0.65"
                     android:hint="množství"
                     app:hintTextColor="@color/purple_700">
 
@@ -216,30 +215,53 @@
                         android:id="@+id/et_quantyti"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.75"
                         android:gravity="top"
                         android:textColor="@color/purple_200"
-                        android:textSize="15dp"
-                        android:layout_weight="0.75"/>
+                        android:textSize="15dp" />
 
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Spinner
-                    android:id="@+id/sp_pridatmnozstvi"
-                    style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tvaddtypeQuantyti"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:entries="@array/quantity"
-                    android:layout_weight="0.25"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:spinnerMode="dropdown"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintLeft_toRightOf="@id/tvaddQuantyti"
-                    android:textSize="15dp"/>
+                    android:layout_weight="0.35"
+                    android:hint="druh"
+                    app:hintTextColor="@color/purple_700">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/ac_typequantity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="none"
+                        android:textSize="15dp">
+
+                    </AutoCompleteTextView>
+
+                    <!--                <Spinner-->
+                    <!--                    android:id="@+id/sp_pridatmnozstvi"-->
+                    <!--                    style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox"-->
+                    <!--                    android:layout_width="0dp"-->
+                    <!--                    android:layout_height="60dp"-->
+                    <!--                    android:entries="@array/quantity"-->
+                    <!--                    android:layout_weight="0.25"-->
+                    <!--                    android:layout_marginStart="16dp"-->
+                    <!--                    android:layout_marginTop="8dp"-->
+                    <!--                    android:layout_marginEnd="16dp"-->
+                    <!--                    android:spinnerMode="dropdown"-->
+                    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                    app:layout_constraintLeft_toRightOf="@id/tvaddQuantyti"-->
+                    <!--                    android:textSize="15dp"/>-->
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
             <Button
                 android:id="@+id/btn_addSurivina"
                 android:layout_width="match_parent"
