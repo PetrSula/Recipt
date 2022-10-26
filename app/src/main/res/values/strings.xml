@@ -1,9 +1,13 @@
 <resources>
+
     <string name="app_name">Bakalarka pokus</string>
     <string name="open"> Open</string>
     <string name="close"> Close</string>
     <string name="Search"> Hledat</string>
     <string name="Add">Přidat</string>
+    <string name="selected_time_format">%1$s:%2$s"</string>
+    <string name="time_prefix">>></string>
+    <string name="time_suffix"> </string>
     <string name="rationale_camera">Tato aplikace potřebuje přístup k fotoaparátu</string>
     <string-array name="quantity">
         <item>ml</item>

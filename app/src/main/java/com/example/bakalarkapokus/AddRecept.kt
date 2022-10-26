@@ -3,6 +3,7 @@ package com.example.bakalarkapokus
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -11,14 +12,13 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Spinner
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.akexorcist.snaptimepicker.SnapTimePickerDialog
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -36,6 +36,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -67,6 +68,27 @@ class AddRecept: AppCompatActivity() {
         btn_add_dish.setOnClickListener{
             addRecept()
         }
+        et_cooking_time.setOnClickListener {
+            SnapTimePickerDialog.Builder().apply {
+                setTitle("Vybrat čas")
+                setPrefix(R.string.time_prefix)
+                setSuffix(R.string.time_suffix)
+                setThemeColor(R.color.colorAccent)
+                setTitleColor(android.R.color.black)
+            }.build().apply {
+                setListener {
+                    // when the user select time onTimePicked
+                    // function get invoked automatically which
+                    // sets the time in textViewTime.
+                        hour, minute ->
+                    onTimePicked(hour, minute)
+                }
+            }.show(
+                supportFragmentManager,
+                SnapTimePickerDialog.TAG
+            )
+        }
+
         val autoTextView : AutoCompleteTextView = findViewById(R.id.at_AddSurovina)
         var listOfIngredience = DBHelper(this).selectallIngredience()
         // REciclewiew
@@ -93,9 +115,23 @@ class AddRecept: AppCompatActivity() {
         val typeAdapter = ArrayAdapter(this, R.layout.dropdown_item, stringType)
         val typeAC = findViewById<AutoCompleteTextView>(R.id.ac_type)
         typeAC.setAdapter(typeAdapter)
+//        Time picker
+
     }
 
+    fun onTimePicked(selectedHour: Int, selectedMinute: Int) {
+        val hour = selectedHour.toString()
+            .padStart(2, '0')
+        val minute = selectedMinute.toString()
+            .padStart(2, '0')
+        var the_time = et_cooking_time.text.toString().trim()
+        the_time  = String.format(
+            getString(
+                R.string.selected_time_format,
+                hour, minute))
+        et_cooking_time.setText(the_time)
 
+    }
 
 
     private fun customImageSelectionDialog() {
