@@ -12,8 +12,12 @@ sealed class SQLdata {
     data class Recept(
         val id: Int,
         val title: String,
+        val type: String,
+        val category: String,
+        val time: String,
         val postup: String,
-//        val quantity: String = "",
+        val quantity: String = "",
+        val portion: Int,
         val img: String
     )
     data class Suroviny(

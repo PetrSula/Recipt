@@ -45,6 +45,10 @@ import kotlin.collections.ArrayList
          - drop down pro TYP a KATEGORII
          - edit suroviny v receptu
          - Přidat nějaký seznam pro více kategorií zároveň
+         - příliž dlouhý text surovin
+         - editace surovin
+         - vyčistit data po přidání
+
 */
 val data = ArrayList<SQLdata.Suroviny>()
 var id_addSurovin = 0
@@ -60,6 +64,12 @@ class AddRecept: AppCompatActivity() {
 
         iv_add_dish_image.setOnClickListener{
             customImageSelectionDialog()
+        }
+        iv_more.setOnClickListener{
+            set_portion(true)
+        }
+        iv_less.setOnClickListener{
+            set_portion(false)
         }
         btn_addSurivina.setOnClickListener{
             addSurovina()
@@ -131,6 +141,24 @@ class AddRecept: AppCompatActivity() {
                 hour, minute))
         et_cooking_time.setText(the_time)
 
+    }
+
+    fun set_portion(boolean: Boolean){
+        var value = tv_portion.text.toString()
+        var number = value.toInt()
+        if (boolean){
+            number += 1
+            value = number.toString()
+            tv_portion.setText(value)
+        }
+        else{
+            number -= 1
+            if (number < 0){
+                number = 0
+            }
+            value = number.toString()
+            tv_portion.setText(value)
+        }
     }
 
 
@@ -332,7 +360,15 @@ class AddRecept: AppCompatActivity() {
 
     fun addRecept(){
         val title = et_title.text.toString().trim()
+        val type = ac_type.text.toString().trim()
+        val category = ac_category.text.toString().trim()
+        val time = et_cooking_time.text.toString().trim()
         val postup = et_direction_to_cook.text.toString()
+        val typeQuantity = ac_typequantity.text.toString().trim()
+        val strQuantity = et_quantyti.text.toString().trim()
+        val quantity = strQuantity  + ' ' + typeQuantity
+        val strPortion = tv_portion.text.toString()
+        val portion = strPortion.toInt()
         val img = img_Path
         var chech = true
         val DB = DBHelper(this)
@@ -354,9 +390,9 @@ class AddRecept: AppCompatActivity() {
             chech = false
         }
         if (chech){
-            val status = DB.insertRECEPT(SQLdata.Recept(0,title,postup,img))
+            val status = DB.insertRECEPT(SQLdata.Recept(0,title, type,category,time, postup, quantity, portion ,img))
             //insertDataINGREDIENCE(SQLdata.Ingredience(0,name))
-            if (status >1){
+            if (status > 0){
                 Toast.makeText(applicationContext, "Přidáno", Toast.LENGTH_LONG).show()
                 for ( i in data) {
                     var add: ArrayList<SQLdata.Ingredience> = DB.selectINGREDIENCE(i.name)

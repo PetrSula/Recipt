@@ -81,6 +81,21 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
             db!!.execSQL(Create_table_SUROVINY_RECEPT)
             db.execSQL(Create_table_RECEPT)
         }
+        if (newVersion == 5){
+            val drop_table_RECEPT = "DROP TABLE " + TABLE_RECEPT
+            val Create_table_RECEPT = "CREATE TABLE " + TABLE_RECEPT + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                                                TITLE+" TEXT,"+
+                                                TYPE +" TEXT" +
+                                                CATEGORY + " TEXT" +
+                                                TIME + " TEXT" +
+                                                POSTUP + " TEXT"+
+                                                QUANTITY + " TEXT"+
+                                                PORTION + " INTEGER"+
+                                                IMG + " TEXT" +")"
+            db!!.execSQL(drop_table_RECEPT)
+            db.execSQL(Create_table_RECEPT)
+        }
+
     }
 
     fun insertDataRecept(dataRecept: SQLdata.Recept):Long{
@@ -278,13 +293,23 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
         var title : String
         var postup: String
         var img : String
+        var type : String
+        var category : String
+        var time : String
+        var quantity : String
+        var portion : Int
         var id:Int
         if (cursor.moveToFirst()){
             do {id = cursor.getInt(cursor.getColumnIndexOrThrow("ID"))
                 title = cursor.getString(cursor.getColumnIndexOrThrow(TITLE))
+                type = cursor.getString(cursor.getColumnIndexOrThrow(TYPE))
+                category = cursor.getString(cursor.getColumnIndexOrThrow(CATEGORY))
+                time = cursor.getString(cursor.getColumnIndexOrThrow(TIME))
                 postup = cursor.getString(cursor.getColumnIndexOrThrow(POSTUP))
+                quantity = cursor.getString(cursor.getColumnIndexOrThrow(QUANTITY))
+                portion = cursor.getInt(cursor.getColumnIndexOrThrow(PORTION))
                 img = cursor.getString(cursor.getColumnIndexOrThrow(IMG))
-                val data = SQLdata.Recept(0,title,postup,img)
+                val data = SQLdata.Recept(0,title,type,category,time,postup,quantity,portion, img)
                 recept.add(data)
             }while (cursor.moveToNext())
         }
@@ -329,6 +354,11 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
         private val NAME = "NAME"
         private val QUANTITY = "QUANTITY"
         private val RECEPT_ID = "RECEPT_ID"
+        private val TYPE = "TYPE"
+        private val PORTION = "PORTION"
+        private val TIME = "TIME"
+        private val CATEGORY = "CATEGORY"
+
 
     }
 

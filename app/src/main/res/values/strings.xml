@@ -10,10 +10,12 @@
     <string name="time_suffix"> </string>
     <string name="rationale_camera">Tato aplikace potřebuje přístup k fotoaparátu</string>
     <string-array name="quantity">
+        <item> </item>
         <item>ml</item>
         <item>g</item>
         <item>ks</item>
         <item>lžička</item>
+        <item>lžíce</item>
     </string-array>
     <string-array name="typeOfRecept">
         <item>hlavní chod</item>
