@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import kotlin.collections.ArrayList
 
 
-class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null,5) {
+class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null,8) {
 
     override fun onCreate(db: SQLiteDatabase?) {
         val Create_table_SPIZ = "CREATE TABLE SPIZ (ID INTEGER PRIMARY KEY AUTOINCREMENT ," +
@@ -81,16 +81,16 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
             db!!.execSQL(Create_table_SUROVINY_RECEPT)
             db.execSQL(Create_table_RECEPT)
         }
-        if (newVersion == 5){
+        if (newVersion == 8){
             val drop_table_RECEPT = "DROP TABLE " + TABLE_RECEPT
             val Create_table_RECEPT = "CREATE TABLE " + TABLE_RECEPT + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
                                                 TITLE+" TEXT,"+
-                                                TYPE +" TEXT" +
-                                                CATEGORY + " TEXT" +
-                                                TIME + " TEXT" +
-                                                POSTUP + " TEXT"+
-                                                QUANTITY + " TEXT"+
-                                                PORTION + " INTEGER"+
+                                                TYPE +" TEXT," +
+                                                CATEGORY + " TEXT," +
+                                                TIME + " TEXT," +
+                                                POSTUP + " TEXT,"+
+                                                QUANTITY + " TEXT,"+
+                                                PORTION + " INTEGER,"+
                                                 IMG + " TEXT" +")"
             db!!.execSQL(drop_table_RECEPT)
             db.execSQL(Create_table_RECEPT)
@@ -269,7 +269,12 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
         val DB = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put(TITLE,recept.title)
+        contentValues.put(TYPE,recept.type)
+        contentValues.put(CATEGORY,recept.category)
+        contentValues.put(TIME,recept.time)
         contentValues.put(POSTUP,recept.postup)
+        contentValues.put(QUANTITY,recept.quantity)
+        contentValues.put(PORTION,recept.portion)
         contentValues.put(IMG,recept.img)
 
         val success = DB.insert(TABLE_RECEPT,null,contentValues)
@@ -336,9 +341,33 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
         return succes
     }
 
-    /*fun selectSUROVINYrecept(int: Int): ArrayList<SQLdata.SurovinyRecept>{
-
-    }*/
+    fun selectSUROVINYrecept(int: Int): ArrayList<SQLdata.RvSurovinyRecept>{
+        var suroviny:ArrayList<SQLdata.RvSurovinyRecept> = ArrayList<SQLdata.RvSurovinyRecept>()
+        val DB = this.readableDatabase
+        val selecQuery = "SELECT " + TABLE_INGREDIENCE+"."+ NAME + ", " + TABLE_SUROVINY_RECEPT + "." + QUANTITY +
+                            " FROM " + TABLE_INGREDIENCE +
+                            " JOIN " + TABLE_SUROVINY_RECEPT+" ON "+TABLE_SUROVINY_RECEPT+"."+ INGREDIENCE_ID+" = "+ TABLE_INGREDIENCE+"."+ ID +
+                 " WHERE "+ TABLE_SUROVINY_RECEPT+"."+ RECEPT_ID+" = "+ int
+        var name:String
+        var quantity:String
+        var id:Int = 0
+        var cursor: Cursor? = null
+        try {
+            cursor = DB.rawQuery(selecQuery, null)
+        } catch (e: SQLiteException) {
+            DB.execSQL(selecQuery)
+            return ArrayList()
+        }
+        if (cursor.moveToFirst()){
+            do {id += id
+                name = cursor.getString(cursor.getColumnIndexOrThrow(NAME))
+                quantity = cursor.getString(cursor.getColumnIndexOrThrow(QUANTITY))
+                val data = SQLdata.RvSurovinyRecept(0,name,quantity)
+                suroviny.add(data)
+            }while (cursor.moveToNext())
+        }
+        return suroviny
+    }
 
     companion object{
         private val DATABASE_NAME = "MyDB"

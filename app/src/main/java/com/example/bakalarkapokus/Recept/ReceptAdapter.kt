@@ -13,15 +13,15 @@ import kotlinx.android.synthetic.main.recept_suroviny.view.*
 class ReceptAdapter(private val sList: ArrayList<SQLdata.RvSurovinyRecept>) : RecyclerView.Adapter<ReceptAdapter.ViewHolder>(){
 
 
-
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
-        val tvName = view.tvSurovina
-        val tvQuantity = view.tvQuantyti
-        val tvEdit = view.ivEdit
-        val tvDelete = view.ivDelete
+        val tvName = view.tvNamers
+        val tvQuantity = view.tvQuantytirs
+        val ivCkeckon = view.ivCheck
+//        val tvEdit = view.ivEdit
+//        val tvDelete = view.ivDelete
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReceptAdapter.ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.recept_suroviny,parent,false)
         )
@@ -29,11 +29,9 @@ class ReceptAdapter(private val sList: ArrayList<SQLdata.RvSurovinyRecept>) : Re
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val item = sList[position]
+        val item = sList.get(position)
         holder.tvName.text = item.name
         holder.tvQuantity.text = item.quantity
-        holder.tvEdit
-        holder.tvDelete
     }
 
     override fun getItemCount(): Int {

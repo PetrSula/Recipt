@@ -402,6 +402,7 @@ class AddRecept: AppCompatActivity() {
                     val quantyti = i.quantity
                     DB.insertSURIVONYrecept(SQLdata.SurovinyRecept(0,ingredienceID,receptID,quantyti))
                 }
+                displayRecept(status.toInt())
             }else{
                 Toast.makeText(applicationContext,"Něco se pokazilo",Toast.LENGTH_LONG).show()
             }
@@ -417,8 +418,12 @@ class AddRecept: AppCompatActivity() {
             DB.insertDataINGREDIENCE(SQLdata.Ingredience(0,name))
         }
     }
-    fun pridatSurovinuRecept(name: String){
+    fun displayRecept(id:Int){
+        Intent(this,ReceptActivita::class.java).also {
+            it.putExtra("EXTRA_ID",id)
+            startActivity(it)
 
+        }
     }
 
     fun saveIMG(bitmap: Bitmap): String{

@@ -57,7 +57,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:padding="10dp"
-                        android:text="vyhledat svůj recept"
+                        android:text="vyhledat recept"
                         android:textColor="@color/black"
                         android:gravity="center_vertical"
                         android:drawableLeft="@drawable/ic_search"
