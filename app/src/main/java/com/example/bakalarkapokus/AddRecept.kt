@@ -48,6 +48,7 @@ import kotlin.collections.ArrayList
          - příliž dlouhý text surovin
          - editace surovin
          - vyčistit data po přidání
+         - default obrázek
 
 */
 val data = ArrayList<SQLdata.Suroviny>()
@@ -98,6 +99,8 @@ class AddRecept: AppCompatActivity() {
                 SnapTimePickerDialog.TAG
             )
         }
+//        val simpleSearchView : SearchView = findViewById(R.id.simpleSearchView)
+
 
         val autoTextView : AutoCompleteTextView = findViewById(R.id.at_AddSurovina)
         var listOfIngredience = DBHelper(this).selectallIngredience()

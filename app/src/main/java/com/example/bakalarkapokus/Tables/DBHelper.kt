@@ -369,6 +369,71 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
         return suroviny
     }
 
+    fun selectAllTitles() : ArrayList<String>{
+        val coun = ArrayList<String>()
+        val selecQuery = "SELECT "+ TITLE+"  FROM "+ TABLE_RECEPT
+        val DB = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            cursor = DB.rawQuery(selecQuery, null)
+        } catch (e: SQLiteException) {
+            DB.execSQL(selecQuery)
+            return ArrayList()
+        }
+
+        var title: String
+
+        if (cursor.moveToFirst()) {
+            do {title = cursor.getString(cursor.getColumnIndexOrThrow(TITLE))
+                coun.add(title)
+
+            } while (cursor.moveToNext())
+        }
+        return coun
+    }
+    fun selectByTitle(title:String) : Int{
+        val selecQuery = "SELECT "+ID+" FROM "+ TABLE_RECEPT+" WHERE "+ TITLE+" = "+" '"+title+"'"
+        val DB = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            cursor = DB.rawQuery(selecQuery, null)
+        } catch (e: SQLiteException) {
+            DB.execSQL(selecQuery)
+            return 0
+        }
+        var id: Int = 0
+        if (cursor.moveToFirst()) {
+            id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
+        }
+        return id
+    }
+
+    fun selectTitleIMG() : ArrayList<SQLdata.AraySearched>{
+        var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
+        val DB = this.readableDatabase
+        val selecQuery = "SELECT "+ ID+", "+ TITLE+", "+ IMG +
+                " FROM "+ TABLE_RECEPT
+        var title:String
+        var img:String
+        var id:Int = 0
+        var cursor: Cursor? = null
+        try {
+            cursor = DB.rawQuery(selecQuery, null)
+        } catch (e: SQLiteException) {
+            DB.execSQL(selecQuery)
+            return ArrayList()
+        }
+        if (cursor.moveToFirst()){
+            do {id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
+                title = cursor.getString(cursor.getColumnIndexOrThrow(TITLE))
+                img = cursor.getString(cursor.getColumnIndexOrThrow(IMG))
+                val data = SQLdata.AraySearched(id,title,img)
+                arraySearched.add(data)
+            }while (cursor.moveToNext())
+        }
+        return arraySearched
+    }
+
     companion object{
         private val DATABASE_NAME = "MyDB"
         private val TABLE_SPIZ = "SPIZ"

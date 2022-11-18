@@ -1,5 +1,7 @@
 package com.example.bakalarkapokus.Tables
 
+import java.io.Serializable
+
 
 sealed class SQLdata {
 
@@ -40,4 +42,9 @@ sealed class SQLdata {
         val name: String,
         val quantity: String
     )
+    data class AraySearched(
+        val id: Int,
+        val title: String,
+        val img: String,
+    ) : Serializable
 }

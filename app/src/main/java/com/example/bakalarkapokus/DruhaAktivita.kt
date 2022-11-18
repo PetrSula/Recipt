@@ -36,7 +36,7 @@ class DruhaAktivita :AppCompatActivity(){
 
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navView = findViewById<NavigationView>(R.id.navView)
-        val spinner: Spinner = (findViewById(R.id.sp_pridatmnozstvi))
+//        val spinner: Spinner = (findViewById(R.id.sp_pridatmnozstvi))
         val autoTextView : AutoCompleteTextView = findViewById(R.id.at_pridatsurovinu)
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open,R.string.close )
@@ -84,11 +84,11 @@ class DruhaAktivita :AppCompatActivity(){
         btn_AddSpiz.setOnClickListener{
             val name = at_pridatsurovinu.text.toString().trim()
             // Naplnění SPINNERu
-            val typeQuantity: String = spinner.selectedItem.toString()
-            val quantity = at_pridatmnozstvi.text.toString().trim()
+//            val typeQuantity: String = spinner.selectedItem.toString()
+//            val quantity = at_pridatmnozstvi.text.toString().trim()
             val addOK = DBHelper(this).selectItemSPIZ(name)
-            val final_quaintity = quantity  + ' ' + typeQuantity
-            closeKeyboard(at_pridatmnozstvi)
+//            val final_quaintity = quantity  + ' ' + typeQuantity
+//            closeKeyboard(at_pridatmnozstvi)
             if (addOK.isEmpty()){
                 pridatZaznam()
             }else{

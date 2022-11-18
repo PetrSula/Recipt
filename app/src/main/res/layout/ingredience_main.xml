@@ -59,33 +59,33 @@
 
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="horizontal">-->
 
-        <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:text="Množství"
-                    android:textSize="18sp" />
-        <AutoCompleteTextView
-            android:id="@+id/at_pridatmnozstvi"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:hint="Množství" />
+<!--        <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="0.25"-->
+<!--                    android:text="Množství"-->
+<!--                    android:textSize="18sp" />-->
+<!--        <AutoCompleteTextView-->
+<!--            android:id="@+id/at_pridatmnozstvi"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="0.5"-->
+<!--            android:hint="Množství" />-->
 
-        <Spinner
-            android:id="@+id/sp_pridatmnozstvi"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:entries="@array/quantity"
-            android:layout_weight="0.25" />
+<!--        <Spinner-->
+<!--            android:id="@+id/sp_pridatmnozstvi"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:entries="@array/quantity"-->
+<!--            android:layout_weight="0.25" />-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
 
     <Button

@@ -39,41 +39,77 @@
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="20dp"
                     android:textColor="@color/white"
+                    android:text="Úvodní stránka"
                     android:textSize="30sp" />
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardSearch"
-                    android:layout_below="@+id/title"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/LlSearch"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="15dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="0dp">
+                    android:orientation="horizontal"
+                    android:layout_below="@id/title">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:padding="10dp"
-                        android:text="vyhledat recept"
-                        android:textColor="@color/black"
-                        android:gravity="center_vertical"
-                        android:drawableLeft="@drawable/ic_search"
-                        android:drawableStart="@drawable/ic_search"
-                        android:drawablePadding="10dp"/>
-                </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardSearch"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/title"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="16dp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp"
+                        android:layout_weight="0.9">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/acSearch"
+                            android:layout_width="342dp"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:drawablePadding="10dp"
+                            android:gravity="center_vertical"
+                            android:background="@android:color/transparent"
+                            android:hint="vyhledat recept"
+                            android:iconifiedByDefault="false"
+                            android:textColor="@color/black" />
+
+                        <!--                    <ListView-->
+<!--                        android:drawableStart="@drawable/ic_search"-->
+<!--                        android:drawableLeft="@drawable/ic_search"-->
+                        <!--                        android:id="@+id/listsearch"-->
+                        <!--                        android:layout_width="fill_parent"-->
+                        <!--                        android:layout_height="fill_parent"-->
+                        <!--                        android:layout_below="@+id/simpleSearchView"/>-->
+                    </androidx.cardview.widget.CardView>
+
+                    <ImageView
+                        android:id="@+id/ivSearch"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.10"
+                        android:scaleType="center"
+                        android:paddingTop="16dp"
+                        android:paddingRight="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/acSearch"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_search" />
+
+
+
+                </LinearLayout>
+
 
                 <androidx.viewpager.widget.ViewPager
                     android:id="@+id/viewPagerHeader"
-                    android:foregroundGravity="center"
-                    android:overScrollMode="never"
-                    android:clipToPadding="false"
-                    android:layout_below="@id/cardSearch"
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp" />
+                    android:layout_height="100dp"
+                    android:layout_below="@id/LlSearch"
+                    android:layout_marginTop="10dp"
+                    android:clipToPadding="false"
+                    android:foregroundGravity="center"
+                    android:overScrollMode="never" />
 
                 <TextView
                     android:id="@+id/titleCategory"
@@ -90,15 +126,15 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_Category"
-                    android:scrollbars="none"
-                    android:layout_marginTop="10dp"
-                    android:clipToPadding="false"
-                    android:layout_below="@id/titleCategory"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_below="@id/titleCategory"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
-                    android:layout_marginBottom="50dp" />
+                    android:layout_marginBottom="50dp"
+                    android:clipToPadding="false"
+                    android:scrollbars="none" />
 
                 <TextView
                     android:padding="10dp"
