@@ -408,11 +408,11 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
         return id
     }
 
-    fun selectTitleIMG() : ArrayList<SQLdata.AraySearched>{
+    fun selectTitleIMG(where : String) : ArrayList<SQLdata.AraySearched>{
         var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
         val DB = this.readableDatabase
         val selecQuery = "SELECT "+ ID+", "+ TITLE+", "+ IMG +
-                " FROM "+ TABLE_RECEPT
+                " FROM "+ TABLE_RECEPT + where
         var title:String
         var img:String
         var id:Int = 0

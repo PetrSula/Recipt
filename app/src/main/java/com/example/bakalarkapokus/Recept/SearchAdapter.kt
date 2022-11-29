@@ -16,20 +16,35 @@ import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.SQLdata
 import kotlinx.android.synthetic.main.items_row.view.*
 import kotlinx.android.synthetic.main.items_searchable.view.*
-import kotlinx.android.synthetic.main.recept_main.*
+import kotlinx.android.synthetic.main.activity_recept.*
 import java.io.File
 
 class SearchAdapter (val context: Context, private val sList: ArrayList<SQLdata.AraySearched>): RecyclerView.Adapter<SearchAdapter.ViewHolder>(){
+    lateinit var mListener : onItemClickListener
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
+    interface onItemClickListener{
+        fun onItemClick(position: Int){
+        }
+    }
+
+    fun setOnItemClickListener(listener : SearchAdapter.onItemClickListener){
+        mListener = listener
+    }
+
+    class ViewHolder(view: View, listener: SearchAdapter.onItemClickListener) : RecyclerView.ViewHolder(view){
         val tvName = view.tvTitle
         val ivIMG = view.ivRecept
-        val tvEdit = view.ivEdit
-        val tvDelete = view.ivDelete
+
+        init {
+            itemView.setOnClickListener{
+                listener.onItemClick(adapterPosition)
+            }
+        }
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAdapter.ViewHolder {
         return SearchAdapter.ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.items_searchable, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.items_searchable, parent, false), mListener
         )
     }
 

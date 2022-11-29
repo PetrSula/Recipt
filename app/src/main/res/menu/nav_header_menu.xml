@@ -8,6 +8,6 @@
         android:title=" Recepty "/>
     <item
         android:id="@+id/miItem3"
-        android:title=" Item 3 "/>
+        android:title=" rozšířené vyhledávání "/>
 
 </menu>

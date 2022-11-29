@@ -57,6 +57,11 @@ class DruhaAktivita :AppCompatActivity(){
                     startActivity(intent)
                     true
                 }
+                R.id.miItem3 ->{
+                    val intent = Intent(this, AdvanceActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> false
             }
         }

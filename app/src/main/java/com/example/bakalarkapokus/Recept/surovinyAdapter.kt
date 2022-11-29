@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bakalarkapokus.AddRecept
-import com.example.bakalarkapokus.DruhaAktivita
-import com.example.bakalarkapokus.R
+import com.example.bakalarkapokus.*
 import com.example.bakalarkapokus.Tables.SQLdata
 import kotlinx.android.synthetic.main.items_row.view.*
 import kotlinx.android.synthetic.main.recept_suroviny.view.*
 
 class surovinyAdapter (val context: Context, private val sList: ArrayList<SQLdata.Suroviny>): RecyclerView.Adapter<surovinyAdapter.ViewHolder>(){
+
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val tvName = view.tvName
@@ -30,10 +29,15 @@ class surovinyAdapter (val context: Context, private val sList: ArrayList<SQLdat
         val item = sList[position]
         holder.tvName.text = item.name
         holder.tvQuantyti.text = item.quantity
+        if (context is AdvanceActivity){
+            holder.tvEdit.visibility = View.GONE
+        }
 
 
         holder.tvDelete.setOnClickListener {
-            if (context is AddRecept) {
+            if (context is AddRecept ) {
+                context.deleteSurovinu(item)
+            }else if (context is AdvanceActivity){
                 context.deleteSurovinu(item)
             }
         }

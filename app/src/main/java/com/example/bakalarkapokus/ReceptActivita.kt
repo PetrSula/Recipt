@@ -11,18 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.bakalarkapokus.Recept.ReceptAdapter
-import com.example.bakalarkapokus.Recept.surovinyAdapter
 import com.example.bakalarkapokus.Tables.DBHelper
-import com.example.bakalarkapokus.Tables.Ingredience
 import com.example.bakalarkapokus.Tables.SQLdata
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.drawerLayout
 import kotlinx.android.synthetic.main.activity_main.navView
 import kotlinx.android.synthetic.main.spiz.*
-import kotlinx.android.synthetic.main.recept_main.*
-import kotlinx.android.synthetic.main.recept_main.iv_less
-import kotlinx.android.synthetic.main.recept_main.iv_more
-import kotlinx.android.synthetic.main.recept_main.tv_portion
+import kotlinx.android.synthetic.main.activity_recept.*
 import kotlinx.android.synthetic.main.recept_postup.*
 import java.io.File
 
@@ -39,7 +34,7 @@ class ReceptActivita: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.recept_main)
+        setContentView(R.layout.activity_recept)
 
         val gv_id = intent.getIntExtra("EXTRA_ID",1)
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open,R.string.close )
@@ -62,17 +57,6 @@ class ReceptActivita: AppCompatActivity() {
                 }
                 else -> false
             }
-        }
-
-        fbAdd.setOnClickListener {
-            val intent = Intent(this, AddRecept::class.java)
-            startActivity(intent)
-        }
-        iv_more.setOnClickListener{
-            set_portion(true)
-        }
-        iv_less.setOnClickListener{
-            set_portion(false)
         }
         showRecept(gv_id)
 
@@ -98,8 +82,9 @@ class ReceptActivita: AppCompatActivity() {
 //                "Poté do pánve přidejte zbylé máslo, tymián a česnek a za stálého míchání restujte asi 2 minuty.\n" +
 //                "Zalijte vínem, přiveďte k mírnému varu a nechte vařit asi 20 minut. Víno se zredukuje, pokud je potřeba, klidně ještě víno přidejte, aby v pánvi zůstala nějaká omáčka.\n" +
 //                "Na závěr přidejte do omáčky pokrájený špenát a nechte jen zavadnout. Dochuťte solí a pepřem, ujistěte se, že je maso propečené a podávejte s rýží nebo širokými nudlemi.\n" +
-//                "Prima tip: Pokud chcete, můžete půlku másla nahradit olivovým olejem."
-        val time = data.time
+//                "Prima tip: Pokud chcete, můžete půlku másla nahradit olivovým olejem.
+        var timeArray: List<String> = data.time.split(":")
+        val time = setTime(timeArray)
         val category = data.category
         val portion = data.portion.toString()
 
@@ -109,11 +94,8 @@ class ReceptActivita: AppCompatActivity() {
             .into(ivPicture)
 
         val sur = getSuroviny(id)
-//        sur.add(SQLdata.RvSurovinyRecept(0,"kuřecí prsa","1000g"))
-//        sur.add(SQLdata.RvSurovinyRecept(1,"červená mletá paprika","špetka"))
-//        sur.add(SQLdata.RvSurovinyRecept(2,"sul",""))
-//        sur.add(SQLdata.RvSurovinyRecept(3,"máslo","250g"))
-//        sur.add(SQLdata.RvSurovinyRecept(4,"špenát","500g"))
+//        získat poměř
+
 
         if (sur.isEmpty()){
             rv_recept.visibility = GONE
@@ -123,40 +105,35 @@ class ReceptActivita: AppCompatActivity() {
             rv_recept.visibility = VISIBLE
             tvNoItems.visibility = GONE
             rv_recept.layoutManager = LinearLayoutManager(this)
-            val adapter = ReceptAdapter(sur)
+            val adapter = ReceptAdapter(this,sur)
             rv_recept.adapter = adapter
         }
 
-        tvTitle.text = title
+        tvTitleRecept.text = title
         tvPostuprm.text = postup
         tvType.text = type
         tvCategory.text = category
-        tv_portion.text = portion
+        tv_portionR.text = portion
         tvTimeminutes.text = time
 
     }
+    fun setTime(list: List<String>) : String{
+        var hour = list[0]
+        var minutes = list[1] + "min"
+        var test = hour[0].toString()
+        if (hour.equals("00")){
+            hour = ""
+        }
+        else if(test.equals("0")){
+            hour = hour[1].toString() + "h"
+        }
+        else{hour = hour + "h"
+        }
+        return hour + ' '+ minutes
+    }
     fun getSuroviny(id: Int):ArrayList<SQLdata.RvSurovinyRecept>{
         val DB = DBHelper(this)
-        val suroviny:ArrayList<SQLdata.RvSurovinyRecept> = DB.selectSUROVINYrecept(id)
+        var suroviny:ArrayList<SQLdata.RvSurovinyRecept> = DB.selectSUROVINYrecept(id)
         return suroviny
-
-    }
-
-    fun set_portion(boolean: Boolean){
-        var value = tv_portion.text.toString()
-        var number = value.toInt()
-        if (boolean){
-            number += 1
-            value = number.toString()
-            tv_portion.setText(value)
-        }
-        else{
-            number -= 1
-            if (number < 0){
-                number = 0
-            }
-            value = number.toString()
-            tv_portion.setText(value)
-        }
     }
 }

@@ -26,12 +26,14 @@
         <entry key="..\:/Users/panpe/AndroidStudioProjects/Bakalarkapokus/app/src/main/res/layouts/layouts_category2/layout/recept_postup.xml" value="0.24427083333333333" />
         <entry key="..\:/Users/panpe/AndroidStudioProjects/Bakalarkapokus/app/src/main/res/layouts/layouts_category2/layout/recept_suroviny.xml" value="0.24427083333333333" />
         <entry key="..\:/Users/panpe/AndroidStudioProjects/Bakalarkapokus/app/src/main/res/menu/nav_header_menu.xml" value="0.225" />
+        <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable-anydpi/ic_search.xml" value="0.2155" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1235" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_add.xml" value="0.1235" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_add_a_photo.xml" value="0.1235" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.1915" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_baseline_horizontal_rule_24.xml" value="0.1235" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_camera.xml" value="0.1235" />
+        <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_check_circle.xml" value="0.2155" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_edit.xml" value="0.1235" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_error.xml" value="0.1235" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_gallery.xml" value="0.1235" />
@@ -39,8 +41,11 @@
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_minus.xml" value="0.1235" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_time.xml" value="0.174" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/activity_recept.xml" value="0.176" />
+        <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/activity_vyhledavani.xml" value="0.21693840579710144" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/chip_item.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/dialog_img.xml" value="0.23854166666666668" />
+        <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/dialog_update.xml" value="0.21693840579710144" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/dropdown_item.xml" value="0.2" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/fragment_items_search.xml" value="0.20885416666666667" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/fragment_searched_recepts.xml" value="0.20885416666666667" />
@@ -58,6 +63,7 @@
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/spiz.xml" value="0.24365942028985507" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/tags_input_layout.xml" value="0.18697916666666667" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/xxx.xml" value="0.16770833333333332" />
+        <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/menu/nav_header_menu.xml" value="0.23854166666666668" />
       </map>
     </option>
   </component>

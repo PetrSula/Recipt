@@ -47,4 +47,11 @@ sealed class SQLdata {
         val title: String,
         val img: String,
     ) : Serializable
+
+    data class ArrayCategory(
+        val id: Int,
+        val string: String,
+        val img: Int,
+
+    )
 }

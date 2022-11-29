@@ -28,6 +28,9 @@
             android:name=".AddRecept"
             android:windowSoftInputMode="stateHidden" />
         <activity
+            android:name=".AdvanceActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

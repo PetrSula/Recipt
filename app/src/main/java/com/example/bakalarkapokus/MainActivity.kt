@@ -10,14 +10,22 @@ import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.bakalarkapokus.Recept.CategoryAdapter
+import com.example.bakalarkapokus.Recept.SearchAdapter
 import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.acSearch
+import kotlinx.android.synthetic.main.activity_main.ivSearch
 import kotlinx.android.synthetic.main.recept_postup.*
+import kotlinx.android.synthetic.main.selected_rv.*
 
 /* TODO - Přidat možnost vyhledávání receptu, jejich obrázek
         - ošetřt přidávání jakéhokoliv textu s mezerami.
+        - live of activity
+        - přenesení SQL lite a její rozšíření případné
 
  */
 fun hideKeyboard(activity: Activity) {
@@ -33,6 +41,8 @@ fun hideKeyboard(activity: Activity) {
 class MainActivity : AppCompatActivity() {
 
     lateinit var toggle: ActionBarDrawerToggle
+    lateinit var imageId: Array<Int>
+    lateinit var name: Array<String>
     lateinit var titlesLV : ListView
     lateinit var listAdapter: ArrayAdapter<String>
     lateinit var titlesList : ArrayList<String>
@@ -41,6 +51,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        rv_Cathegory()
+        rv_type()
 
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navView = findViewById<NavigationView>(R.id.navView)
@@ -60,6 +73,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.miItem2 -> {
                     val intent = Intent(this, ReceptActivita::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.miItem3 ->{
+                    val intent = Intent(this, AdvanceActivity::class.java)
                     startActivity(intent)
                     true
                 }
@@ -100,8 +118,11 @@ class MainActivity : AppCompatActivity() {
         ivSearch.setOnClickListener{
             search_handeler()
         }
-
-
+//        add Recept
+        fbAdd.setOnClickListener {
+            val intent = Intent(this, AddRecept::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -110,9 +131,9 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
     fun search_handeler(){
         val input = acSearch.text.toString().trim()
-
 //        if (input.isEmpty()){
 //            return
 //        }
@@ -133,11 +154,84 @@ class MainActivity : AppCompatActivity() {
         }
     }
     fun showSearched(){
+        val where = " "
         var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
-        arraySearched = DBHelper(this).selectTitleIMG()
+        arraySearched = DBHelper(this).selectTitleIMG(where)
         Intent(this,SearchedActivity::class.java).also {
             it.putExtra("EXTRA_SEARCHED",arraySearched)
             startActivity(it)
         }
+    }
+    fun rv_Cathegory(){
+        val category = arrayListOf<SQLdata.ArrayCategory>()
+        imageId = arrayOf(
+            R.drawable.steak,
+            R.drawable.vegetarian,
+            R.drawable.vegan,
+            R.drawable.low_carb
+        )
+        val stringCategory = resources.getStringArray(R.array.categoryRecept)
+        for (i in imageId.indices){
+            val item = SQLdata.ArrayCategory(i,stringCategory[i],imageId[i])
+            category.add(item)
+        }
+
+        rv_Category.layoutManager = LinearLayoutManager(this)
+        var categoryAdapter = CategoryAdapter(category)
+        rv_Category.adapter = categoryAdapter
+        categoryAdapter.setOnItemClickListener(object : CategoryAdapter.onItemClickListener {
+
+            override fun onItemClick(position: Int) {
+//                super.onItemClick(position)
+//                val intent = Intent(this@MainActivity,SearchedActivity::class.java).also {
+//                    it.putExtra("EXTRA_SEARCHED",arraySearched)
+//                    startActivity(it)
+                val where = " WHERE CATEGORY = " + "'"+category[position].string+"'"
+                var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
+                arraySearched = DBHelper(this@MainActivity).selectTitleIMG(where)
+                Intent(this@MainActivity,SearchedActivity::class.java).also {
+                    it.putExtra("EXTRA_SEARCHED",arraySearched)
+                    startActivity(it)
+                }
+            }
+        })
+    }
+
+    fun rv_type(){
+        var type = arrayListOf<SQLdata.ArrayCategory>()
+        imageId = arrayOf(
+            R.drawable.hlavni_chod,
+            R.drawable.moucnik,
+            R.drawable.polevka,
+            R.drawable.svacina,
+            R.drawable.snidane,
+            R.drawable.priloha
+        )
+        val stringType = resources.getStringArray(R.array.typeOfRecept)
+        for (i in imageId.indices){
+            val item = SQLdata.ArrayCategory(i,stringType[i],imageId[i])
+            type.add(item)
+        }
+
+        rv_Type.layoutManager = LinearLayoutManager(this)
+        var categoryAdapter = CategoryAdapter(type)
+        rv_Type.adapter = categoryAdapter
+
+        categoryAdapter.setOnItemClickListener(object : CategoryAdapter.onItemClickListener {
+
+            override fun onItemClick(position: Int) {
+//                super.onItemClick(position)
+//                val intent = Intent(this@MainActivity,SearchedActivity::class.java).also {
+//                    it.putExtra("EXTRA_SEARCHED",arraySearched)
+//                    startActivity(it)
+                val where = " WHERE TYPE = " + "'"+type[position].string+"'"
+                var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
+                arraySearched = DBHelper(this@MainActivity).selectTitleIMG(where)
+                Intent(this@MainActivity,SearchedActivity::class.java).also {
+                    it.putExtra("EXTRA_SEARCHED",arraySearched)
+                    startActivity(it)
+                }
+            }
+        })
     }
 }
