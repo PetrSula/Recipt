@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bakalarkapokus.AdvanceActivity
 import com.example.bakalarkapokus.DruhaAktivita
 import com.example.bakalarkapokus.MainActivity
 import com.example.bakalarkapokus.R

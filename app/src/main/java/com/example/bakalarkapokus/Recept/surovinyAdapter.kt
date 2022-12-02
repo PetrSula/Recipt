@@ -32,8 +32,11 @@ class surovinyAdapter (val context: Context, private val sList: ArrayList<SQLdat
         if (context is AdvanceActivity){
             holder.tvEdit.visibility = View.GONE
         }
-
-
+        holder.tvEdit.setOnClickListener{
+            if ( context is AddRecept ){
+                context.editSurovinaRV(item)
+            }
+        }
         holder.tvDelete.setOnClickListener {
             if (context is AddRecept ) {
                 context.deleteSurovinu(item)

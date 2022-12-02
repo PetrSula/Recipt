@@ -59,6 +59,9 @@ class ReceptActivita: AppCompatActivity() {
             }
         }
         showRecept(gv_id)
+        iv_edit_recept.setOnClickListener{
+            editaceRecept(gv_id)
+        }
 
     }
 
@@ -135,5 +138,11 @@ class ReceptActivita: AppCompatActivity() {
         val DB = DBHelper(this)
         var suroviny:ArrayList<SQLdata.RvSurovinyRecept> = DB.selectSUROVINYrecept(id)
         return suroviny
+    }
+    fun editaceRecept(id: Int){
+        Intent(this,AddRecept::class.java).also {
+            it.putExtra("EXTRA_ID", id)
+            startActivity(it)
+        }
     }
 }

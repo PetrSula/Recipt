@@ -30,8 +30,11 @@ class SearchedActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val gv_title = intent.getStringExtra("EXTRA_TITLE")
         val arraySearched = intent.getSerializableExtra("EXTRA_SEARCHED") as ArrayList<SQLdata.AraySearched>
+
+//        SET TITLE
+
 
 
         setContentView(R.layout.selected_rv)

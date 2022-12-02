@@ -1,4 +1,5 @@
 package com.example.bakalarkapokus.Tables
+/*TODO - zavrít databáze po každém dotazu*/
 
 import android.content.ContentValues
 import android.content.Context
@@ -6,10 +7,29 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
-import kotlin.collections.ArrayList
+import android.util.Log
+import java.io.File
+import java.io.FileOutputStream
 
 
-class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null,8) {
+const val dbName = "MyDB.db"
+
+
+class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null,8) {
+    private var dataBase: SQLiteDatabase? = null
+
+    init {
+        // Check if the database already copied to the device.
+        val dbExist = checkDatabase()
+        if (dbExist) {
+            // if already copied then don't do anything.
+            Log.e("-----", "Database exist")
+        } else {
+            // else copy the database to the device.
+            Log.e("-----", "Database doesn't exist")
+            createDatabase()
+        }
+    }
 
     override fun onCreate(db: SQLiteDatabase?) {
         val Create_table_SPIZ = "CREATE TABLE SPIZ (ID INTEGER PRIMARY KEY AUTOINCREMENT ," +
@@ -96,6 +116,26 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
             db.execSQL(Create_table_RECEPT)
         }
 
+    }
+    private fun createDatabase() {
+        copyDatabase()
+    }
+    private fun checkDatabase(): Boolean {
+        val dbFile = File(context.getDatabasePath(dbName).path)
+        return dbFile.exists()
+    }
+    private fun copyDatabase() {
+
+        val inputStream = context.assets.open("$dbName")
+        val outputFile = File(context.getDatabasePath(dbName).path)
+        val outputStream = FileOutputStream(outputFile)
+
+        val bytesCopied = inputStream.copyTo(outputStream)
+        Log.e("bytesCopied", "$bytesCopied")
+        inputStream.close()
+
+        outputStream.flush()
+        outputStream.close()
     }
 
     fun insertDataRecept(dataRecept: SQLdata.Recept):Long{
@@ -340,11 +380,33 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
         DB.close()
         return succes
     }
+    fun selectOneSurRecept(int: Int): SQLdata.RvSurovinyRecept{
+        val DB = this.readableDatabase
+        val selecQuery = "SELECT "+ TABLE_SUROVINY_RECEPT+"."+ID+", " + TABLE_INGREDIENCE+"."+ NAME + ", " + TABLE_SUROVINY_RECEPT + "." + QUANTITY +
+                " FROM " + TABLE_INGREDIENCE +
+                " JOIN " + TABLE_SUROVINY_RECEPT+" ON "+TABLE_SUROVINY_RECEPT+"."+ INGREDIENCE_ID+" = "+ TABLE_INGREDIENCE+"."+ ID +
+                " WHERE "+ TABLE_SUROVINY_RECEPT+"."+ ID +" = "+ int
+        var name:String
+        var quantity:String
+        var id:Int = 0
+        var cursor: Cursor? = null
+        try {
+            cursor = DB.rawQuery(selecQuery, null)
+        } catch (e: SQLiteException) {
+            DB.execSQL(selecQuery)
+            return SQLdata.RvSurovinyRecept(0,"","")
+        }
+         id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
+         name = cursor.getString(cursor.getColumnIndexOrThrow(NAME))
+        quantity = cursor.getString(cursor.getColumnIndexOrThrow(QUANTITY))
+        val data = SQLdata.RvSurovinyRecept(id,name,quantity)
+        return data
+    }
 
     fun selectSUROVINYrecept(int: Int): ArrayList<SQLdata.RvSurovinyRecept>{
         var suroviny:ArrayList<SQLdata.RvSurovinyRecept> = ArrayList<SQLdata.RvSurovinyRecept>()
         val DB = this.readableDatabase
-        val selecQuery = "SELECT " + TABLE_INGREDIENCE+"."+ NAME + ", " + TABLE_SUROVINY_RECEPT + "." + QUANTITY +
+        val selecQuery = "SELECT "+ TABLE_SUROVINY_RECEPT+"."+ID+", " + TABLE_INGREDIENCE+"."+ NAME + ", " + TABLE_SUROVINY_RECEPT + "." + QUANTITY +
                             " FROM " + TABLE_INGREDIENCE +
                             " JOIN " + TABLE_SUROVINY_RECEPT+" ON "+TABLE_SUROVINY_RECEPT+"."+ INGREDIENCE_ID+" = "+ TABLE_INGREDIENCE+"."+ ID +
                  " WHERE "+ TABLE_SUROVINY_RECEPT+"."+ RECEPT_ID+" = "+ int
@@ -359,14 +421,23 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
             return ArrayList()
         }
         if (cursor.moveToFirst()){
-            do {id += id
+            do {id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
                 name = cursor.getString(cursor.getColumnIndexOrThrow(NAME))
                 quantity = cursor.getString(cursor.getColumnIndexOrThrow(QUANTITY))
-                val data = SQLdata.RvSurovinyRecept(0,name,quantity)
+                val data = SQLdata.RvSurovinyRecept(id,name,quantity)
                 suroviny.add(data)
             }while (cursor.moveToNext())
         }
         return suroviny
+    }
+    fun updateSur(surovinyRecept: SQLdata.SurovinyRecept ){
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(INGREDIENCE_ID,surovinyRecept.ingredience_id)
+        contentValues.put(RECEPT_ID,surovinyRecept.recept_id)
+        contentValues.put(QUANTITY,surovinyRecept.quantity)
+        db.update(TABLE_SUROVINY_RECEPT,contentValues,"ID=${surovinyRecept.id}", arrayOf())
+        db.close()
     }
 
     fun selectAllTitles() : ArrayList<String>{
@@ -433,9 +504,23 @@ class DBHelper ( context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null
         }
         return arraySearched
     }
+    fun updateRecept(recept: SQLdata.Recept){
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(TITLE,recept.title)
+        contentValues.put(TYPE,recept.type)
+        contentValues.put(CATEGORY,recept.category)
+        contentValues.put(TIME,recept.time)
+        contentValues.put(POSTUP,recept.postup)
+        contentValues.put(QUANTITY,recept.quantity)
+        contentValues.put(PORTION,recept.portion)
+        contentValues.put(IMG,recept.img)
+        db.update(TABLE_RECEPT,contentValues,"ID=${recept.id}", arrayOf())
+        db.close()
+    }
 
     companion object{
-        private val DATABASE_NAME = "MyDB"
+        private val DATABASE_NAME = "MyDB.db"
         private val TABLE_SPIZ = "SPIZ"
         private val TABLE_RECEPT = "RECEPT"
         private val TABLE_INGREDIENCE = "INGREDIENCE"

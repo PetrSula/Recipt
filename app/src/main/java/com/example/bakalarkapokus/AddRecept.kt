@@ -9,6 +9,7 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -17,6 +18,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.translationMatrix
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.akexorcist.snaptimepicker.SnapTimePickerDialog
 import com.bumptech.glide.Glide
@@ -29,6 +31,7 @@ import com.bumptech.glide.request.target.Target
 import com.example.bakalarkapokus.Recept.surovinyAdapter
 import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
+import kotlinx.android.synthetic.main.activity_recept.*
 import kotlinx.android.synthetic.main.dialog_img.*
 import kotlinx.android.synthetic.main.recept_postup.*
 import pub.devrel.easypermissions.EasyPermissions
@@ -49,9 +52,10 @@ import kotlin.collections.ArrayList
          - editace surovin
          - vyčistit data po přidání
          - default obrázek
+         - není upraveno přístup/oprava obrázku
 
 */
-val data = ArrayList<SQLdata.Suroviny>()
+var data = ArrayList<SQLdata.Suroviny>()
 var id_addSurovin = 0
 
 
@@ -60,6 +64,8 @@ class AddRecept: AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        data.clear()
+        val gv_id = intent.getIntExtra("EXTRA_ID",0)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.recept_postup)
 
@@ -77,7 +83,11 @@ class AddRecept: AppCompatActivity() {
         }
 
         btn_add_dish.setOnClickListener{
-            addRecept()
+            if (gv_id != 0){
+                updateRecept(gv_id )
+            }else{
+                addRecept()
+            }
         }
         et_cooking_time.setOnClickListener {
             SnapTimePickerDialog.Builder().apply {
@@ -99,8 +109,9 @@ class AddRecept: AppCompatActivity() {
                 SnapTimePickerDialog.TAG
             )
         }
-//        val simpleSearchView : SearchView = findViewById(R.id.simpleSearchView)
-
+//      val simpleSearchView : SearchView = findViewById(R.id.simpleSearchView)
+//      pokud přístup z editace ukaž recept
+        showRecept(gv_id)
 
         val autoTextView : AutoCompleteTextView = findViewById(R.id.at_AddSurovina)
         var listOfIngredience = DBHelper(this).selectallIngredience()
@@ -128,8 +139,41 @@ class AddRecept: AppCompatActivity() {
         val typeAdapter = ArrayAdapter(this, R.layout.dropdown_item, stringType)
         val typeAC = findViewById<AutoCompleteTextView>(R.id.ac_type)
         typeAC.setAdapter(typeAdapter)
-//        Time picker
 
+
+    }
+    fun showRecept(id: Int){
+        val DB = DBHelper(this)
+        val recept :ArrayList<SQLdata.Recept> = DB.selectRECEPT(id)
+        if (recept.isEmpty()){
+            return
+        }
+        val data_edit = recept.get(0)
+        val file = File(data_edit.img)
+        var imgURI = Uri.fromFile(file)
+        val title = data_edit.title
+        val postup = data_edit.postup
+        val type = data_edit.type
+        val category = data_edit.category
+        val portion = data_edit.portion.toString()
+        val sur = getSuroviny(id)
+        for (item in sur){
+            data.add(SQLdata.Suroviny(item.id,item.name,item.quantity))
+        }
+
+        et_title.setText(title)
+        ac_type.setText(type)
+        ac_category.setText(category)
+        et_cooking_time.setText(data_edit.time)
+        tv_portion.text = portion
+        et_direction_to_cook.setText(postup)
+
+    }
+
+    fun getSuroviny(id: Int):ArrayList<SQLdata.RvSurovinyRecept>{
+        val DB = DBHelper(this)
+        var suroviny:ArrayList<SQLdata.RvSurovinyRecept> = DB.selectSUROVINYrecept(id)
+        return suroviny
     }
 
     fun onTimePicked(selectedHour: Int, selectedMinute: Int) {
@@ -144,6 +188,18 @@ class AddRecept: AppCompatActivity() {
                 hour, minute))
         et_cooking_time.setText(the_time)
 
+    }
+
+    fun editSurovinaRV(sData: SQLdata.Suroviny){
+        var qunatity = sData.quantity.split(" ")
+            .dropLast(1)
+            .joinToString(" ")
+        var type = sData.quantity.substring(sData.quantity.lastIndexOf(' '))
+        at_AddSurovina.setText(sData.name)
+        et_quantyti.setText(qunatity.trim())
+        ac_typequantity.setText(type)
+        SVadd.scrollToDescendant(et_direction_to_cook)
+        btn_addSurivina.setText("Editovat Surovinu")
     }
 
     fun set_portion(boolean: Boolean){
@@ -295,11 +351,12 @@ class AddRecept: AppCompatActivity() {
     private fun addSurovina () {
 //        val spinner: Spinner = (findViewById(R.id.ac_typequantity))
         val typeQuantity = ac_typequantity.text.toString().trim()
-        val name = at_AddSurovina.text.toString().trim()
+        var name = at_AddSurovina.text.toString().trim()
         val quantyti = et_quantyti.text.toString().trim()
 //        val typeQuantity: String = spinner.selectedItem.toString()
-        val final_quaintity = quantyti  + ' ' + typeQuantity
+        var final_quaintity = quantyti  + ' ' + typeQuantity
         hideKeyboard(this)
+
         if (name.isNotEmpty()){
             val addOK = data.any { it.name == name }
             if (!addOK) {
@@ -311,17 +368,29 @@ class AddRecept: AppCompatActivity() {
                 //("přídat autocoplete ")
                 showSuroviny()
             }else{
-                val alertDialog = AlertDialog.Builder(this).create()
+                val alertDialog = AlertDialog.Builder(this)
                 alertDialog.setTitle("Alert")
-                alertDialog.setMessage("Surovina se již nachází v receptu")
-                alertDialog.setButton(
-                    AlertDialog.BUTTON_NEUTRAL, "OK"
-                ) { dialog, which -> dialog.dismiss() }
-                alertDialog.show()
+                alertDialog.setMessage("Surovina se již nachází v receptu, přejete si ji změnit")
+                alertDialog.setIcon(android.R.drawable.ic_dialog_alert)
+                alertDialog.setPositiveButton("ANO"){ dialogInterface, which->
+                    var index = data.indexOfFirst{ it.name == name}
+                    var item = data.get(index)
+                    data.set(index,SQLdata.Suroviny(item.id,name,final_quaintity))
+                    dialogInterface.dismiss()
+                    showSuroviny()
+                }
+                alertDialog.setNegativeButton("NE"){ dialogInterface, which ->
+                    dialogInterface.dismiss()
+                }
+                val alert: AlertDialog = alertDialog.create()
+                alert.setCancelable(true)
+                alert.show()
             }
-
+        }else{
+            Toast.makeText(applicationContext, "Název suroviny nevyplněn", Toast.LENGTH_LONG).show()
         }
     }
+
 
     private fun showSuroviny(){
         val adapter = surovinyAdapter(this, data)
@@ -413,6 +482,61 @@ class AddRecept: AppCompatActivity() {
 
         //("přidání ukládání surovin do tabulky ingredience")
         //("ošetřit přidání bez titulu, postupu či ingrediencí")
+    }
+
+    fun updateRecept(id : Int){
+        val title = et_title.text.toString().trim()
+        val type = ac_type.text.toString().trim()
+        val category = ac_category.text.toString().trim()
+        val time = et_cooking_time.text.toString().trim()
+        val postup = et_direction_to_cook.text.toString()
+        val typeQuantity = ac_typequantity.text.toString().trim()
+        val strQuantity = et_quantyti.text.toString().trim()
+        val quantity = strQuantity  + ' ' + typeQuantity
+        val strPortion = tv_portion.text.toString()
+        val portion = strPortion.toInt()
+        val img = img_Path
+        var chech = true
+        val DB = DBHelper(this)
+        til_title.setError(null)
+        tvAddSurovina.setError(null)
+        til_direction_to_cook.setError(null)
+
+        if (title.isEmpty()) {
+            Toast.makeText(applicationContext, "Název receptu nevyplněn", Toast.LENGTH_LONG).show()
+            til_title.setError("Povinné")
+            chech = false
+        } else if(data.isEmpty()){
+            Toast.makeText(applicationContext, "Není vyplněna ani jedna surovina", Toast.LENGTH_LONG).show()
+            tvAddSurovina.setError("Povinné")
+            chech = false
+        } else if (postup.isEmpty()){
+            Toast.makeText(applicationContext, "Postup receptu nevyplněn", Toast.LENGTH_LONG).show()
+            til_direction_to_cook.setError("Povinné")
+            chech = false
+        }
+        if (chech){
+            val status = DB.updateRecept(SQLdata.Recept(id,title, type,category,time,postup,quantity,portion,img))
+            updateSurovinyRecept(id)
+            displayRecept(id)
+        }
+    }
+    fun updateSurovinyRecept(receptID : Int){
+        val DB = DBHelper(this)
+        for (item in data){
+            val itemDB = DB.selectOneSurRecept(item.id)
+            if (item.name != itemDB.name){
+                var add: ArrayList<SQLdata.Ingredience> = DB.selectINGREDIENCE(item.name)
+                val ingredienceID = add[0].id
+                val quantyti = item.quantity
+                DB.insertSURIVONYrecept(SQLdata.SurovinyRecept(0,ingredienceID,receptID,quantyti))
+            }else if (item.quantity != itemDB.quantity) {
+                var add: ArrayList<SQLdata.Ingredience> = DB.selectINGREDIENCE(item.name)
+                val ingredienceID = add[0].id
+                val quantyti = item.quantity
+                DB.updateSur(SQLdata.SurovinyRecept(item.id, ingredienceID, receptID, quantyti))
+            }
+        }
     }
     fun pridatIngredienci(name : String){
         val DB = DBHelper(this)

@@ -138,12 +138,10 @@ class MainActivity : AppCompatActivity() {
 //            return
 //        }
         val id = DBHelper(this).selectByTitle(input)
-        Toast.makeText(this@MainActivity, "Nalezen " + id.toString(), Toast.LENGTH_LONG).show()
         if (id != 0){
             showRecept(id)
         }
         else{
-            showSearched()
             return
         }
     }
@@ -191,6 +189,7 @@ class MainActivity : AppCompatActivity() {
                 arraySearched = DBHelper(this@MainActivity).selectTitleIMG(where)
                 Intent(this@MainActivity,SearchedActivity::class.java).also {
                     it.putExtra("EXTRA_SEARCHED",arraySearched)
+                    it.putExtra("EXTRA_TITLE",category[position].string)
                     startActivity(it)
                 }
             }
