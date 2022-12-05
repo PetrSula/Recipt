@@ -1,5 +1,8 @@
 package com.example.bakalarkapokus.Tables
-/*TODO - zavrít databáze po každém dotazu*/
+/*TODO - zavrít databáze po každém dotazu
+       - select DISTINCT RECEPT.ID from recept, SUROVINY_RECEPT
+Where (SUROVINY_RECEPT.RECEPT_ID = RECEPT.ID) AND ( RECEPT.CATEGORY = 'vegetariánské') AND
+	(  SUROVINY_RECEPT.INGREDIENCE_ID = 9 or SUROVINY_RECEPT.INGREDIENCE_ID = 11)*/
 
 import android.content.ContentValues
 import android.content.Context
@@ -253,11 +256,9 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
             where = " WHERE NAME =" + "'" + name + "'"
         }
         val INGList: ArrayList<SQLdata.Ingredience> = ArrayList<SQLdata.Ingredience>()
-
         val selecQuery = "SELECT * FROM "+ TABLE_INGREDIENCE +where
         val DB = this.readableDatabase
         var cursor: Cursor? = null
-
         try {
             cursor = DB.rawQuery(selecQuery, null)
         } catch (e: SQLiteException) {
@@ -266,18 +267,34 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         }
         var id: Int
         var name: String
-
         if (cursor.moveToFirst()) {
             do {
                 id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
                 name = cursor.getString(cursor.getColumnIndexOrThrow(NAME))
-
                 val data = SQLdata.Ingredience(id = id, name = name)
                 INGList.add(data)
-
             } while (cursor.moveToNext())
         }
         return INGList
+    }
+
+    fun sellectOneIDIngredience(name:String) :Int{
+        var id = -1
+        val DB = this.readableDatabase
+        val selecQuery = "SELECT ID FROM " + TABLE_INGREDIENCE + " WHERE NAME = " + name
+        var cursor: Cursor? = null
+        try {
+            cursor = DB.rawQuery(selecQuery, null)
+        } catch (e: SQLiteException) {
+            DB.execSQL(selecQuery)
+            return id
+        }
+        if (cursor.moveToFirst()) {
+            do {id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
+
+            } while (cursor.moveToNext())
+        }
+        return id
     }
 
     fun selectallIngredience() : ArrayList<String>{
@@ -390,17 +407,22 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         var quantity:String
         var id:Int = 0
         var cursor: Cursor? = null
+        var suroviny:SQLdata.RvSurovinyRecept = SQLdata.RvSurovinyRecept(0,"","")
         try {
             cursor = DB.rawQuery(selecQuery, null)
         } catch (e: SQLiteException) {
             DB.execSQL(selecQuery)
-            return SQLdata.RvSurovinyRecept(0,"","")
+            return suroviny
         }
-         id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
-         name = cursor.getString(cursor.getColumnIndexOrThrow(NAME))
-        quantity = cursor.getString(cursor.getColumnIndexOrThrow(QUANTITY))
-        val data = SQLdata.RvSurovinyRecept(id,name,quantity)
-        return data
+        if (cursor.moveToFirst()) {
+            do {
+                id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
+                name = cursor.getString(cursor.getColumnIndexOrThrow(NAME))
+                quantity = cursor.getString(cursor.getColumnIndexOrThrow(QUANTITY))
+                suroviny = SQLdata.RvSurovinyRecept(id, name, quantity)
+            } while (cursor.moveToNext())
+        }
+        return suroviny
     }
 
     fun selectSUROVINYrecept(int: Int): ArrayList<SQLdata.RvSurovinyRecept>{
@@ -482,8 +504,8 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
     fun selectTitleIMG(where : String) : ArrayList<SQLdata.AraySearched>{
         var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
         val DB = this.readableDatabase
-        val selecQuery = "SELECT "+ ID+", "+ TITLE+", "+ IMG +
-                " FROM "+ TABLE_RECEPT + where
+        val selecQuery = "SELECT DISTINCT $TABLE_RECEPT."+ ID+", $TABLE_RECEPT."+ TITLE+", $TABLE_RECEPT."+ IMG +
+                " FROM "+ TABLE_RECEPT+", "+ TABLE_SUROVINY_RECEPT + " WHERE (SUROVINY_RECEPT.RECEPT_ID = RECEPT.ID) " + where
         var title:String
         var img:String
         var id:Int = 0

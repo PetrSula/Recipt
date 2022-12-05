@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_vyhledavani.*
 import kotlinx.android.synthetic.main.recept_postup.*
 
 val data_search = ArrayList<SQLdata.Suroviny>()
+val data_id     = ArrayList<Int>()
 var id_inger = 0
 
 class AdvanceActivity : AppCompatActivity(){
@@ -59,12 +60,12 @@ class AdvanceActivity : AppCompatActivity(){
 //                adapter pro dropdown Kategorie
         val stringCategory = resources.getStringArray(R.array.categoryRecept)
         val categoryAdapter = ArrayAdapter(this,R.layout.dropdown_item,stringCategory)
-        val categoryAC = findViewById<AutoCompleteTextView>(R.id.ac_category)
+        val categoryAC = findViewById<AutoCompleteTextView>(R.id.ac_categoryAV)
         categoryAC.setAdapter(categoryAdapter)
 //        adapter pro dropdown Typ
         val stringType = resources.getStringArray(R.array.typeOfRecept)
         val typeAdapter = ArrayAdapter(this, R.layout.dropdown_item, stringType)
-        val typeAC = findViewById<AutoCompleteTextView>(R.id.ac_type)
+        val typeAC = findViewById<AutoCompleteTextView>(R.id.ac_typeAV)
         typeAC.setAdapter(typeAdapter)
 
         rv_addSearc.layoutManager = LinearLayoutManager(this)
@@ -74,6 +75,9 @@ class AdvanceActivity : AppCompatActivity(){
         }
         btn_addAll.setOnClickListener{
             addAll()
+        }
+        btn_advadnceSerch.setOnClickListener {
+            val where = getWhere()
         }
 
     }
@@ -85,6 +89,8 @@ class AdvanceActivity : AppCompatActivity(){
             if (!addOK) {
                 id_inger = id_inger.inc()
                 data_search.add(SQLdata.Suroviny(id_inger,name,""))
+                val addId = DBHelper(this).sellectOneIDIngredience(name)
+                data_id.add(addId)
                 at_AddSurovinaAV.text.clear()
                 showIngred()
 
@@ -112,6 +118,8 @@ class AdvanceActivity : AppCompatActivity(){
         builder.setIcon(android.R.drawable.ic_dialog_alert)
 
         builder.setPositiveButton("ANO") { dialogInterface, which ->
+            val addId = DBHelper(this).sellectOneIDIngredience(sData.name)
+            data_id.remove(addId)
             data_search.remove(sData)
             showIngred()
 
@@ -134,8 +142,39 @@ class AdvanceActivity : AppCompatActivity(){
             if (!addOK){
                 id_inger = id_inger.inc()
                 data_search.add(SQLdata.Suroviny(id_inger,item.name,""))
+                val addId = DBHelper(this).sellectOneIDIngredience(item.name)
+                data_id.add(addId)
             }
         }
         showIngred()
     }
+    fun getWhere(): String{
+        var where = ""
+        val typ = ac_typeAV.text.toString()
+        val category = ac_categoryAV.text.toString()
+        if (!typ.isEmpty()){
+            where + "AND ( RECEPT.TYPE = "+typ +" ) "
+        }
+        if (!category.isEmpty()){
+            where + "AND ( RECEPT.CATEGORY = "+category+ " )"
+        }
+//        val type = ac_type.text.toString()
+//        val category = ac_category.
+        val sur = " AND " + getWhereSur()
+        return where
+    }
+    fun getWhereSur(): String{
+        var where : String = "("
+        var first = true
+        for (i in data_id){
+            if (first){
+                first = false
+                where + "SUROVINY_RECEPT.INGREDIENCE_ID = " + i
+                continue
+            }
+            where + " or SUROVINY_RECEPT.INGREDIENCE_ID = " + i
+        }
+        return where+")"
+    }
+
 }

@@ -184,7 +184,7 @@ class MainActivity : AppCompatActivity() {
 //                val intent = Intent(this@MainActivity,SearchedActivity::class.java).also {
 //                    it.putExtra("EXTRA_SEARCHED",arraySearched)
 //                    startActivity(it)
-                val where = " WHERE CATEGORY = " + "'"+category[position].string+"'"
+                val where = "AND ( RECEPT.CATEGORY = " + "'"+category[position].string+"' )"
                 var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
                 arraySearched = DBHelper(this@MainActivity).selectTitleIMG(where)
                 Intent(this@MainActivity,SearchedActivity::class.java).also {
@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity() {
 //                val intent = Intent(this@MainActivity,SearchedActivity::class.java).also {
 //                    it.putExtra("EXTRA_SEARCHED",arraySearched)
 //                    startActivity(it)
-                val where = " WHERE TYPE = " + "'"+type[position].string+"'"
+                val where = " AND RECEPT.TYPE = " + "'"+type[position].string+"'"
                 var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
                 arraySearched = DBHelper(this@MainActivity).selectTitleIMG(where)
                 Intent(this@MainActivity,SearchedActivity::class.java).also {

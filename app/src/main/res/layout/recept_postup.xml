@@ -34,7 +34,7 @@
                     android:id="@+id/iv_dish_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/background"
+                    android:background="@color/third"
                     android:contentDescription="IMG"
                     android:scaleType="fitXY" />
 
@@ -77,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:maxLength="50"
-                    android:textColor="@color/purple_200"
+                    android:textColor="@color/secondary"
                     android:textSize="15dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,7 +90,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Type"
-                app:hintTextColor="@color/purple_500"
+                app:hintTextColor="@color/secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/til_title">
@@ -102,7 +102,7 @@
                     android:focusable="false"
                     android:focusableInTouchMode="true"
                     android:inputType="text"
-                    android:textColor="@color/purple_200"
+                    android:textColor="@color/black"
                     android:textSize="15dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -115,7 +115,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="kategorie"
-                app:hintTextColor="@color/purple_500"
+                app:hintTextColor="@color/secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/til_type">
@@ -127,7 +127,7 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:inputType="text"
-                    android:textColor="@color/purple_200"
+                    android:textColor="@color/black"
                     android:textSize="15dp" />
 
                 <TextView
@@ -138,7 +138,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:text="Suroviny"
-                    android:textColor="@color/purple_500"
+                    android:textColor="@color/secondary"
                     android:textSize="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -174,7 +174,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="suroviny"
-                app:hintTextColor="@color/purple_700"
+                app:hintTextColor="@color/secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rv_addSuroviny">
@@ -185,7 +185,7 @@
                     android:layout_height="55dp"
                     android:inputType="textMultiLine"
                     android:paddingLeft="10dp"
-                    android:textColor="@color/purple_200"
+                    android:textColor="@color/black"
                     android:textSize="15dp" />
 
 
@@ -211,7 +211,7 @@
                     android:layout_marginEnd="16dp"
                     android:layout_weight="0.65"
                     android:hint="množství"
-                    app:hintTextColor="@color/purple_700">
+                    app:hintTextColor="@color/secondary">
 
                     <EditText
                         android:id="@+id/et_quantyti"
@@ -219,7 +219,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.75"
                         android:gravity="top"
-                        android:textColor="@color/purple_200"
+                        android:textColor="@color/black"
                         android:textSize="15dp" />
 
 
@@ -234,7 +234,7 @@
                     android:layout_marginEnd="16dp"
                     android:layout_weight="0.35"
                     android:hint="druh"
-                    app:hintTextColor="@color/purple_700">
+                    app:hintTextColor="@color/secondary">
 
                     <AutoCompleteTextView
                         android:id="@+id/ac_typequantity"
@@ -279,7 +279,7 @@
                     android:layout_weight="0.4"
                     android:textSize="20dp"
                     android:hint="Počet porcí"
-                    app:hintTextColor="@color/purple_700"/>
+                    app:hintTextColor="@color/secondary"/>
 
 <!--                <TextView-->
 <!--                    android:id="@+id/et_portion"-->
@@ -299,7 +299,7 @@
                     android:layout_marginStart="8dp"
                     android:background="@color/background"
                     android:foreground="?android:attr/selectableItemBackground"
-                    app:cardBackgroundColor="@color/purple_500"
+                    app:cardBackgroundColor="@color/secondary"
                     app:cardCornerRadius="5dp"
                     app:cardElevation="9dp">
 
@@ -333,7 +333,7 @@
                     android:background="@color/background"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:layout_marginEnd="26dp"
-                    app:cardBackgroundColor="@color/purple_500"
+                    app:cardBackgroundColor="@color/secondary"
                     app:cardCornerRadius="5dp"
                     app:cardElevation="9dp">
 
@@ -382,7 +382,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Postup"
-                app:hintTextColor="@color/purple_700"
+                app:hintTextColor="@color/secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/til_cooking_time">
@@ -409,7 +409,7 @@
                     android:layout_marginBottom="50dp"
                     android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"
-                    android:text="Přidat recept"
+                    android:text="Uložit recept"
                     app:layout_constraintBottom_toBottomOf="@+id/til_direction_to_cook"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

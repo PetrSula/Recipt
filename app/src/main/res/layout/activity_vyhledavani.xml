@@ -13,7 +13,7 @@
             android:id="@+id/viewHead"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="@color/background"
+            android:background="@color/primary"
             app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -91,19 +91,19 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:hint="Type"
-                    app:hintTextColor="@color/purple_500"
+                    app:hintTextColor="@color/secondary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <AutoCompleteTextView
-                        android:id="@+id/ac_type"
+                        android:id="@+id/ac_typeAV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:focusableInTouchMode="true"
                         android:inputType="text"
-                        android:textColor="@color/purple_200"
+                        android:textColor="@color/black"
                         android:textSize="15dp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -116,19 +116,19 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:hint="kategorie"
-                    app:hintTextColor="@color/purple_500"
+                    app:hintTextColor="@color/secondary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/til_type">
 
                     <AutoCompleteTextView
-                        android:id="@+id/ac_category"
+                        android:id="@+id/ac_categoryAV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="text"
-                        android:textColor="@color/purple_200"
+                        android:textColor="@color/black"
                         android:textSize="15dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -141,7 +141,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:text="Suroviny"
-                    android:textColor="@color/purple_500"
+                    android:textColor="@color/secondary"
                     android:textSize="20dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/til_category" />
@@ -165,7 +165,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:hint="suroviny"
-                    app:hintTextColor="@color/purple_700"
+                    app:hintTextColor="@color/secondary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rv_addSearc">
@@ -176,7 +176,7 @@
                         android:layout_height="55dp"
                         android:inputType="textMultiLine"
                         android:paddingLeft="10dp"
-                        android:textColor="@color/purple_200"
+                        android:textColor="@color/black"
                         android:textSize="15dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -187,6 +187,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Přidat Surovinu"
+                    android:backgroundTint="@color/secondary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
@@ -197,11 +198,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/secondary"
                     android:text="Vše ze spíže"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btn_addItem" />
+                <Button
+                    android:id="@+id/btn_advadnceSerch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/secondary"
+                    android:text="Vyhledat"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_addAll" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,7 +22,7 @@
                 android:layout_height="300dp"
                 android:theme="@style/Theme.BakalarkaPokus"
                 app:layout_scrollFlags="scroll"
-                app:contentScrim="@color/design_default_color_primary">
+                app:contentScrim="@color/third">
 
                 <ImageView
                     android:id="@+id/ivPicture"
@@ -75,7 +75,7 @@
                         android:layout_weight="0.8"
                         android:textSize="30dp"
                         android:hint=" Title"
-                        android:textColor="@color/black"
+                        android:textColor="@color/secondary"
                         android:textStyle="bold"
                         android:gravity="center"
                         android:textAlignment="center"/>
@@ -88,13 +88,13 @@
                         android:contentDescription="IMG"
                         android:focusable="true"
                         android:padding="16dp"
-                        android:tint="@color/background"
+                        android:tint="@color/primary"
                         android:src="@drawable/ic_edit" />
                 </LinearLayout>
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="2dp"
-                    android:background="@color/purple_200">
+                    android:background="@color/third">
 
                 </View>
 
@@ -225,7 +225,7 @@
                         android:textSize="20dp"
                         android:hint="Počet porcí"
                         android:textStyle="bold"
-                        app:hintTextColor="@color/purple_700"/>
+                        android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/tv_portionR"
@@ -245,7 +245,7 @@
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="2dp"
-                    android:background="@color/purple_200">
+                    android:background="@color/third">
 
                 </View>
 
@@ -270,7 +270,7 @@
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="2dp"
-                    android:background="@color/purple_200">
+                    android:background="@color/third">
                 </View>
                 <TextView
                 android:id="@+id/tvPostuprm"

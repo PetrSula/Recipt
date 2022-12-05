@@ -28,7 +28,7 @@
                     android:id="@+id/Vvheader"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:background="@color/background" />
+                    android:background="@color/primary" />
 
 
                 <LinearLayout
@@ -95,7 +95,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="16dp"
                     android:text="Kategorie"
-                    android:textColor="@color/background"
+                    android:textColor="@color/secondary"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
@@ -120,7 +120,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="16dp"
                     android:text="Typ"
-                    android:textColor="@color/background"
+                    android:textColor="@color/secondary"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
@@ -159,7 +159,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
-            android:backgroundTint="@color/background"
+            android:backgroundTint="@color/secondary"
             android:src="@drawable/ic_add">
 
         </com.google.android.material.floatingactionbutton.FloatingActionButton>
