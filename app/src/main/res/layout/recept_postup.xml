@@ -36,7 +36,7 @@
                     android:layout_height="match_parent"
                     android:background="@color/third"
                     android:contentDescription="IMG"
-                    android:scaleType="fitXY" />
+                    android:scaleType="centerCrop" />
 
                 <ImageView
                     android:id="@+id/iv_add_dish_image"

@@ -48,12 +48,12 @@ class AdvanceActivity : AppCompatActivity(){
                     startActivity(intent)
                     true
                 }
-                R.id.miItem2 -> {
-                    val intent = Intent(this, ReceptActivita::class.java)
-                    finish()
-                    startActivity(intent)
-                    true
-                }
+//                R.id.miItem2 -> {
+//                    val intent = Intent(this, ReceptActivita::class.java)
+//                    finish()
+//                    startActivity(intent)
+//                    true
+//                }
                 R.id.miItem0 -> {
                     val intent = Intent(this, MainActivity::class.java)
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

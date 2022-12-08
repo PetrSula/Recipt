@@ -6,21 +6,23 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@color/white">
+        android:layout_height="80dp"
+        android:background="@color/white"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/view_img"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp">
+        android:paddingStart="15dp"
+        app:cardCornerRadius="20dp">
 
         <ImageView
             android:id="@+id/ivRecept"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:scaleType="matrix"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
             >
         </ImageView>
 

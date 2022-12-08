@@ -1,10 +1,12 @@
 package com.example.bakalarkapokus.Recept
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
@@ -17,6 +19,7 @@ import com.example.bakalarkapokus.Tables.SQLdata
 import kotlinx.android.synthetic.main.items_row.view.*
 import kotlinx.android.synthetic.main.items_searchable.view.*
 import kotlinx.android.synthetic.main.activity_recept.*
+import kotlinx.android.synthetic.main.recept_postup.*
 import java.io.File
 
 class SearchAdapter (val context: Context, private val sList: ArrayList<SQLdata.AraySearched>): RecyclerView.Adapter<SearchAdapter.ViewHolder>(){
@@ -52,16 +55,38 @@ class SearchAdapter (val context: Context, private val sList: ArrayList<SQLdata.
         val item = sList[position]
         holder.tvName.text = item.title
 
-        var requestOptions = RequestOptions()
-            .fitCenter()
-            .override(200,200)
-        val file = File(item.img)
-        var imgURI = Uri.fromFile(file)
+//        loadDataFromAsset(holder,item.img)
+//        var requestOptions = RequestOptions()
+//            .fitCenter()
+//            .override(200,200)
+//        val file = File(item.img)
+//        var imgURI = Uri.fromFile(file)
+//
+//        Glide.with(context)
+//            .load(imgURI)
+//            .apply (requestOptions)
+//            .into(holder.ivIMG)
 
-        Glide.with(context)
-            .load(imgURI)
-            .apply (requestOptions)
-            .into(holder.ivIMG)
+        val path = item.img
+        val check : Boolean = "pictures/" in path
+        if (check) {
+            try {
+                var ims = context.getResources().getAssets().open(path)
+                var drawable = Drawable.createFromStream(ims, null)
+                holder.ivIMG.setImageDrawable(drawable)
+            } catch (e: Exception) {
+                return
+            }
+        }else{
+            val file = File(path)
+            var imgURI = Uri.fromFile(file)
+            Glide.with(context)
+                .load(imgURI)
+                .into(holder.ivIMG)
+        }
+    }
+
+    fun loadDataFromAsset(holder: SearchAdapter.ViewHolder,path : String){
 
     }
 

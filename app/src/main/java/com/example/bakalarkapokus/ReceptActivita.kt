@@ -62,11 +62,11 @@ class ReceptActivita: AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-                R.id.miItem2 -> {
-                    val intent = Intent(this, ReceptActivita::class.java)
-                    startActivity(intent)
-                    true
-                }
+//                R.id.miItem2 -> {
+//                    val intent = Intent(this, ReceptActivita::class.java)
+//                    startActivity(intent)
+//                    true
+//                }
                 R.id.miItem0 -> {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)

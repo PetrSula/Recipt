@@ -423,6 +423,7 @@ class AddRecept: AppCompatActivity() {
                 alert.setCancelable(true)
                 alert.show()
             }
+            ac_typequantity.text.clear()
             at_AddSurovina.text.clear()
             et_quantyti.text.clear()
         }else{

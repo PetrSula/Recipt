@@ -59,11 +59,11 @@ class SearchedActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-                R.id.miItem2 -> {
-                    val intent = Intent(this, ReceptActivita::class.java)
-                    startActivity(intent)
-                    true
-                }
+//                R.id.miItem2 -> {
+//                    val intent = Intent(this, ReceptActivita::class.java)
+//                    startActivity(intent)
+//                    true
+//                }
                 R.id.miItem3 ->{
                     val intent = Intent(this, AdvanceActivity::class.java)
                     startActivity(intent)
