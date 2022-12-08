@@ -2,8 +2,10 @@ package com.example.bakalarkapokus
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -27,12 +29,14 @@ class AdvanceActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_vyhledavani)
-        val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
-        val navView = findViewById<NavigationView>(R.id.navView)
+//        val drawerLayout = findViewById<DrawerLayout>(R.id.Dlsearch)
+//        val navView = findViewById<NavigationView>(R.id.navView)
+        val drawerLayou = findViewById<DrawerLayout>(R.id.drawerLayout)
+        val navVi = findViewById<NavigationView>(R.id.navView)
 
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open,R.string.close )
-        drawerLayout.addDrawerListener(toggle)
+        drawerLayou.addDrawerListener(toggle)
         toggle.syncState()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -40,11 +44,20 @@ class AdvanceActivity : AppCompatActivity(){
             when (it.itemId) {
                 R.id.miItem1 -> {
                     val intent = Intent(this, DruhaAktivita::class.java)
+                    finish()
                     startActivity(intent)
                     true
                 }
                 R.id.miItem2 -> {
                     val intent = Intent(this, ReceptActivita::class.java)
+                    finish()
+                    startActivity(intent)
+                    true
+                }
+                R.id.miItem0 -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    intent.putExtra("EXIT",true)
                     startActivity(intent)
                     true
                 }
@@ -78,9 +91,18 @@ class AdvanceActivity : AppCompatActivity(){
         }
         btn_advadnceSerch.setOnClickListener {
             val where = getWhere()
+            where + getWhereSur()
+            callActivity(where)
         }
 
     }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(toggle.onOptionsItemSelected(item)){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun addIngredience(){
         val name = at_AddSurovinaAV.text.toString().trim()
         hideKeyboard(this)
@@ -152,15 +174,19 @@ class AdvanceActivity : AppCompatActivity(){
         var where = ""
         val typ = ac_typeAV.text.toString()
         val category = ac_categoryAV.text.toString()
-        if (!typ.isEmpty()){
-            where + "AND ( RECEPT.TYPE = "+typ +" ) "
+        if (typ.isNotEmpty()){
+            where = where + "AND ( RECEPT.TYPE = '$typ' ) "
         }
-        if (!category.isEmpty()){
-            where + "AND ( RECEPT.CATEGORY = "+category+ " )"
+        if (category.isNotEmpty()){
+            where = where + "AND ( RECEPT.CATEGORY ='$category'  )"
         }
 //        val type = ac_type.text.toString()
 //        val category = ac_category.
-        val sur = " AND " + getWhereSur()
+        if (data_id.isNotEmpty()){
+            val sur = getWhereSur()
+            where = where + " AND " + sur
+        }
+//        val sur = " AND " + getWhereSur()
         return where
     }
     fun getWhereSur(): String{
@@ -169,12 +195,27 @@ class AdvanceActivity : AppCompatActivity(){
         for (i in data_id){
             if (first){
                 first = false
-                where + "SUROVINY_RECEPT.INGREDIENCE_ID = " + i
+                where = where + "SUROVINY_RECEPT.INGREDIENCE_ID = " + i
                 continue
             }
-            where + " or SUROVINY_RECEPT.INGREDIENCE_ID = " + i
+            where = where + " or SUROVINY_RECEPT.INGREDIENCE_ID = " + i
         }
-        return where+")"
+        where = where+")"
+        return where
+    }
+
+    fun callActivity(where:String){
+        var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
+        arraySearched = DBHelper(this@AdvanceActivity).selectTitleIMG(where)
+        if (arraySearched.isNotEmpty()) {
+            Intent(this@AdvanceActivity, SearchedActivity::class.java).also {
+                it.putExtra("EXTRA_SEARCHED", arraySearched)
+                it.putExtra("EXTRA_TITLE", "")
+                startActivity(it)
+            }
+        }else{
+            Toast.makeText(applicationContext, "vybraná kriteria neodpovidají žádnému receptu", Toast.LENGTH_LONG).show()
+        }
     }
 
 }

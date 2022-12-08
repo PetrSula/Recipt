@@ -2,6 +2,8 @@ package com.example.bakalarkapokus
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View.GONE
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
@@ -33,11 +35,15 @@ class SearchedActivity : AppCompatActivity() {
         val gv_title = intent.getStringExtra("EXTRA_TITLE")
         val arraySearched = intent.getSerializableExtra("EXTRA_SEARCHED") as ArrayList<SQLdata.AraySearched>
 
-//        SET TITLE
-
-
 
         setContentView(R.layout.selected_rv)
+        //        SET TITLE
+        val title = findViewById<TextView>(R.id.tvtitleSelected)
+        if (gv_title.isNullOrBlank()) {
+            title.text= ""
+        }else{
+            title.text = gv_title
+        }
         val drawerLayout = findViewById<DrawerLayout>(R.id.Dlsearch)
         val navView = findViewById<NavigationView>(R.id.navView)
 
@@ -63,6 +69,13 @@ class SearchedActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+                R.id.miItem0 -> {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.putExtra("EXIT",true)
+                true
+            }
                 else -> false
             }
         }

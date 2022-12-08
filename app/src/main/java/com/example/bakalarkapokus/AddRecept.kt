@@ -44,19 +44,16 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-/* ToDo  - Ohraničení pro dropdow menu
-         - drop down pro TYP a KATEGORII
-         - edit suroviny v receptu
-         - Přidat nějaký seznam pro více kategorií zároveň
-         - příliž dlouhý text surovin
-         - editace surovin
-         - vyčistit data po přidání
-         - default obrázek
+/* ToDo  - default obrázek
          - není upraveno přístup/oprava obrázku
-
+         - vymazat surovinu při editaci
+    BUG  - úprava receptu přepíše obrázek
+         - úprva dat v databási, typ pokrmu velká písmena
 */
 var data = ArrayList<SQLdata.Suroviny>()
+var data_del = ArrayList<SQLdata.Suroviny>()
 var id_addSurovin = 0
+var gv_id = 0
 
 
 class AddRecept: AppCompatActivity() {
@@ -65,7 +62,7 @@ class AddRecept: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         data.clear()
-        val gv_id = intent.getIntExtra("EXTRA_ID",0)
+        gv_id = intent.getIntExtra("EXTRA_ID",0)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.recept_postup)
 
@@ -134,11 +131,8 @@ class AddRecept: AppCompatActivity() {
         val categoryAdapter = ArrayAdapter(this,R.layout.dropdown_item,stringCategory)
         val categoryAC = findViewById<AutoCompleteTextView>(R.id.ac_category)
         categoryAC.setAdapter(categoryAdapter)
-//        adapter pro dropdown Typ
-        val stringType = resources.getStringArray(R.array.typeOfRecept)
-        val typeAdapter = ArrayAdapter(this, R.layout.dropdown_item, stringType)
-        val typeAC = findViewById<AutoCompleteTextView>(R.id.ac_type)
-        typeAC.setAdapter(typeAdapter)
+        adapterQuantity(" ")
+        adaptertype()
 
 
     }
@@ -149,14 +143,16 @@ class AddRecept: AppCompatActivity() {
             return
         }
         val data_edit = recept.get(0)
-        val file = File(data_edit.img)
-        var imgURI = Uri.fromFile(file)
+//        val file = File(data_edit.img)
+//        var imgURI = Uri.fromFile(file)
         val title = data_edit.title
         val postup = data_edit.postup
         val type = data_edit.type
         val category = data_edit.category
         val portion = data_edit.portion.toString()
         val sur = getSuroviny(id)
+        loadDataFromAsset(data_edit.img)
+        img_Path = data_edit.img
         for (item in sur){
             data.add(SQLdata.Suroviny(item.id,item.name,item.quantity))
         }
@@ -168,6 +164,47 @@ class AddRecept: AppCompatActivity() {
         tv_portion.text = portion
         et_direction_to_cook.setText(postup)
 
+    }
+    fun loadDataFromAsset(path : String){
+        var Image: ImageView
+            Image = findViewById(R.id.iv_dish_image)
+        val check : Boolean = "pictures/" in path
+        if (check) {
+            try {
+                var ims = getAssets().open(path)
+                var drawable = Drawable.createFromStream(ims, null)
+                Image.setImageDrawable(drawable)
+            } catch (e: Exception) {
+                return
+            }
+        }else{
+            val file = File(path)
+            var imgURI = Uri.fromFile(file)
+            Glide.with(this)
+                .load(imgURI)
+                .into(Image)
+        }
+        val requestCode=RequestOptions.placeholderOf(R.drawable.ic_add)
+        Glide.with(this)
+            .load(R.drawable.ic_edit)
+            .apply(requestCode)
+            .into(iv_add_dish_image)
+    }
+    fun adapterQuantity(default : String){
+        val stringTypeQuantity = resources.getStringArray(R.array.quantity)
+        val quantityAdapter = ArrayAdapter(this,R.layout.dropdown_item, stringTypeQuantity)
+        val quantityAC = findViewById<AutoCompleteTextView>(R.id.ac_typequantity)
+//        val position = quantityAC.getPosition(" ")
+//        quantityAC.setText(typeAdapter.getItem(position))
+        quantityAC.setText(default)
+        quantityAC.setAdapter(quantityAdapter)
+    }
+    fun adaptertype(){
+        //        adapter pro dropdown Typ
+        val stringType = resources.getStringArray(R.array.typeOfRecept)
+        val typeAdapter = ArrayAdapter(this, R.layout.dropdown_item, stringType)
+        val typeAC = findViewById<AutoCompleteTextView>(R.id.ac_type)
+        typeAC.setAdapter(typeAdapter)
     }
 
     fun getSuroviny(id: Int):ArrayList<SQLdata.RvSurovinyRecept>{
@@ -200,6 +237,7 @@ class AddRecept: AppCompatActivity() {
         ac_typequantity.setText(type)
         SVadd.scrollToDescendant(et_direction_to_cook)
         btn_addSurivina.setText("Editovat Surovinu")
+        adapterQuantity(type)
     }
 
     fun set_portion(boolean: Boolean){
@@ -223,13 +261,12 @@ class AddRecept: AppCompatActivity() {
 
     private fun customImageSelectionDialog() {
         val dialog = Dialog(this,R.style.Theme_Dialog)
-        dialog.setCancelable(false)
+        dialog.setCancelable(true)
         dialog.setContentView(R.layout.dialog_img)
         dialog.tvcamera.setOnClickListener{
             checkCameraPermission()
             dialog.dismiss()
         }
-
         dialog.tvgallery.setOnClickListener {
             checkStoragePermission()
             dialog.dismiss()
@@ -238,7 +275,7 @@ class AddRecept: AppCompatActivity() {
     }
 
     private fun checkCameraPermission() {
-        if (hasPermission()) {
+        if (hasPermission(true)) {
             // Have permission, do the thing!
             val galleryIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             if (galleryIntent.resolveActivity(packageManager) != null) { // its always null
@@ -257,9 +294,8 @@ class AddRecept: AppCompatActivity() {
     }
 
     private fun checkStoragePermission() {
-        if (hasPermission()) {
+        if (hasPermission(false)) {
             // Have permission, do the thing!
-
             val takePictureIntent =
                 Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             if (takePictureIntent.resolveActivity(packageManager) != null) { // its always null
@@ -277,11 +313,15 @@ class AddRecept: AppCompatActivity() {
         }
     }
 
-    private fun hasPermission(): Boolean {
-        return EasyPermissions.hasPermissions(
-            this,
-            Manifest.permission.CAMERA
-        ) && EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+    private fun hasPermission(camera:Boolean): Boolean {
+        if (camera){
+            return EasyPermissions.hasPermissions(
+                this,
+                Manifest.permission.CAMERA
+            ) && EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        }else{
+            return EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -363,9 +403,6 @@ class AddRecept: AppCompatActivity() {
                 pridatIngredien(name)
                 id_addSurovin = id_addSurovin.inc()
                 data.add(SQLdata.Suroviny(id_addSurovin,name,final_quaintity))
-                at_AddSurovina.text.clear()
-                et_quantyti.text.clear()
-                //("přídat autocoplete ")
                 showSuroviny()
             }else{
                 val alertDialog = AlertDialog.Builder(this)
@@ -386,6 +423,8 @@ class AddRecept: AppCompatActivity() {
                 alert.setCancelable(true)
                 alert.show()
             }
+            at_AddSurovina.text.clear()
+            et_quantyti.text.clear()
         }else{
             Toast.makeText(applicationContext, "Název suroviny nevyplněn", Toast.LENGTH_LONG).show()
         }
@@ -402,8 +441,10 @@ class AddRecept: AppCompatActivity() {
         builder.setTitle("Vymazat záznam")
         builder.setMessage("Opravdu si přejete vymazat ${sData.name}")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
-
         builder.setPositiveButton("ANO") { dialogInterface, which ->
+            if (gv_id != 0){
+                data_del.add(sData)
+            }
             data.remove(sData)
             showSuroviny()
 
@@ -418,7 +459,14 @@ class AddRecept: AppCompatActivity() {
         alertDialog.setCancelable(true)
         alertDialog.show()
     }
-
+    fun deleteSurDB(){
+        val DB = DBHelper(this)
+        for (sData in data_del) {
+            var del: ArrayList<SQLdata.Ingredience> = DB.selectINGREDIENCE(sData.name)
+            val ingredienceID = del[0].id
+            DB.deleteSurRecept(ingredienceID, gv_id)
+        }
+    }
     fun pridatIngredien(name: String ) {
 //        val name = at_pridatsurovinu.text.toString().trim()
         val DB = DBHelper(this)
@@ -447,6 +495,7 @@ class AddRecept: AppCompatActivity() {
         til_title.setError(null)
         tvAddSurovina.setError(null)
         til_direction_to_cook.setError(null)
+        et_cooking_time.setError(null)
 
         if (title.isEmpty()) {
             Toast.makeText(applicationContext, "Název receptu nevyplněn", Toast.LENGTH_LONG).show()
@@ -459,6 +508,10 @@ class AddRecept: AppCompatActivity() {
         } else if (postup.isEmpty()){
             Toast.makeText(applicationContext, "Postup receptu nevyplněn", Toast.LENGTH_LONG).show()
             til_direction_to_cook.setError("Povinné")
+            chech = false
+        } else if (time.isEmpty()){
+            Toast.makeText(applicationContext, "Čas přípravy receptu nevyplněn", Toast.LENGTH_LONG).show()
+            et_cooking_time.setError("Povinné")
             chech = false
         }
         if (chech){
@@ -501,6 +554,7 @@ class AddRecept: AppCompatActivity() {
         til_title.setError(null)
         tvAddSurovina.setError(null)
         til_direction_to_cook.setError(null)
+        et_cooking_time.setError(null)
 
         if (title.isEmpty()) {
             Toast.makeText(applicationContext, "Název receptu nevyplněn", Toast.LENGTH_LONG).show()
@@ -514,6 +568,10 @@ class AddRecept: AppCompatActivity() {
             Toast.makeText(applicationContext, "Postup receptu nevyplněn", Toast.LENGTH_LONG).show()
             til_direction_to_cook.setError("Povinné")
             chech = false
+        }else if (time.isEmpty()){
+            Toast.makeText(applicationContext, "Čas přípravy receptu nevyplněn", Toast.LENGTH_LONG).show()
+            et_cooking_time.setError("Povinné")
+            chech = false
         }
         if (chech){
             val status = DB.updateRecept(SQLdata.Recept(id,title, type,category,time,postup,quantity,portion,img))
@@ -522,6 +580,8 @@ class AddRecept: AppCompatActivity() {
         }
     }
     fun updateSurovinyRecept(receptID : Int){
+        deleteSurDB()
+//        adapterQuantity()
         val DB = DBHelper(this)
         for (item in data){
             val itemDB = DB.selectOneSurRecept(item.id)
@@ -538,6 +598,7 @@ class AddRecept: AppCompatActivity() {
             }
         }
     }
+
     fun pridatIngredienci(name : String){
         val DB = DBHelper(this)
         val add = DB.selectINGREDIENCE(name)
@@ -545,9 +606,16 @@ class AddRecept: AppCompatActivity() {
             DB.insertDataINGREDIENCE(SQLdata.Ingredience(0,name))
         }
     }
+
     fun displayRecept(id:Int){
         Intent(this,ReceptActivita::class.java).also {
             it.putExtra("EXTRA_ID",id)
+            if (gv_id == 0){
+                finish()
+            }else{
+                ReceptActivita.Myclass.activity?.finish()
+                finish()
+            }
             startActivity(it)
 
         }
@@ -567,17 +635,6 @@ class AddRecept: AppCompatActivity() {
         }
         return file.absolutePath
     }
-//    fun hideKeyboard() {
-//        val imm = this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-//        //Find the currently focused view, so we can grab the correct window token from it.
-//        var view = this.currentFocus
-//        //If no view currently has focus, create a new one, just so we can grab a window token from it
-//        if (view == null) {
-//            view = View(this)
-//        }
-//        imm.hideSoftInputFromWindow(view.windowToken, 0)
-//    }
-
 
     companion object {
         private const val REQUEST_IMAGE_CAPTURE = 1

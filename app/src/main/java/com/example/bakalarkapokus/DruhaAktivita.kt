@@ -49,16 +49,26 @@ class DruhaAktivita :AppCompatActivity(){
             when (it.itemId) {
                 R.id.miItem1 -> {
                     val intent = Intent(this, DruhaAktivita::class.java)
+                    finish()
                     startActivity(intent)
                     true
                 }
                 R.id.miItem2 -> {
                     val intent = Intent(this, ReceptActivita::class.java)
+                    finish()
                     startActivity(intent)
                     true
                 }
                 R.id.miItem3 ->{
+                    finish()
                     val intent = Intent(this, AdvanceActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.miItem0 -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    intent.putExtra("EXIT",true)
                     startActivity(intent)
                     true
                 }
@@ -87,25 +97,7 @@ class DruhaAktivita :AppCompatActivity(){
 
         // Lister pro Přidat záznam surovina
         btn_AddSpiz.setOnClickListener{
-            val name = at_pridatsurovinu.text.toString().trim()
-            // Naplnění SPINNERu
-//            val typeQuantity: String = spinner.selectedItem.toString()
-//            val quantity = at_pridatmnozstvi.text.toString().trim()
-            val addOK = DBHelper(this).selectItemSPIZ(name)
-//            val final_quaintity = quantity  + ' ' + typeQuantity
-//            closeKeyboard(at_pridatmnozstvi)
-            if (addOK.isEmpty()){
-                pridatZaznam()
-            }else{
-                val alertDialog = AlertDialog.Builder(this).create()
-                alertDialog.setTitle("Alert")
-                alertDialog.setMessage("Ingredience je již ve Spíži")
-                alertDialog.setButton(
-                    AlertDialog.BUTTON_NEUTRAL, "OK"
-                ) { dialog, which -> dialog.dismiss() }
-                alertDialog.show()
-            }
-
+            addSuroSpiz()
         }
         // volání funkce pro naplnění RecicleView
         setupListofDataIntoRecyclerView()
@@ -122,6 +114,28 @@ class DruhaAktivita :AppCompatActivity(){
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken,0)
 
+    }
+    private fun addSuroSpiz(){
+        val name = at_pridatsurovinu.text.toString().trim()
+        if (name.isNotEmpty()) {
+            // Naplnění SPINNERu
+//            val typeQuantity: String = spinner.selectedItem.toString()
+//            val quantity = at_pridatmnozstvi.text.toString().trim()
+            val addOK = DBHelper(this).selectItemSPIZ(name)
+//            val final_quaintity = quantity  + ' ' + typeQuantity
+//            closeKeyboard(at_pridatmnozstvi)
+            if (addOK.isEmpty()) {
+                pridatZaznam()
+            } else {
+                val alertDialog = AlertDialog.Builder(this).create()
+                alertDialog.setTitle("Alert")
+                alertDialog.setMessage("Ingredience je již ve Spíži")
+                alertDialog.setButton(
+                    AlertDialog.BUTTON_NEUTRAL, "OK"
+                ) { dialog, which -> dialog.dismiss() }
+                alertDialog.show()
+            }
+        }
     }
 
     private fun setupListofDataIntoRecyclerView(){

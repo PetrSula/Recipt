@@ -15,7 +15,7 @@
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
     </fragment>
-    <fragment
+        <fragment
         android:id="@+id/SecondFragment"
         android:name="com.example.bakalarkapokus.SecondFragment"
         android:label="@string/second_fragment_label"

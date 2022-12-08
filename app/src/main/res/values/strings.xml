@@ -9,6 +9,9 @@
     <string name="time_prefix">>></string>
     <string name="time_suffix"> </string>
     <string name="rationale_camera">Tato aplikace potřebuje přístup k fotoaparátu</string>
+    <string name="title_activity_searched">Rozšířené vyhledávání</string>
+    <string name="first_fragment_label">První fragment</string>
+    <string name="second_fragment_label">Druhý fragment</string>
     <string-array name="quantity">
         <item> </item>
         <item>ml</item>
@@ -16,31 +19,23 @@
         <item>ks</item>
         <item>lžička</item>
         <item>lžíce</item>
+        <item>hrnek</item>
     </string-array>
     <string-array name="typeOfRecept">
-        <item>hlavní chod</item>
-        <item>moučník</item>
-        <item>polevka</item>
-        <item>svačina</item>
-        <item>snídaně</item>
-        <item>přilohy</item>
+        <item>Hlavní chod</item>
+        <item>Moučník</item>
+        <item>Polévka</item>
+        <item>Svačina</item>
+        <item>Snídaně</item>
+        <item>Přílohy</item>
     </string-array>
     <string-array name="categoryRecept">
-        <item>maso</item>
-        <item>vegetariánské</item>
-        <item>veganské</item>
-        <item>lowcarb</item>
+        <item>Maso</item>
+        <item>Vegetariánské</item>
+        <item>Veganské</item>
+        <item>Lowcarb</item>
 
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_searched">SearchedActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
 </resources>

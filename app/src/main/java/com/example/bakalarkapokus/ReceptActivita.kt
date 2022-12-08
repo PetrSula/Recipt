@@ -1,11 +1,15 @@
 package com.example.bakalarkapokus
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.ImageView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +24,7 @@ import kotlinx.android.synthetic.main.spiz.*
 import kotlinx.android.synthetic.main.activity_recept.*
 import kotlinx.android.synthetic.main.recept_postup.*
 import java.io.File
+import java.io.InputStream
 
 /* TODO - obrázek check on
         - Přepočítávání porcí
@@ -31,12 +36,19 @@ import java.io.File
 class ReceptActivita: AppCompatActivity() {
 
     lateinit var toggle: ActionBarDrawerToggle
+    class Myclass{
+        companion object{
+            var activity: Activity? = null
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recept)
+        Myclass.activity = this@ReceptActivita
 
         val gv_id = intent.getIntExtra("EXTRA_ID",1)
+
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open,R.string.close )
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
@@ -55,9 +67,17 @@ class ReceptActivita: AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+                R.id.miItem0 -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    intent.putExtra("EXIT",true)
+                    true
+                }
                 else -> false
             }
         }
+        loadDataFromAsset("pictures/baseMeal.webp")
         showRecept(gv_id)
         iv_edit_recept.setOnClickListener{
             editaceRecept(gv_id)
@@ -71,12 +91,32 @@ class ReceptActivita: AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+    fun loadDataFromAsset(path : String){
+        var Image: ImageView
+        Image = findViewById(R.id.iv_rec_Picture)
+        val check : Boolean = "pictures/" in path
+        if (check) {
+            try {
+                var ims = getAssets().open(path)
+                var drawable = Drawable.createFromStream(ims, null)
+                Image.setImageDrawable(drawable)
+            } catch (e: Exception) {
+                return
+            }
+        }else{
+            val file = File(path)
+            var imgURI = Uri.fromFile(file)
+            Glide.with(this)
+                .load(imgURI)
+                .into(Image)
+        }
+    }
+
     fun showRecept(id: Int){
         val DB = DBHelper(this)
         val recept :ArrayList<SQLdata.Recept> = DB.selectRECEPT(id)
         val data = recept.get(0)
         val file = File(data.img)
-        var imgURI = Uri.fromFile(file)
         val title = data.title
         val postup = data.postup
         val type = data.type
@@ -90,11 +130,12 @@ class ReceptActivita: AppCompatActivity() {
         val time = setTime(timeArray)
         val category = data.category
         val portion = data.portion.toString()
+        loadDataFromAsset(data.img)
 
 
-        Glide.with(this)
-            .load(imgURI)
-            .into(ivPicture)
+//        Glide.with(this)
+//            .load(imgURI)
+//            .into(ivPicture)
 
         val sur = getSuroviny(id)
 //        získat poměř

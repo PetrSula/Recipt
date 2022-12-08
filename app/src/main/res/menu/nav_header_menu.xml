@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/miItem0"
+        android:icon="@drawable/ic_house"
+        android:title=" Úvodní stránka"/>
+    <item
         android:id="@+id/miItem1"
+        android:icon="@drawable/ic_storefront"
         android:title=" Spiz "/>
     <item
         android:id="@+id/miItem2"
         android:title=" Recepty "/>
     <item
         android:id="@+id/miItem3"
-        android:title=" rozšířené vyhledávání "/>
+        android:icon="@drawable/ic_search"
+        android:title=" Rozšířené vyhledávání "/>
 
 </menu>

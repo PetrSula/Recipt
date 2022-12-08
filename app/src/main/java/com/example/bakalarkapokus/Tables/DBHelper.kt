@@ -222,10 +222,8 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         val DB = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put(ID,dataSpiz.id)
-
         val success = DB.delete(TABLE_SPIZ, ID+"="+dataSpiz.id, null)
         DB.close()
-
         return success
     }
 
@@ -281,7 +279,7 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
     fun sellectOneIDIngredience(name:String) :Int{
         var id = -1
         val DB = this.readableDatabase
-        val selecQuery = "SELECT ID FROM " + TABLE_INGREDIENCE + " WHERE NAME = " + name
+        val selecQuery = "SELECT ID FROM " + TABLE_INGREDIENCE + " WHERE NAME = " +"'"+ name +"'"
         var cursor: Cursor? = null
         try {
             cursor = DB.rawQuery(selecQuery, null)
@@ -460,6 +458,13 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         contentValues.put(QUANTITY,surovinyRecept.quantity)
         db.update(TABLE_SUROVINY_RECEPT,contentValues,"ID=${surovinyRecept.id}", arrayOf())
         db.close()
+    }
+    fun deleteSurRecept(id_ing: Int, id_recept : Int){
+        val DB = this.writableDatabase
+        val contentValues = ContentValues()
+        val success = DB.delete(TABLE_SUROVINY_RECEPT, " $INGREDIENCE_ID = $id_ing and $RECEPT_ID = $id_recept", null)
+        DB.close()
+        return
     }
 
     fun selectAllTitles() : ArrayList<String>{
