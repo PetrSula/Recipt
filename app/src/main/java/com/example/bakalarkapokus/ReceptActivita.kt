@@ -1,7 +1,9 @@
 package com.example.bakalarkapokus
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -81,6 +83,9 @@ class ReceptActivita: AppCompatActivity() {
         showRecept(gv_id)
         iv_edit_recept.setOnClickListener{
             editaceRecept(gv_id)
+        }
+        btn_rec_spotreb.setOnClickListener {
+            spotrevSur(gv_id)
         }
 
     }
@@ -163,15 +168,15 @@ class ReceptActivita: AppCompatActivity() {
     }
     fun setTime(list: List<String>) : String{
         var hour = list[0]
-        var minutes = list[1] + "min"
+        var minutes = list[1] + " min"
         var test = hour[0].toString()
         if (hour.equals("00")){
             hour = ""
         }
         else if(test.equals("0")){
-            hour = hour[1].toString() + "h"
+            hour = hour[1].toString() + " h"
         }
-        else{hour = hour + "h"
+        else{hour = hour + " h"
         }
         return hour + ' '+ minutes
     }
@@ -185,5 +190,47 @@ class ReceptActivita: AppCompatActivity() {
             it.putExtra("EXTRA_ID", id)
             startActivity(it)
         }
+    }
+    fun spotrevSur(id:Int){
+        val builder = AlertDialog.Builder(this)
+        val sur = getSuroviny(id)
+        var show = Array<String>(sur.size){ " it = $it" }
+        var i = 0
+        for (item in sur){
+            show.set(i,item.name)
+            i +=1
+        }
+//        val sur = arrayOf("C", "C++", "JAVA", "PYTHON")
+        val checkedItems = BooleanArray(sur.size)
+        val selectedItems = ArrayList<Int>()
+        builder.setTitle("Vyberte suroviny ke spotřebování")
+//        builder.setMultiChoiceItems(sur, null,
+//            DialogInterface.OnMultiChoiceClickListener{dialog, which, isChecked ->
+//            if (isChecked){
+//                selectedItems.add(which)
+//            }else if (selectedItems.contains(which)){
+//                selectedItems.remove(which)
+//            }
+//        })
+        builder.setMultiChoiceItems(show,checkedItems, DialogInterface.OnMultiChoiceClickListener() { dialogInterface, which, isChecked ->
+            if (isChecked) {
+                selectedItems.add(which)
+            } else if (selectedItems.contains(which)) {
+                selectedItems.remove(which)
+            }
+        })
+        builder.setPositiveButton("ANO"){
+                dialogInterface, which -> odebratSpiz(selectedItems)
+            dialogInterface.dismiss()
+        }
+        builder.setNegativeButton("NE"){
+                dialogInterface, which ->
+            dialogInterface.dismiss()
+        }
+        builder.setCancelable(true)
+        builder.create().show()
+    }
+    fun odebratSpiz(surID:ArrayList<Int>){
+        return
     }
 }

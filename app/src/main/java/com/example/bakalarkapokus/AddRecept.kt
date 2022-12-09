@@ -47,8 +47,8 @@ import kotlin.collections.ArrayList
 /* ToDo  - default obrázek
          - není upraveno přístup/oprava obrázku
          - vymazat surovinu při editaci
-    BUG  - úprava receptu přepíše obrázek
-         - úprva dat v databási, typ pokrmu velká písmena
+    BUG  - null možnost vyhledávání
+         - přidat možnsot vyhledat jen podle části názvu
 */
 var data = ArrayList<SQLdata.Suroviny>()
 var data_del = ArrayList<SQLdata.Suroviny>()
@@ -78,7 +78,6 @@ class AddRecept: AppCompatActivity() {
         btn_addSurivina.setOnClickListener{
             addSurovina()
         }
-
         btn_add_dish.setOnClickListener{
             if (gv_id != 0){
                 updateRecept(gv_id )
@@ -190,6 +189,7 @@ class AddRecept: AppCompatActivity() {
             .apply(requestCode)
             .into(iv_add_dish_image)
     }
+
     fun adapterQuantity(default : String){
         val stringTypeQuantity = resources.getStringArray(R.array.quantity)
         val quantityAdapter = ArrayAdapter(this,R.layout.dropdown_item, stringTypeQuantity)
@@ -199,6 +199,7 @@ class AddRecept: AppCompatActivity() {
         quantityAC.setText(default)
         quantityAC.setAdapter(quantityAdapter)
     }
+
     fun adaptertype(){
         //        adapter pro dropdown Typ
         val stringType = resources.getStringArray(R.array.typeOfRecept)
