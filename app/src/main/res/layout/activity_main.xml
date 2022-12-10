@@ -22,7 +22,8 @@
             <RelativeLayout
                 android:id="@+id/headerView"
                 android:layout_width="match_parent"
-                android:layout_height="300dp">
+                android:layout_height="300dp"
+                android:background="?attr/rv_color">
 
                 <View
                     android:id="@+id/Vvheader"
@@ -104,6 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/titleCategory"
+                    android:background="?attr/rv_color"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
@@ -137,16 +139,16 @@
                     android:scrollbars="none" />
 
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="20dp"
-                    android:background="@color/white"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/app_name"
-                    android:textColor="@color/white" />
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignParentBottom="true"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:background="@color/white"-->
+<!--                    android:gravity="center"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:text="@string/app_name"-->
+<!--                    android:textColor="@color/white" />-->
 
 
 

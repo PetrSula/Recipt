@@ -2,12 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/rv_color">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="90dp"
-        android:background="@color/white"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="15dp"
+        android:background="?attr/rv_color">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/view_img"
@@ -30,13 +31,13 @@
             android:id="@+id/tvCategoryRv"
             android:layout_width="match_parent"
             android:layout_height="90dp"
-            android:textSize="24dp"
-            android:gravity="center_vertical"
-            android:textStyle="bold"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="16dp"
             android:layout_toRightOf="@+id/view_img"
-            android:hint="Recept">
+            android:gravity="center_vertical"
+            android:hint="Recept"
+            android:textSize="24dp"
+            android:textStyle="bold">
 
         </TextView>
     </RelativeLayout>

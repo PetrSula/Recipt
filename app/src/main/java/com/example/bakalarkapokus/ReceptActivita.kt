@@ -27,6 +27,8 @@ import kotlinx.android.synthetic.main.activity_recept.*
 import kotlinx.android.synthetic.main.recept_postup.*
 import java.io.File
 import java.io.InputStream
+import java.util.Arrays.fill
+import java.util.Collections.fill
 
 /* TODO - obrázek check on
         - Přepočítávání porcí
@@ -142,9 +144,18 @@ class ReceptActivita: AppCompatActivity() {
 //            .load(imgURI)
 //            .into(ivPicture)
 
-        val sur = getSuroviny(id)
-//        získat poměř
+        shouwSuroREcept(id)
 
+        tvTitleRecept.text = title
+        tvPostuprm.text = postup
+        tvType.text = type
+        tvCategory.text = category
+        tv_portionR.text = portion
+        tvTimeminutes.text = time
+
+    }
+    fun shouwSuroREcept(id: Int){
+        val sur = getSuroviny(id)
 
         if (sur.isEmpty()){
             rv_recept.visibility = GONE
@@ -157,14 +168,6 @@ class ReceptActivita: AppCompatActivity() {
             val adapter = ReceptAdapter(this,sur)
             rv_recept.adapter = adapter
         }
-
-        tvTitleRecept.text = title
-        tvPostuprm.text = postup
-        tvType.text = type
-        tvCategory.text = category
-        tv_portionR.text = portion
-        tvTimeminutes.text = time
-
     }
     fun setTime(list: List<String>) : String{
         var hour = list[0]
@@ -192,45 +195,62 @@ class ReceptActivita: AppCompatActivity() {
         }
     }
     fun spotrevSur(id:Int){
+        val spis= DBHelper(this).selectSpiz()
         val builder = AlertDialog.Builder(this)
         val sur = getSuroviny(id)
-        var show = Array<String>(sur.size){ " it = $it" }
+        var showSur = ArrayList<SQLdata.Ingredience>()
         var i = 0
         for (item in sur){
-            show.set(i,item.name)
-            i +=1
+            val addOK = spis.any { it.name == item.name }
+            if (addOK) {
+                showSur.add(SQLdata.Ingredience(i,item.name))
+                i += 1
+            }
         }
-//        val sur = arrayOf("C", "C++", "JAVA", "PYTHON")
-        val checkedItems = BooleanArray(sur.size)
+        var show = Array<String>(showSur.size){" it = $it"}
+        for (item in showSur){
+            show.set(item.id,item.name)
+        }
+        var checkedItems = BooleanArray(show.size)
         val selectedItems = ArrayList<Int>()
         builder.setTitle("Vyberte suroviny ke spotřebování")
-//        builder.setMultiChoiceItems(sur, null,
-//            DialogInterface.OnMultiChoiceClickListener{dialog, which, isChecked ->
-//            if (isChecked){
-//                selectedItems.add(which)
-//            }else if (selectedItems.contains(which)){
-//                selectedItems.remove(which)
-//            }
-//        })
-        builder.setMultiChoiceItems(show,checkedItems, DialogInterface.OnMultiChoiceClickListener() { dialogInterface, which, isChecked ->
-            if (isChecked) {
-                selectedItems.add(which)
-            } else if (selectedItems.contains(which)) {
-                selectedItems.remove(which)
+        if (checkedItems.isEmpty()){
+            builder.setMessage("Recept nepoužívá žádné suroviny ze spíže")
+        }else {
+            builder.setMultiChoiceItems(
+                show,
+                checkedItems,
+                DialogInterface.OnMultiChoiceClickListener() { dialogInterface, which, isChecked ->
+                    if (isChecked) {
+                        selectedItems.add(which)
+                    } else if (selectedItems.contains(which)) {
+                        selectedItems.remove(which)
+                    }
+                })
+            builder.setPositiveButton("ANO") { dialogInterface, which ->
+                odebratSpiz(selectedItems, showSur)
+                shouwSuroREcept(id)
+                dialogInterface.dismiss()
             }
-        })
-        builder.setPositiveButton("ANO"){
-                dialogInterface, which -> odebratSpiz(selectedItems)
-            dialogInterface.dismiss()
+            builder.setNegativeButton("NE") { dialogInterface, which ->
+                dialogInterface.dismiss()
+            }
         }
-        builder.setNegativeButton("NE"){
-                dialogInterface, which ->
-            dialogInterface.dismiss()
-        }
+//        builder.setNeutralButton("Vybrat všechny",null)
+//        {
+//                dialogInterface, which ->
+//            checkedItems.all { it-> false }
+//        }
         builder.setCancelable(true)
         builder.create().show()
+//        val neutralBtn = builder.getButton(AlertDialog.BUTTON_NEUTRAL)
+//        builder.
     }
-    fun odebratSpiz(surID:ArrayList<Int>){
+    fun odebratSpiz(surID:ArrayList<Int>, surSpiz: ArrayList<SQLdata.Ingredience>){
+        for (item in surID) {
+            val name = surSpiz.get(item)
+            DBHelper(this).deleteSpizByName(name.name)
+        }
         return
     }
 }

@@ -12,4 +12,8 @@
     <color name= "secondary">#ACBF60</color>
     <color name= "third">#C6C29B</color>
     <color name="header">#40403A</color>
+    <declare-styleable name="ds">
+        <attr name="rv_color" format="color"/>
+        <attr name="text" format="color"/>
+    </declare-styleable>
 </resources>

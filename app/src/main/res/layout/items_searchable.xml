@@ -7,40 +7,39 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/white"
         android:paddingStart="16dp"
-        android:paddingTop="16dp">
+        android:paddingTop="16dp"
+        android:background="?attr/rv_color">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/view_img"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:paddingStart="15dp"
-        app:cardCornerRadius="20dp">
-
-        <ImageView
-            android:id="@+id/ivRecept"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/view_img"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            >
-        </ImageView>
+            android:paddingStart="15dp"
+            app:cardCornerRadius="20dp">
 
-    </androidx.cardview.widget.CardView>
+            <ImageView
+                android:id="@+id/ivRecept"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"></ImageView>
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:textSize="16dp"
-        android:gravity="fill_vertical"
-        android:textStyle="bold"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_toRightOf="@+id/view_img"
-        android:hint="Recept">
+        </androidx.cardview.widget.CardView>
 
-    </TextView>
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toRightOf="@+id/view_img"
+            android:gravity="fill_vertical"
+            android:hint="Recept"
+            android:textSize="16dp"
+            android:textStyle="bold">
+
+        </TextView>
     </RelativeLayout>
 </RelativeLayout>

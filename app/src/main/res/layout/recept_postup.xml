@@ -16,11 +16,13 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="1.0"
+        android:background="?attr/rv_color">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <FrameLayout
                 android:id="@+id/fl_select_image"
@@ -102,7 +104,7 @@
                     android:focusable="false"
                     android:focusableInTouchMode="true"
                     android:inputType="text"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/text"
                     android:textSize="15dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -127,7 +129,7 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:inputType="text"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/text"
                     android:textSize="15dp" />
 
                 <TextView
@@ -185,7 +187,7 @@
                     android:layout_height="55dp"
                     android:inputType="textMultiLine"
                     android:paddingLeft="10dp"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/text"
                     android:textSize="15dp" />
 
 
@@ -219,7 +221,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.75"
                         android:gravity="top"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/text"
                         android:textSize="15dp" />
 
 
@@ -279,7 +281,7 @@
                     android:layout_weight="0.4"
                     android:textSize="20dp"
                     android:hint="Počet porcí"
-                    app:hintTextColor="@color/secondary"/>
+                    app:hintTextColor="?attr/text"/>
 
 <!--                <TextView-->
 <!--                    android:id="@+id/et_portion"-->
@@ -321,7 +323,7 @@
                     android:layout_gravity="center"
                     android:padding="15dp"
                     android:text="4"
-                    android:textColor="@android:color/black"
+                    android:textColor="?attr/text"
                     android:textStyle="bold"/>
 
 
@@ -369,7 +371,7 @@
                     android:focusableInTouchMode="false"
                     android:gravity="top"
                     android:inputType="text"
-                    android:textColor="@color/purple_200"
+                    android:textColor="?attr/text"
                     android:textSize="15dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -395,7 +397,7 @@
                     android:inputType="textMultiLine"
                     android:lines="8"
                     android:minLines="4"
-                    android:textColor="@color/purple_200"
+                    android:textColor="?attr/text"
                     android:textSize="15dp" />
 
                 <Button

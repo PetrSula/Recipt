@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    app:chainUseRtl="true">
+    app:chainUseRtl="true"
+    android:background="?attr/rv_color">
 
     <TextView
         android:id="@+id/tvTitile"

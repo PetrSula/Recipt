@@ -226,6 +226,13 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         DB.close()
         return success
     }
+    fun deleteSpizByName(name: String){
+        val DB = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(ID,name)
+        val success = DB.delete(TABLE_SPIZ, NAME+" = '$name'", null)
+        DB.close()
+    }
 
     fun updateSpiz(dataSpiz: SQLdata.Spiz):Int{
         val DB = this.writableDatabase

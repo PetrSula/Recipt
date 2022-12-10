@@ -10,7 +10,8 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".DruhaAktivita"
     tools:showIn="@layout/spiz"
-    tools:visibility="visible">
+    tools:visibility="visible"
+    android:background="?attr/rv_color">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -100,12 +101,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible"
-        tools:visibility="gone" />
+        tools:visibility="gone"
+        android:background="?attr/rv_color"/>
 
     <TextView
         android:id="@+id/tvNoRecordsAvailable"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:textColor="?attr/text"
         android:gravity="center"
         android:text="No records available!!!"
         android:textSize="18sp"

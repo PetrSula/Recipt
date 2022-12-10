@@ -46,11 +46,11 @@ class ReceptAdapter(val context: Context, private val sList: ArrayList<SQLdata.R
         holder.tvQuantity.text = item.quantity
         val addOK = spis.any { it.name == item.name }
         if (addOK){
-            DrawableCompat.setTint(DrawableCompat.wrap(holder.ivCkeckon.drawable),ContextCompat.getColor(context,R.color.colorAccent))
+            DrawableCompat.setTint(DrawableCompat.wrap(holder.ivCkeckon.drawable),ContextCompat.getColor(context,R.color.primary))
         }
-        else{
-            DrawableCompat.setTint(DrawableCompat.wrap(holder.ivCkeckon.drawable),ContextCompat.getColor(context,R.color.black))
-        }
+//        else{
+//            DrawableCompat.setTint(DrawableCompat.wrap(holder.ivCkeckon.drawable),ContextCompat.getColor(context,R.color.))
+//        }
 //        var color = Color.parseColor("#000000")
 //        holder.ivCkeckon.drawable.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_ATOP)
 
