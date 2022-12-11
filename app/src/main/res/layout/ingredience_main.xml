@@ -110,8 +110,8 @@
         android:layout_height="match_parent"
         android:textColor="?attr/text"
         android:gravity="center"
-        android:text="No records available!!!"
-        android:textSize="18sp"
+        android:text="Spíž je prázdná"
+        android:textSize="26sp"
         android:visibility="gone"
         tools:visibility="visible" />
 

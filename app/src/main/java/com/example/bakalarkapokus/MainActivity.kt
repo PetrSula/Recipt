@@ -84,29 +84,7 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-// SearchView
-//        titlesLV = findViewById(R.id.listsearch)
-//        searchView = findViewById(R.id.simpleSearchView)
-//        titlesList = DBHelper(this).selectallTitles()
-//        listAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1,titlesList)
-//        titlesLV.adapter = listAdapter
-//
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                if (titlesList.contains(query)){
-//                    listAdapter.filter.filter(query)
-//                }
-//                else{
-//                    Toast.makeText(this@MainActivity, "Nic nenalezeno", Toast.LENGTH_LONG).show()
-//                }
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                listAdapter.filter.filter(newText)
-//                return false
-//            }
-//        })m
+
 //         AutoCoplitetextView
         val autoTextView : AutoCompleteTextView = findViewById(R.id.acSearch)
         var listOfRecepts= DBHelper(this).selectAllTitles()
@@ -133,15 +111,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun search_handeler(){
+        var arraySearched:ArrayList<SQLdata.AraySearched>
         val input = acSearch.text.toString().trim()
-//        if (input.isEmpty()){
-//            return
-//        }
-        val id = DBHelper(this).selectByTitle(input)
-        if (id != 0){
-            showRecept(id)
+        if (input.isEmpty()){
+            Toast.makeText(applicationContext, "Nezadali jste žádné hodnoty", Toast.LENGTH_LONG).show()
+            return
         }
-        else{
+        arraySearched = DBHelper(this).selectByTitle(input)
+        if (arraySearched.size == 1){
+            showRecept(arraySearched[0].id)
+        }else if (arraySearched.size != 0){
+            Intent(this,SearchedActivity::class.java).also {
+                it.putExtra("EXTRA_SEARCHED",arraySearched)
+                startActivity(it)}
+        }else{
+            Toast.makeText(applicationContext, "Zadané hodnotě neodpovídá žádný recept", Toast.LENGTH_LONG).show()
             return
         }
     }

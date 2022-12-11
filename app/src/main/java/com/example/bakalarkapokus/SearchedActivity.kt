@@ -57,6 +57,7 @@ class SearchedActivity : AppCompatActivity() {
                 R.id.miItem1 -> {
                     val intent = Intent(this, DruhaAktivita::class.java)
                     startActivity(intent)
+                    finish()
                     true
                 }
 //                R.id.miItem2 -> {
@@ -67,6 +68,7 @@ class SearchedActivity : AppCompatActivity() {
                 R.id.miItem3 ->{
                     val intent = Intent(this, AdvanceActivity::class.java)
                     startActivity(intent)
+                    finish()
                     true
                 }
                 R.id.miItem0 -> {

@@ -72,12 +72,16 @@ class AdvanceActivity : AppCompatActivity(){
         autoTextView.setAdapter(Autoadapter)
 //                adapter pro dropdown Kategorie
         val stringCategory = resources.getStringArray(R.array.categoryRecept)
-        val categoryAdapter = ArrayAdapter(this,R.layout.dropdown_item,stringCategory)
+        val newStringCategory = stringCategory.copyOf(stringCategory.size+1)
+        newStringCategory.set(stringCategory.size, "")
+        val categoryAdapter = ArrayAdapter(this,R.layout.dropdown_item,newStringCategory)
         val categoryAC = findViewById<AutoCompleteTextView>(R.id.ac_categoryAV)
         categoryAC.setAdapter(categoryAdapter)
 //        adapter pro dropdown Typ
         val stringType = resources.getStringArray(R.array.typeOfRecept)
-        val typeAdapter = ArrayAdapter(this, R.layout.dropdown_item, stringType)
+        val newStringType = stringType.copyOf(stringType.size+1)
+        newStringType.set(stringType.size, "")
+        val typeAdapter = ArrayAdapter(this, R.layout.dropdown_item, newStringType)
         val typeAC = findViewById<AutoCompleteTextView>(R.id.ac_typeAV)
         typeAC.setAdapter(typeAdapter)
 
@@ -102,6 +106,7 @@ class AdvanceActivity : AppCompatActivity(){
         }
         return super.onOptionsItemSelected(item)
     }
+//    fun resize
 
     private fun addIngredience(){
         val name = at_AddSurovinaAV.text.toString().trim()

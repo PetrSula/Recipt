@@ -7,8 +7,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:paddingStart="16dp"
-        android:paddingTop="16dp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
         android:background="?attr/rv_color">
 
         <androidx.cardview.widget.CardView
@@ -22,7 +22,9 @@
                 android:id="@+id/ivRecept"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:scaleType="centerCrop"></ImageView>
+                android:scaleType="centerCrop">
+
+            </ImageView>
 
         </androidx.cardview.widget.CardView>
 
@@ -32,12 +34,12 @@
             android:layout_height="80dp"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_toRightOf="@+id/view_img"
             android:gravity="fill_vertical"
             android:hint="Recept"
-            android:textSize="16dp"
+            android:textSize="20dp"
             android:textStyle="bold">
 
         </TextView>

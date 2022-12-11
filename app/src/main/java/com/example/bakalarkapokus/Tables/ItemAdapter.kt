@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bakalarkapokus.AdvanceActivity
 import com.example.bakalarkapokus.DruhaAktivita
@@ -28,16 +30,19 @@ class ItemAdapter(val context: Context, val items: ArrayList<SQLdata.Spiz>):
         val item = items.get(position)
         holder.tvName.text = item.name
 
+
         holder.tvDelete.setOnClickListener {
             if (context is DruhaAktivita) {
                 context.deleteRecord(item)
             }
         }
+        DrawableCompat.setTint(DrawableCompat.wrap(holder.tvDelete.drawable),ContextCompat.getColor(context,R.color.primary))
         holder.tvEdit.setOnClickListener {
             if (context is DruhaAktivita) {
                 context.updateRecord(item)
             }
         }
+        DrawableCompat.setTint(DrawableCompat.wrap(holder.tvEdit.drawable),ContextCompat.getColor(context,R.color.primary))
     }
 
 

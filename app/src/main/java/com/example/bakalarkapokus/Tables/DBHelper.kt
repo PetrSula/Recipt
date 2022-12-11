@@ -496,21 +496,29 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         }
         return coun
     }
-    fun selectByTitle(title:String) : Int{
-        val selecQuery = "SELECT "+ID+" FROM "+ TABLE_RECEPT+" WHERE "+ TITLE+" = "+" '"+title+"'"
+    fun selectByTitle(title:String) : ArrayList<SQLdata.AraySearched>{
+        var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
+        val selecQuery = "SELECT $ID, $TITLE, $IMG FROM $TABLE_RECEPT WHERE $TITLE like '%$title%'"
         val DB = this.readableDatabase
         var cursor: Cursor? = null
+        var title:String
+        var img:String
+        var id:Int = 0
         try {
             cursor = DB.rawQuery(selecQuery, null)
         } catch (e: SQLiteException) {
             DB.execSQL(selecQuery)
-            return 0
+            return ArrayList()
         }
-        var id: Int = 0
         if (cursor.moveToFirst()) {
-            id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
+            do {id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
+                title = cursor.getString(cursor.getColumnIndexOrThrow(TITLE))
+                img = cursor.getString(cursor.getColumnIndexOrThrow(IMG))
+                val data = SQLdata.AraySearched(id,title,img)
+                arraySearched.add(data)
+            }while (cursor.moveToNext())
         }
-        return id
+        return arraySearched
     }
 
     fun selectTitleIMG(where : String) : ArrayList<SQLdata.AraySearched>{
