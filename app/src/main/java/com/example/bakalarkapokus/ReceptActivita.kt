@@ -1,34 +1,54 @@
 package com.example.bakalarkapokus
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.bakalarkapokus.Recept.ReceptAdapter
 import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
+//import com.itextpdf.text.pdf.PdfDocument
+import android.graphics.pdf.PdfDocument
+import com.bumptech.glide.load.engine.Resource
+import com.itextpdf.text.pdf.PdfWriter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.drawerLayout
 import kotlinx.android.synthetic.main.activity_main.navView
-import kotlinx.android.synthetic.main.spiz.*
+import kotlinx.android.synthetic.main.activity_spiz.*
 import kotlinx.android.synthetic.main.activity_recept.*
-import kotlinx.android.synthetic.main.recept_postup.*
+import kotlinx.android.synthetic.main.activity_add_recept.*
+import org.w3c.dom.Document
 import java.io.File
+import java.io.FileOutputStream
 import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.Arrays.fill
 import java.util.Collections.fill
+import kotlin.collections.ArrayList
 
 /* TODO - obrázek check on
         - Přepočítávání porcí
@@ -38,8 +58,16 @@ import java.util.Collections.fill
  */
 
 class ReceptActivita: AppCompatActivity() {
-
+    lateinit var  et_pdf_data :EditText
     lateinit var toggle: ActionBarDrawerToggle
+    private val STORAGE_CODE = 1001
+    var PERMISSUIN_CODE = 101
+    var pageHeight = 1120
+    var pageWidth = 792
+    lateinit var bmp: Bitmap
+    lateinit var scaledbmp: Bitmap
+    lateinit var imgPath : String
+
     class Myclass{
         companion object{
             var activity: Activity? = null
@@ -50,6 +78,7 @@ class ReceptActivita: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recept)
         Myclass.activity = this@ReceptActivita
+
 
         val gv_id = intent.getIntExtra("EXTRA_ID",1)
 
@@ -89,6 +118,104 @@ class ReceptActivita: AppCompatActivity() {
         btn_rec_spotreb.setOnClickListener {
             spotrevSur(gv_id)
         }
+        btn_rec_pfd.setOnClickListener {
+            if ( android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                preparePDF()
+                generatePDF()
+            }
+        }
+
+    }
+
+    private fun preparePDF() {
+        val check : Boolean = "pictures/" in imgPath
+        if (check) {
+            try {
+                var ims = getAssets().open(imgPath)
+                bmp = BitmapFactory.decodeStream(ims)
+            } catch (e: Exception) {
+                return
+            }
+        }else{
+            bmp = BitmapFactory.decodeFile(imgPath)
+        }
+
+//        bmp = BitmapFactory.decodeResource(resources, R.id.iv_rec_Picture)
+        scaledbmp = Bitmap.createScaledBitmap(bmp, 250, 250, false)
+        if (!checkPermissions()){
+            requestPermission()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
+    private fun generatePDF() {
+        var pdfDocument: PdfDocument = PdfDocument()
+        var paint: Paint = Paint()
+        var title: Paint = Paint()
+        var myPageInfo: PdfDocument.PageInfo? =
+            PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create()
+        var myPage: PdfDocument.Page = pdfDocument.startPage(myPageInfo)
+        var canvas: Canvas = myPage.canvas
+        canvas.drawBitmap(scaledbmp, 56F, 40F, paint)
+        title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+        title.textSize = 15F
+        title.setColor(ContextCompat.getColor(this, R.color.primary))
+        canvas.drawText(tvTitleRecept.toString().trim(), 209F, 100F, title)
+        canvas.drawText(tvPostuprm.toString(), 209F, 80F, title)
+        title.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL))
+        title.setColor(ContextCompat.getColor(this, R.color.secondary))
+        title.textSize = 15F
+        title.textAlign = Paint.Align.CENTER
+        pdfDocument.finishPage(myPage)
+        val mFileName = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
+            .format(System.currentTimeMillis())
+//        var dowDir = Path.Combio
+        val file: File = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),  mFileName + ".pdf")
+//        val exFile = File(getExternalFilesDir("//sdcard//Download"),"name.pdf")
+
+        try {
+//            val fileOutputStream = FileOutputStream
+            pdfDocument.writeTo(FileOutputStream(file))
+            Toast.makeText(applicationContext, "PDF uloženo do složky Stažené/Downloads", Toast.LENGTH_SHORT).show()
+        }catch (e: Exception){
+            e.printStackTrace()
+            Toast.makeText(applicationContext, "Nepodařilo se vygenerovat PDF", Toast.LENGTH_SHORT)
+                .show()
+        }
+        pdfDocument.close()
+    }
+
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE), PERMISSUIN_CODE
+        )
+    }
+
+    private fun checkPermissions(): Boolean {
+        var writeStoragePermission = ContextCompat.checkSelfPermission(
+            applicationContext,
+            WRITE_EXTERNAL_STORAGE
+        )
+        var readStoragePermission = ContextCompat.checkSelfPermission(
+            applicationContext,
+            READ_EXTERNAL_STORAGE
+        )
+        return writeStoragePermission == PackageManager.PERMISSION_GRANTED
+                && readStoragePermission == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun savePDF() {
+//        val mDoc = Document()
+//        val mFileName = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
+//            .format(System.currentTimeMillis())
+//        val mFilePath = Environment.getExternalStorageDirectory().toString() + "/" + mFileName + ".pdf"
+//        try {
+//            PdfWriter.getInstance(mDoc)
+//
+//        }catch (e: Exception){
+//            Toast.makeText(this,""+e.toString(),Toast.LENGTH_SHORT).show()
+//        }
 
     }
 
@@ -138,6 +265,7 @@ class ReceptActivita: AppCompatActivity() {
         val category = data.category
         val portion = data.portion.toString()
         loadDataFromAsset(data.img)
+        imgPath = data.img
 
 
 //        Glide.with(this)
@@ -216,6 +344,9 @@ class ReceptActivita: AppCompatActivity() {
         builder.setTitle("Vyberte suroviny ke spotřebování")
         if (checkedItems.isEmpty()){
             builder.setMessage("Recept nepoužívá žádné suroviny ze spíže")
+            builder.setNegativeButton("Zpět") { dialogInterface, which ->
+                dialogInterface.dismiss()
+            }
         }else {
             builder.setMultiChoiceItems(
                 show,
@@ -227,12 +358,12 @@ class ReceptActivita: AppCompatActivity() {
                         selectedItems.remove(which)
                     }
                 })
-            builder.setPositiveButton("ANO") { dialogInterface, which ->
+            builder.setPositiveButton("Spotřebovat") { dialogInterface, which ->
                 odebratSpiz(selectedItems, showSur)
                 shouwSuroREcept(id)
                 dialogInterface.dismiss()
             }
-            builder.setNegativeButton("NE") { dialogInterface, which ->
+            builder.setNegativeButton("Zpět") { dialogInterface, which ->
                 dialogInterface.dismiss()
             }
         }
@@ -253,4 +384,18 @@ class ReceptActivita: AppCompatActivity() {
         }
         return
     }
+
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if (requestCode == PERMISSUIN_CODE){
+//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1]
+//                == PackageManager.PERMISSION_GRANTED){
+//
+//            }
+//        }
+//    }
 }

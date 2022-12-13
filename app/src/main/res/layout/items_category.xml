@@ -35,6 +35,7 @@
             android:layout_marginStart="16dp"
             android:layout_toRightOf="@+id/view_img"
             android:gravity="center_vertical"
+            android:textColor="@color/ikon"
             android:hint="Recept"
             android:textSize="24dp"
             android:textStyle="bold">

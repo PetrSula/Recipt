@@ -1,6 +1,5 @@
 package com.example.bakalarkapokus
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -11,7 +10,6 @@ import android.view.View.GONE
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
@@ -32,7 +30,7 @@ class DruhaAktivita :AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.spiz)
+        setContentView(R.layout.activity_spiz)
 
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navView = findViewById<NavigationView>(R.id.navView)
@@ -98,6 +96,7 @@ class DruhaAktivita :AppCompatActivity(){
         // Lister pro Přidat záznam surovina
         btn_AddSpiz.setOnClickListener{
             addSuroSpiz()
+            hideKeyboard(this)
         }
         // volání funkce pro naplnění RecicleView
         setupListofDataIntoRecyclerView()
@@ -194,7 +193,7 @@ class DruhaAktivita :AppCompatActivity(){
     fun deleteRecord(spiz: SQLdata.Spiz){
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Vymazat záznam")
-        builder.setMessage("Opravdu si přejete vymazat ${spiz.name}")
+        builder.setMessage("Opravdu si přejete záznam vymazat ${spiz.name}")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
 
         builder.setPositiveButton("ANO"){
@@ -238,7 +237,7 @@ class DruhaAktivita :AppCompatActivity(){
             if (name.isNotEmpty()){
                 val status = DB.updateSpiz(SQLdata.Spiz(spiz.id,0,name))
                 if (status > -1) {
-                    Toast.makeText(applicationContext, "Record Upraven.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, "Záznam upraven.", Toast.LENGTH_LONG).show()
 
                     setupListofDataIntoRecyclerView()
                 }
@@ -257,16 +256,5 @@ class DruhaAktivita :AppCompatActivity(){
     fun getIngrediences():ArrayList<String>{
         var listOfIngredience = DBHelper(this).selectallIngredience()
         return listOfIngredience
-    }
-
-    fun hideKeyboard() {
-        val imm = this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        //Find the currently focused view, so we can grab the correct window token from it.
-        var view = this.currentFocus
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = View(this)
-        }
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

@@ -3,7 +3,6 @@ package com.example.bakalarkapokus
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -13,12 +12,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.translationMatrix
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.akexorcist.snaptimepicker.SnapTimePickerDialog
 import com.bumptech.glide.Glide
@@ -33,13 +30,12 @@ import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
 import kotlinx.android.synthetic.main.activity_recept.*
 import kotlinx.android.synthetic.main.dialog_img.*
-import kotlinx.android.synthetic.main.recept_postup.*
+import kotlinx.android.synthetic.main.activity_add_recept.*
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -64,7 +60,7 @@ class AddRecept: AppCompatActivity() {
         data.clear()
         gv_id = intent.getIntExtra("EXTRA_ID",0)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.recept_postup)
+        setContentView(R.layout.activity_add_recept)
 
         iv_add_dish_image.setOnClickListener{
             customImageSelectionDialog()
@@ -87,16 +83,12 @@ class AddRecept: AppCompatActivity() {
         }
         et_cooking_time.setOnClickListener {
             SnapTimePickerDialog.Builder().apply {
-                setTitle("Vybrat čas")
+                setTitle(R.string.TimeTitle)
                 setPrefix(R.string.time_prefix)
-                setSuffix(R.string.time_suffix)
-                setThemeColor(R.color.colorAccent)
-                setTitleColor(android.R.color.black)
+                setThemeColor(R.color.primary)
+                setTitleColor(R.color.white)
             }.build().apply {
                 setListener {
-                    // when the user select time onTimePicked
-                    // function get invoked automatically which
-                    // sets the time in textViewTime.
                         hour, minute ->
                     onTimePicked(hour, minute)
                 }
@@ -105,7 +97,6 @@ class AddRecept: AppCompatActivity() {
                 SnapTimePickerDialog.TAG
             )
         }
-//      val simpleSearchView : SearchView = findViewById(R.id.simpleSearchView)
 //      pokud přístup z editace ukaž recept
         showRecept(gv_id)
 
@@ -237,7 +228,6 @@ class AddRecept: AppCompatActivity() {
         et_quantyti.setText(qunatity.trim())
         ac_typequantity.setText(type)
         SVadd.scrollToDescendant(et_direction_to_cook)
-        btn_addSurivina.setText("Editovat Surovinu")
         adapterQuantity(type)
     }
 
@@ -507,9 +497,18 @@ class AddRecept: AppCompatActivity() {
             Toast.makeText(applicationContext, "Není vyplněna ani jedna surovina", Toast.LENGTH_LONG).show()
             tvAddSurovina.setError("Povinné")
             chech = false
-        } else if (postup.isEmpty()){
+        } else if (postup.isEmpty()) {
+            Toast.makeText(applicationContext, "Postup receptu nevyplněn", Toast.LENGTH_LONG).show()
             Toast.makeText(applicationContext, "Postup receptu nevyplněn", Toast.LENGTH_LONG).show()
             til_direction_to_cook.setError("Povinné")
+            chech = false
+        }else if (type.isEmpty()){
+                Toast.makeText(applicationContext, "Druh receptu nevyplněn", Toast.LENGTH_LONG).show()
+                ac_type.setError("Povinné")
+                chech = false
+        }else if (category.isEmpty()){
+            Toast.makeText(applicationContext, "Kategorie receptu nevyplněna", Toast.LENGTH_LONG).show()
+            ac_category.setError("Povinné")
             chech = false
         } else if (time.isEmpty()){
             Toast.makeText(applicationContext, "Čas přípravy receptu nevyplněn", Toast.LENGTH_LONG).show()
@@ -574,7 +573,14 @@ class AddRecept: AppCompatActivity() {
             Toast.makeText(applicationContext, "Čas přípravy receptu nevyplněn", Toast.LENGTH_LONG).show()
             et_cooking_time.setError("Povinné")
             chech = false
-        }
+        }else if (type.isEmpty()){
+            Toast.makeText(applicationContext, "Druh receptu nevyplněn", Toast.LENGTH_LONG).show()
+            ac_type.setError("Povinné")
+            chech = false
+        }else if (category.isEmpty()){
+            Toast.makeText(applicationContext, "Kategorie receptu nevyplněna", Toast.LENGTH_LONG).show()
+            ac_category.setError("Povinné")
+            chech = false}
         if (chech){
             val status = DB.updateRecept(SQLdata.Recept(id,title, type,category,time,postup,quantity,portion,img))
             updateSurovinyRecept(id)

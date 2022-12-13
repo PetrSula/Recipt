@@ -2,14 +2,14 @@
     <!-- Base application theme. -->
     <style name="Theme.BakalarkaPokus" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/secondary</item>
+        <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/header</item>
         <item name="colorOnPrimary">#f6f5ee</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondary">@color/primary</item>
         <item name="colorSecondaryVariant">@color/third</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="rv_color">#f6f5ee</item>
+        <item name="rv_color">#FFF07A</item>
         <item name="text">@color/black</item>        <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->

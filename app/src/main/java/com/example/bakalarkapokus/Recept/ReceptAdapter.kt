@@ -1,23 +1,19 @@
 package com.example.bakalarkapokus.Recept
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.graphics.green
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.DBHelper
-import com.example.bakalarkapokus.Tables.Ingredience
 import com.example.bakalarkapokus.Tables.SQLdata
-import com.example.bakalarkapokus.data
 import kotlinx.android.synthetic.main.items_row.view.*
-import kotlinx.android.synthetic.main.recept_suroviny.view.*
+import kotlinx.android.synthetic.main.items_recept_suroviny.view.*
 
 class ReceptAdapter(val context: Context, private val sList: ArrayList<SQLdata.RvSurovinyRecept>) : RecyclerView.Adapter<ReceptAdapter.ViewHolder>(){
     val spis= DBHelper(context).selectSpiz()
@@ -35,7 +31,7 @@ class ReceptAdapter(val context: Context, private val sList: ArrayList<SQLdata.R
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReceptAdapter.ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.recept_suroviny,parent,false)
+            LayoutInflater.from(parent.context).inflate(R.layout.items_recept_suroviny,parent,false)
         )
     }
 
@@ -46,11 +42,13 @@ class ReceptAdapter(val context: Context, private val sList: ArrayList<SQLdata.R
         holder.tvQuantity.text = item.quantity
         val addOK = spis.any { it.name == item.name }
         if (addOK){
-            DrawableCompat.setTint(DrawableCompat.wrap(holder.ivCkeckon.drawable),ContextCompat.getColor(context,R.color.primary))
+
+            DrawableCompat.setTint(DrawableCompat.wrap(holder.ivCkeckon.drawable),ContextCompat.getColor(context,R.color.ikon))
         }
-//        else{
-//            DrawableCompat.setTint(DrawableCompat.wrap(holder.ivCkeckon.drawable),ContextCompat.getColor(context,R.color.))
-//        }
+        else{val drawable = ContextCompat.getDrawable(context,R.drawable.ic_not_in)
+            holder.ivCkeckon.setImageDrawable(drawable)
+            DrawableCompat.setTint(DrawableCompat.wrap(holder.ivCkeckon.drawable),ContextCompat.getColor(context,R.color.third))
+        }
 //        var color = Color.parseColor("#000000")
 //        holder.ivCkeckon.drawable.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_ATOP)
 
@@ -60,3 +58,4 @@ class ReceptAdapter(val context: Context, private val sList: ArrayList<SQLdata.R
         return sList.size
     }
 }
+

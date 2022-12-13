@@ -79,7 +79,7 @@
                         android:layout_weight="0.8"
                         android:textSize="30dp"
                         android:hint=" Title"
-                        android:textColor="@color/secondary"
+                        android:textColor="@color/primary"
                         android:textStyle="bold"
                         android:gravity="center"
                         android:textAlignment="center"/>
@@ -92,7 +92,7 @@
                         android:contentDescription="IMG"
                         android:focusable="true"
                         android:padding="16dp"
-                        android:tint="@color/primary"
+                        android:tint="@color/ikon"
                         android:src="@drawable/ic_edit" />
                 </LinearLayout>
                 <View
@@ -114,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
                         android:textSize="20dp"
-                        android:text="Typ"
+                        android:text="Druh"
                         android:paddingStart="56dp"
                         android:textColor="?attr/text"
                         android:textStyle="bold"/>
@@ -124,7 +124,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
                         android:textSize="20dp"
-                        android:hint="Type"
+                        android:hint="Druh"
                         android:textColor="?attr/text"
                         android:textStyle="bold"/>
 
@@ -153,7 +153,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:textSize="20dp"
-                    android:hint="Category"
+                    android:hint="Kategory"
                     android:textColor="?attr/text"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -295,8 +295,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
                     android:text="Spotřebovat suroviny">
+                </Button>
+                <Button
+                    android:id="@+id/btn_rec_pfd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:text="generovat PDF">
                 </Button>
 
             </LinearLayout>

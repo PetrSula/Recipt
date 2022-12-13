@@ -19,11 +19,10 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.acSearch
 import kotlinx.android.synthetic.main.activity_main.ivSearch
-import kotlinx.android.synthetic.main.recept_postup.*
-import kotlinx.android.synthetic.main.selected_rv.*
+import kotlinx.android.synthetic.main.activity_add_recept.*
+import kotlinx.android.synthetic.main.activity_searched.*
 
-/* TODO - Přidat možnost vyhledávání receptu, jejich obrázek
-        - ošetřt přidávání jakéhokoliv textu s mezerami.
+/* TODO - ošetřt přidávání jakéhokoliv textu s mezerami.
         - live of activity
         - přenesení SQL lite a její rozšíření případné
 

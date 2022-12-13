@@ -51,21 +51,21 @@
                 app:cardElevation="0dp"
                 android:layout_weight="0.9">
 
-            <AutoCompleteTextView
-                android:id="@+id/acSearch"
-                android:layout_width="342dp"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:drawablePadding="10dp"
-                android:gravity="center_vertical"
-                android:background="@android:color/transparent"
-                android:hint="vyhledat recept"
-                android:iconifiedByDefault="false"
-                android:textColor="@color/black" />
+                <AutoCompleteTextView
+                    android:id="@+id/ac_Srch_Search"
+                    android:layout_width="334dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:hint="vyhledat recept"
+                    android:iconifiedByDefault="false"
+                    android:padding="10dp"
+                    android:textColor="@color/black" />
             </androidx.cardview.widget.CardView>
 
             <ImageView
-                android:id="@+id/ivSearch"
+                android:id="@+id/iv_srch_Search"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.30"

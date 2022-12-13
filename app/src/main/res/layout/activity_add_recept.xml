@@ -27,7 +27,7 @@
             <FrameLayout
                 android:id="@+id/fl_select_image"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="300dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -37,8 +37,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/third"
-                    android:contentDescription="IMG"
-                    android:scaleType="centerCrop" />
+                    android:contentDescription="JPG"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_local_dining"/>
 
                 <ImageView
                     android:id="@+id/iv_add_dish_image"
@@ -61,14 +62,14 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:hint="Title"
+                android:hint="Název"
                 app:counterEnabled="true"
                 app:counterMaxLength="50"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/ic_error"
                 app:helperText="Povinné*"
                 app:helperTextTextColor="@color/background"
-                app:hintTextColor="@color/black"
+                app:hintTextColor="?attr/text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fl_select_image">
@@ -91,7 +92,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:hint="Type"
+                android:hint="Druh"
                 app:hintTextColor="@color/secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -116,7 +117,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:hint="kategorie"
+                android:hint="Kategorie"
                 app:hintTextColor="@color/secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

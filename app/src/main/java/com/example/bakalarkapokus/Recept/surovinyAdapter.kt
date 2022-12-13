@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bakalarkapokus.*
 import com.example.bakalarkapokus.Tables.SQLdata
 import kotlinx.android.synthetic.main.items_row.view.*
-import kotlinx.android.synthetic.main.recept_suroviny.view.*
+import kotlinx.android.synthetic.main.activity_add_recept.view.*
 
 class surovinyAdapter (val context: Context, private val sList: ArrayList<SQLdata.Suroviny>): RecyclerView.Adapter<surovinyAdapter.ViewHolder>(){
 

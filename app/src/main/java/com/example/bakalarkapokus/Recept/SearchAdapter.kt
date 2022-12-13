@@ -19,7 +19,7 @@ import com.example.bakalarkapokus.Tables.SQLdata
 import kotlinx.android.synthetic.main.items_row.view.*
 import kotlinx.android.synthetic.main.items_searchable.view.*
 import kotlinx.android.synthetic.main.activity_recept.*
-import kotlinx.android.synthetic.main.recept_postup.*
+import kotlinx.android.synthetic.main.activity_add_recept.*
 import java.io.File
 
 class SearchAdapter (val context: Context, private val sList: ArrayList<SQLdata.AraySearched>): RecyclerView.Adapter<SearchAdapter.ViewHolder>(){

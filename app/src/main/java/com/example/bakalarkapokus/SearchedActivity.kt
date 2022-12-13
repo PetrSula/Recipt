@@ -2,29 +2,24 @@ package com.example.bakalarkapokus
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View.GONE
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AlertDialog
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.bakalarkapokus.Recept.CategoryAdapter
 import com.example.bakalarkapokus.Recept.SearchAdapter
-import com.example.bakalarkapokus.Recept.surovinyAdapter
 import com.example.bakalarkapokus.Tables.DBHelper
-import com.example.bakalarkapokus.Tables.ItemAdapter
 import com.example.bakalarkapokus.Tables.SQLdata
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_vyhledavani.*
 import kotlinx.android.synthetic.main.ingredience_main.*
-import kotlinx.android.synthetic.main.recept_postup.*
-import kotlinx.android.synthetic.main.selected_rv.*
+import kotlinx.android.synthetic.main.activity_add_recept.*
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_searched.*
+import kotlinx.android.synthetic.main.activity_vyhledavani.acSearch
 
 
 class SearchedActivity : AppCompatActivity() {
@@ -36,7 +31,7 @@ class SearchedActivity : AppCompatActivity() {
         val arraySearched = intent.getSerializableExtra("EXTRA_SEARCHED") as ArrayList<SQLdata.AraySearched>
 
 
-        setContentView(R.layout.selected_rv)
+        setContentView(R.layout.activity_searched)
         //        SET TITLE
         val title = findViewById<TextView>(R.id.tvtitleSelected)
         if (gv_title.isNullOrBlank()) {
@@ -81,10 +76,46 @@ class SearchedActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
+//                 AutoCoplitetextView
+        val autoTextView : AutoCompleteTextView = findViewById(R.id.ac_Srch_Search)
+        var listOfRecepts= DBHelper(this).selectAllTitles()
+        val Autoadapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, listOfRecepts)
+        autoTextView.threshold=1
+        autoTextView.setAdapter(Autoadapter)
+        iv_srch_Search.setOnClickListener{
+            search_handeler()
+        }
         setupListofDataIntoRecyclerView(arraySearched)
 
     }
+
+    private fun search_handeler() {
+        hideKeyboard(this)
+        var arraySearched:ArrayList<SQLdata.AraySearched>
+        val input = ac_Srch_Search.text.toString().trim()
+        if (input.isEmpty()){
+            Toast.makeText(applicationContext, "Nezadali jste žádné hodnoty", Toast.LENGTH_LONG).show()
+            return
+        }
+        arraySearched = DBHelper(this).selectByTitle(input)
+        if (arraySearched.size == 1){
+            showRecept(arraySearched[0].id)
+        }else if (arraySearched.size != 0){
+            setupListofDataIntoRecyclerView(arraySearched)
+        }else{
+            Toast.makeText(applicationContext, "Zadané hodnotě neodpovídá žádný recept", Toast.LENGTH_LONG).show()
+            return
+        }
+    }
+
+    private fun showRecept(id: Int) {
+        Intent(this,ReceptActivita::class.java).also {
+            it.putExtra("EXTRA_ID", id)
+            startActivity(it)
+            finish()
+        }
+    }
+
 
     private fun setupListofDataIntoRecyclerView(array : ArrayList<SQLdata.AraySearched>){
         rv_Searched.layoutManager = LinearLayoutManager(this)

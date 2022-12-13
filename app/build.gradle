@@ -76,5 +76,7 @@ dependencies {
     implementation 'com.akexorcist:snap-time-picker:1.0.0'
 //    SQLiteAssetHelper
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
+//    PDF CReator
+    implementation 'com.itextpdf:itextg:5.5.10'
 
 }

@@ -8,10 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="background">#B00C0C</color>
-    <color name= "primary">#3B6842</color>
-    <color name= "secondary">#ACBF60</color>
-    <color name= "third">#C6C29B</color>
+    <color name= "primary">#4E7825</color>
+    <color name= "secondary">#A1BF60</color>
+    <color name= "third">#E2AE6D</color>
+    <color name="ikon">#512215</color>
     <color name="header">#40403A</color>
+<!--    #ACBF60-->
     <declare-styleable name="ds">
         <attr name="rv_color" format="color"/>
         <attr name="text" format="color"/>

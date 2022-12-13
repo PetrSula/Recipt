@@ -16,7 +16,7 @@ import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_vyhledavani.*
-import kotlinx.android.synthetic.main.recept_postup.*
+import kotlinx.android.synthetic.main.activity_add_recept.*
 
 val data_search = ArrayList<SQLdata.Suroviny>()
 val data_id     = ArrayList<Int>()
@@ -27,6 +27,8 @@ class AdvanceActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        data_search.clear()
+        data_id.clear()
 
         setContentView(R.layout.activity_vyhledavani)
 //        val drawerLayout = findViewById<DrawerLayout>(R.id.Dlsearch)
