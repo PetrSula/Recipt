@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.ingredience_main.*
 import kotlinx.android.synthetic.main.activity_add_recept.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_searched.*
-import kotlinx.android.synthetic.main.activity_vyhledavani.acSearch
 
 
 class SearchedActivity : AppCompatActivity() {

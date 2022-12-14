@@ -32,6 +32,8 @@ import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
 //import com.itextpdf.text.pdf.PdfDocument
 import android.graphics.pdf.PdfDocument
+import android.text.StaticLayout
+import android.text.TextPaint
 import com.bumptech.glide.load.engine.Resource
 import com.itextpdf.text.pdf.PdfWriter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -107,6 +109,11 @@ class ReceptActivita: AppCompatActivity() {
                     intent.putExtra("EXIT",true)
                     true
                 }
+                R.id.miItem3 ->{
+                    val intent = Intent(this, AdvanceActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> false
             }
         }
@@ -118,12 +125,7 @@ class ReceptActivita: AppCompatActivity() {
         btn_rec_spotreb.setOnClickListener {
             spotrevSur(gv_id)
         }
-        btn_rec_pfd.setOnClickListener {
-            if ( android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                preparePDF()
-                generatePDF()
-            }
-        }
+
 
     }
 
@@ -147,43 +149,49 @@ class ReceptActivita: AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
-    private fun generatePDF() {
-        var pdfDocument: PdfDocument = PdfDocument()
-        var paint: Paint = Paint()
-        var title: Paint = Paint()
-        var myPageInfo: PdfDocument.PageInfo? =
-            PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create()
-        var myPage: PdfDocument.Page = pdfDocument.startPage(myPageInfo)
-        var canvas: Canvas = myPage.canvas
-        canvas.drawBitmap(scaledbmp, 56F, 40F, paint)
-        title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-        title.textSize = 15F
-        title.setColor(ContextCompat.getColor(this, R.color.primary))
-        canvas.drawText(tvTitleRecept.toString().trim(), 209F, 100F, title)
-        canvas.drawText(tvPostuprm.toString(), 209F, 80F, title)
-        title.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL))
-        title.setColor(ContextCompat.getColor(this, R.color.secondary))
-        title.textSize = 15F
-        title.textAlign = Paint.Align.CENTER
-        pdfDocument.finishPage(myPage)
-        val mFileName = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
-            .format(System.currentTimeMillis())
-//        var dowDir = Path.Combio
-        val file: File = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),  mFileName + ".pdf")
-//        val exFile = File(getExternalFilesDir("//sdcard//Download"),"name.pdf")
-
-        try {
-//            val fileOutputStream = FileOutputStream
-            pdfDocument.writeTo(FileOutputStream(file))
-            Toast.makeText(applicationContext, "PDF uloženo do složky Stažené/Downloads", Toast.LENGTH_SHORT).show()
-        }catch (e: Exception){
-            e.printStackTrace()
-            Toast.makeText(applicationContext, "Nepodařilo se vygenerovat PDF", Toast.LENGTH_SHORT)
-                .show()
-        }
-        pdfDocument.close()
-    }
+//    @RequiresApi(Build.VERSION_CODES.KITKAT)
+//    private fun generatePDF() {
+//        var pdfDocument: PdfDocument = PdfDocument()
+//        var paint: Paint = Paint()
+//        var title: Paint = Paint()
+//        var text: Paint = TextPaint()
+//        var myPageInfo: PdfDocument.PageInfo? =
+//            PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create()
+//        var myPage: PdfDocument.Page = pdfDocument.startPage(myPageInfo)
+//        var canvas: Canvas = myPage.canvas
+//        val titelIN = tvTitleRecept.text.toString().trim()
+////        val postup = tvPostuprm.text.toString()
+////        var layout : StaticLayout =
+////        layout = ("1.Inventarizační kokpit UIK – \n zobrazené zůstatky jednotlivých účtů neodpovídají skutečným zůstatkům!!!",text, canvas.getWidth(), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
+////        val postup =
+//        canvas.drawBitmap(scaledbmp, 56F, 40F, paint)
+//        title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+//        title.textSize = 18F
+//        title.setColor(ContextCompat.getColor(this, R.color.primary))
+//        text.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+//        text.textSize = 15F
+//        text.setColor(ContextCompat.getColor(this,R.color.secondary))
+//        canvas.drawText(titelIN, 400F, 80F, title)
+////        canvas.drawText(postup, 300F , 100F, text)
+//        pdfDocument.finishPage(myPage)
+//        val mFileName = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
+//            .format(System.currentTimeMillis())
+////        var dowDir = Path.Combio
+//        val file: File = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),  mFileName + ".pdf")
+////        val exFile = File(getExternalFilesDir("//sdcard//Download"),"name.pdf")
+//
+//        try {
+////            val fileOutputStream = FileOutputStream
+//            pdfDocument.writeTo(FileOutputStream(file))
+//            Toast.makeText(applicationContext, "PDF uloženo do složky Stažené/Downloads", Toast.LENGTH_SHORT).show()
+//            pdfDocument.close()
+//        }catch (e: Exception){
+//            e.printStackTrace()
+//            Toast.makeText(applicationContext, "Nepodařilo se vygenerovat PDF", Toast.LENGTH_SHORT)
+//                .show()
+//        }
+//
+//    }
 
     private fun requestPermission() {
         ActivityCompat.requestPermissions(

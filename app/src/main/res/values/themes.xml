@@ -9,6 +9,7 @@
         <item name="colorSecondary">@color/primary</item>
         <item name="colorSecondaryVariant">@color/third</item>
         <item name="colorOnSecondary">@color/black</item>
+        <item name="android:colorBackground">@color/third</item>
         <item name="rv_color">#FFF07A</item>
         <item name="text">@color/black</item>        <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
