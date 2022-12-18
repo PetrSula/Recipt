@@ -54,4 +54,14 @@ sealed class SQLdata {
         val img: Int,
 
     )
+    data class ArrayCSVRecept(
+        val id: Int,
+        val title: String,
+        val type: String,
+        val category: String,
+        val suroviny: Suroviny,
+        val time: String,
+        val postup: String,
+        val portion: Int
+    )
 }

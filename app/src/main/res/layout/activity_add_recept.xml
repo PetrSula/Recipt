@@ -54,6 +54,16 @@
                     android:src="@drawable/ic_add_a_photo" />
             </FrameLayout>
 
+            <Button
+                android:id="@+id/btn_add_Upload"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:text="Nahrát recept"
+                app:layout_constraintTop_toBottomOf="@+id/fl_select_image" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_title"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -72,7 +82,7 @@
                 app:hintTextColor="?attr/text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fl_select_image">
+                app:layout_constraintTop_toBottomOf="@id/btn_add_Upload">
 
                 <EditText
                     android:id="@+id/et_title"

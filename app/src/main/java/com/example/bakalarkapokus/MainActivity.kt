@@ -5,10 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bakalarkapokus.Recept.CategoryAdapter
@@ -70,11 +73,16 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-//                R.id.miItem2 -> {
-//                    val intent = Intent(this, ReceptActivita::class.java)
-//                    startActivity(intent)
-//                    true
-//                }
+                R.id.miItem2 -> {
+                    val where = " "
+                    var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
+                    arraySearched = DBHelper(this@MainActivity).selectTitleIMG(where)
+                    Intent(this@MainActivity,SearchedActivity::class.java).also {
+                        it.putExtra("EXTRA_SEARCHED", arraySearched)
+                        startActivity(it)
+                    }
+                    true
+                }
                 R.id.miItem3 ->{
                     val intent = Intent(this, AdvanceActivity::class.java)
                     startActivity(intent)
@@ -93,12 +101,30 @@ class MainActivity : AppCompatActivity() {
 
 //      Search on clicl listener
         ivSearch.setOnClickListener{
-            search_handeler()
+//            search_handeler()
+            slide()
         }
 //        add Recept
         fbAdd.setOnClickListener {
             val intent = Intent(this, AddRecept::class.java)
             startActivity(intent)
+        }
+    }
+
+    private fun slide() {
+        var view = findViewById<CardView>(R.id.cardSearch)
+//        view.translationY(100)
+//        view.visibility = View.VISIBLE
+////        TranslateAnimation(0F,80F,0F,0F).duration(500)
+//        transla
+        view.apply {
+            alpha = 0f
+            visibility = View.VISIBLE
+            animate()
+                .alpha(1f)
+                .setDuration(5000)
+                .translationX(100f)
+                .setListener(null)
         }
     }
 

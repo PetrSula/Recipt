@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/miItem0"
         android:icon="@drawable/ic_house"
+        app:showAsAction="never"
         android:title=" Úvodní stránka"/>
     <item
         android:id="@+id/miItem1"
         android:icon="@drawable/ic_storefront"
+        app:showAsAction="never"
         android:title=" Spíž "/>
-<!--    <item-->
-<!--        android:id="@+id/miItem2"-->
-<!--        android:title=" Recepty "/>-->
+    <item
+        android:id="@+id/miItem2"
+        android:icon="@drawable/ic_local_dining"
+        app:showAsAction="never"
+        android:title=" Recepty "/>
     <item
         android:id="@+id/miItem3"
         android:icon="@drawable/ic_search"
+        app:showAsAction="never"
         android:title=" Rozšířené vyhledávání "/>
 
 </menu>

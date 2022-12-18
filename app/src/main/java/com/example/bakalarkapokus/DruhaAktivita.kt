@@ -51,12 +51,16 @@ class DruhaAktivita :AppCompatActivity(){
                     startActivity(intent)
                     true
                 }
-//                R.id.miItem2 -> {
-//                    val intent = Intent(this, ReceptActivita::class.java)
-//                    finish()
-//                    startActivity(intent)
-//                    true
-//                }
+                R.id.miItem2 -> {
+                    val where = " "
+                    var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
+                    arraySearched = DBHelper(this@DruhaAktivita).selectTitleIMG(where)
+                    Intent(this@DruhaAktivita,SearchedActivity::class.java).also {
+                        it.putExtra("EXTRA_SEARCHED", arraySearched)
+                        startActivity(it)
+                    }
+                    true
+                }
                 R.id.miItem3 ->{
                     finish()
                     val intent = Intent(this, AdvanceActivity::class.java)

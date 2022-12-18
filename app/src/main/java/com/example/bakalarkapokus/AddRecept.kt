@@ -3,9 +3,11 @@ package com.example.bakalarkapokus
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.app.DownloadManager
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -16,6 +18,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.net.toFile
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.akexorcist.snaptimepicker.SnapTimePickerDialog
 import com.bumptech.glide.Glide
@@ -28,23 +31,31 @@ import com.bumptech.glide.request.target.Target
 import com.example.bakalarkapokus.Recept.surovinyAdapter
 import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
-import kotlinx.android.synthetic.main.activity_recept.*
-import kotlinx.android.synthetic.main.dialog_img.*
 import kotlinx.android.synthetic.main.activity_add_recept.*
+import kotlinx.android.synthetic.main.dialog_img.*
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVParser
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
+import java.net.URI
+import java.nio.charset.Charset
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /* ToDo  - default obrázek
          - není upraveno přístup/oprava obrázku
          - vymazat surovinu při editaci
-    BUG  - null možnost vyhledávání
-         - přidat možnsot vyhledat jen podle části názvu
+    BUG  - přidat možnsot vyhledat jen podle části názvu
+         - Přidání suroviny do Spíze, prázdné, červené zobrazení
+         - Toas exportovalo se úspešně
+         - odebat tla49tko na nahr8v8n9 pokud editace
+         - zkontrolovat nahrávání surovin testovat
+         - uvozovky při nahrávání
+         - přejmenovat exportovaný soubor
+         - co když je nahrán prázdný soubor nebo jiný formát
 */
 var data = ArrayList<SQLdata.Suroviny>()
 var data_del = ArrayList<SQLdata.Suroviny>()
@@ -70,6 +81,9 @@ class AddRecept: AppCompatActivity() {
         }
         iv_less.setOnClickListener{
             set_portion(false)
+        }
+        btn_add_Upload.setOnClickListener {
+            importCSV()
         }
         btn_addSurivina.setOnClickListener{
             addSurovina()
@@ -111,7 +125,7 @@ class AddRecept: AppCompatActivity() {
 
         val adapter = surovinyAdapter(this, data)
         rv_addSuroviny.adapter = adapter
-//         adapter pro dropdawn Suroviny druhy
+//         adapter pro dropdouwn Suroviny druhy
         val stringTypeQuantity = resources.getStringArray(R.array.quantity)
         val quantityAdapter = ArrayAdapter(this,R.layout.dropdown_item, stringTypeQuantity)
         val quantityAC = findViewById<AutoCompleteTextView>(R.id.ac_typequantity)
@@ -126,6 +140,9 @@ class AddRecept: AppCompatActivity() {
 
 
     }
+
+
+
     fun showRecept(id: Int){
         val DB = DBHelper(this)
         val recept :ArrayList<SQLdata.Recept> = DB.selectRECEPT(id)
@@ -317,7 +334,7 @@ class AddRecept: AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_IMAGE_CAPTURE && data != null){
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_IMAGE_CAPTURE && data != null) {
             data?.extras?.let {
                 val pic: Bitmap = data.extras!!.get("data") as Bitmap
                 val requestOptions = RequestOptions.centerCropTransform()
@@ -326,7 +343,7 @@ class AddRecept: AppCompatActivity() {
                     .load(pic)
                     .apply(requestOptions)
                     .into(iv_dish_image)
-                img_Path= saveIMG(pic)
+                img_Path = saveIMG(pic)
 
                 Glide.with(this)
                     .load(R.drawable.ic_edit)
@@ -334,7 +351,7 @@ class AddRecept: AppCompatActivity() {
                     .into(iv_add_dish_image)
             }
         }
-        if (requestCode == REQUEST_FILE_GALLERY){
+        if (requestCode == REQUEST_FILE_GALLERY) {
             data?.let {
                 val vybrane_photo = data.data
                 val requestOptions = RequestOptions.centerCropTransform()
@@ -342,7 +359,7 @@ class AddRecept: AppCompatActivity() {
                 Glide.with(this)
                     .load(vybrane_photo)
                     .apply { requestCode }
-                    .listener(object : RequestListener<Drawable>{
+                    .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(
                             e: GlideException?,
                             model: Any?,
@@ -369,15 +386,33 @@ class AddRecept: AppCompatActivity() {
                     })
                     .into(iv_dish_image)
 
-                val requestCode=RequestOptions.placeholderOf(R.drawable.ic_add)
+                val requestCode = RequestOptions.placeholderOf(R.drawable.ic_add)
 
                 Glide.with(this)
                     .load(R.drawable.ic_edit)
                     .apply(requestCode)
                     .into(iv_add_dish_image)
             }
+        } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_FILE_DOWL && data != null){
+            val uri = data?.data
+            if (uri != null){
+                val path = RealPathUtil.getRealPath(this,uri)
+                var inputStream = this.contentResolver.openInputStream(uri)
+                val buffer = inputStream?.bufferedReader(charset("Cp1250"))
+                var line = buffer?.readLine()
+                var line2 = buffer?.readLine()
+                if (line2 != null ){
+                        translateCSV(line2)
+                }else if (line != null ){
+                    translateCSV(line)
+                }else {
+                    Toast.makeText(this,"Soubor se nepovedlo nahrát zkontrolujte formát",Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
+
+
 
     private fun addSurovina () {
 //        val spinner: Spinner = (findViewById(R.id.ac_typequantity))
@@ -439,7 +474,6 @@ class AddRecept: AppCompatActivity() {
             }
             data.remove(sData)
             showSuroviny()
-
             dialogInterface.dismiss()
         }
 
@@ -530,12 +564,9 @@ class AddRecept: AppCompatActivity() {
                 }
                 displayRecept(status.toInt())
             }else{
-                Toast.makeText(applicationContext,"Něco se pokazilo",Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext,"Recept nepřidán",Toast.LENGTH_LONG).show()
             }
         }
-
-        //("přidání ukládání surovin do tabulky ingredience")
-        //("ošetřit přidání bez titulu, postupu či ingrediencí")
     }
 
     fun updateRecept(id : Int){
@@ -644,12 +675,176 @@ class AddRecept: AppCompatActivity() {
         return file.absolutePath
     }
 
+    private fun importCSV() {
+        val path : String
+
+        if (hasPermission(false)) {
+//            val intent = Intent(DownloadManager.ACTION_VIEW_DOWNLOADS)
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.setType("*/*")
+            startActivityForResult(Intent.createChooser(intent,"Vybrat"), REQUEST_FILE_DOWL)
+//            intent.setType("*/*")
+//            startActivityForResult(Intent.createChooser(intent,"VYBRAT SOUBOR"),1)
+        }
+        var neco : Uri = Uri.EMPTY
+        var file = File(getRealPathFromURI(neco))
+
+    }
+    private fun getRealPathFromURI(contentURI: Uri): String? {
+        val result: String?
+        val cursor: Cursor? = contentResolver.query(contentURI, null, null, null, null)
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.path
+        } else {
+            cursor.moveToFirst()
+            val idx: Int = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+            result = cursor.getString(idx)
+            cursor.close()
+        }
+        return result
+    }
+
+    fun translateCSV(line : String){
+        val list : List<String> = line.split("\",")
+        try {
+            val title = list.get(0).replace("\"", "").trim()
+            et_title.setText(title)
+        }catch (e: Exception) {
+            return
+        }
+        try{
+            val druh = list.get(1)
+            setDruh(druh)
+        }catch (e: Exception) {
+            return
+        }
+        try {
+            val category = list.get(2)
+            setCategory(category)
+        }catch (e: Exception) {
+            return
+        }
+        try {
+            val sur = list.get(3)
+            setSuroviny(sur)
+        }catch (e: Exception) {
+            return
+        }
+        try {
+            val sur = list.get(3)
+            setSuroviny(sur)
+        }catch (e: Exception) {
+            return
+        }
+        try {
+            val cas = list.get(4)
+            setCas(cas)
+        }catch (e: Exception) {
+            return
+        }
+        try {
+            val porce = list.get(5)
+            setPorce(porce)
+        }catch (e: Exception) {
+            return
+        }
+        try {
+            val postup = list.get(6)
+            setPostup(postup)
+        }catch (e: Exception) {
+            return
+        }
+
+    }
+
+    private fun setCas(string: String) {
+        var output = string.replace("\"", "")
+        val cas = output.split(":")
+        if (cas.size == 2) {
+            val hod = cas.get(0)
+            val min = cas.get(1)
+            val numH = hod.filter { it.isDigit() }
+            val numM = hod.filter { it.isDigit() }
+            if (numH.isNotEmpty() && numM.isNotEmpty()) {
+                et_cooking_time.setText(output)
+            }
+        }
+    }
+
+    private fun setPorce(string: String) {
+        val porce = string.filter { it.isDigit() }
+        if (porce.isNotEmpty()){
+            tv_portion.setText(porce)
+        }
+    }
+
+    private fun setPostup(string: String) {
+        var postup = string.replace("\"", "")
+        et_direction_to_cook.setText(postup)
+    }
+
+    private fun setSuroviny(sur: String) {
+        data.clear()
+        val listSur = sur.split(",")
+        for ( i in listSur){
+            val item = i.split("|")
+            if (item.size != 2){
+                continue
+            }
+            val name = item[0].trim()
+            var quantyti = item[1].trim()
+            var numberQuantity = quantyti.filter { it.isDigit() }
+            var typeQunatity = quantyti.filter { it.isLetter() }
+            val number = name.filter { it.isDigit() }
+
+            if (number.isNotEmpty() || name.isEmpty()){
+                continue
+            }else{
+                pridatIngredienci(name)
+                val addQuantity = numberQuantity + " " + typeQunatity
+                data.add(SQLdata.Suroviny(id_addSurovin,name,addQuantity))
+                id_addSurovin = id_addSurovin.inc()
+            }
+//            if (size == 0){
+//                return
+//            }else if (size == 1){
+//                pridatIngredien(item[0])
+//                data.add(SQLdata.Suroviny(id_addSurovin,item[0],""))
+//            }
+        }
+        showSuroviny()
+    }
+
+    private fun setDruh(string: String) {
+        var druh = string.replace("\"", "")
+        druh = druh.capitalize().trim()
+        val array = resources.getStringArray(R.array.typeOfRecept)
+        if (druh in array) {
+            ac_type.setText(druh)
+        }
+    }
+
+    private fun setCategory(string: String) {
+        var category = string.replace("\"", "")
+        category = category.capitalize().trim()
+        val array = resources.getStringArray(R.array.categoryRecept)
+        if (category in array) {
+            ac_category.setText(category)
+        }
+    }
+
+
     companion object {
+        private const val REQUEST_FILE_DOWL = 223
         private const val REQUEST_IMAGE_CAPTURE = 1
         private const val REQUEST_FILE_GALLERY = 2
         private const val REQUEST_CODE: Int = 123
         private const val IMAGE_DIRECTORY = "RecipesImg"
     }
+
+
+
+
 
 
 

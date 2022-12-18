@@ -83,17 +83,6 @@
                         android:textStyle="bold"
                         android:gravity="center"
                         android:textAlignment="center"/>
-                    <ImageView
-                        android:id="@+id/iv_edit_recept"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end|bottom"
-                        android:clickable="true"
-                        android:contentDescription="IMG"
-                        android:focusable="true"
-                        android:padding="16dp"
-                        android:tint="@color/ikon"
-                        android:src="@drawable/ic_edit" />
                 </LinearLayout>
                 <View
                     android:layout_width="wrap_content"
@@ -183,7 +172,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="0dp"
-                        android:text="Množství"
+                        android:text=""
                         android:textColor="?attr/text"
                         android:textSize="18dp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -254,6 +243,41 @@
                     android:background="@color/third">
 
                 </View>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:id="@+id/iv_edit_recept"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="30dp"
+                        android:tint="@color/ikon"
+                        android:src="@drawable/ic_edit"/>
+
+                    <ImageView
+                        android:id="@+id/iv_recept_delete"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="30dp"
+                        android:tint="@color/ikon"
+                        app:srcCompat="@android:drawable/ic_menu_delete"/>
+
+                    <ImageView
+                        android:id="@+id/iv_recept_export"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="30dp"
+                        android:tint="@color/ikon"
+                        app:srcCompat="@drawable/ic_archive"/>
+
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_recept"
@@ -299,15 +323,15 @@
                     android:layout_centerHorizontal="true"
                     android:text="Spotřebovat suroviny">
                 </Button>
-<!--                <Button-->
-<!--                    android:id="@+id/btn_rec_pfd"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="8dp"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_centerHorizontal="true"-->
-<!--                    android:text="generovat PDF">-->
-<!--                </Button>-->
+                <Button
+                    android:id="@+id/btn_rec_pfd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:text="Exportovat Recept">
+                </Button>
 
             </LinearLayout>
 

@@ -32,20 +32,28 @@ import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
 //import com.itextpdf.text.pdf.PdfDocument
 import android.graphics.pdf.PdfDocument
+import android.os.Environment.getExternalStoragePublicDirectory
 import android.text.StaticLayout
 import android.text.TextPaint
+import android.text.style.LineBackgroundSpan
 import com.bumptech.glide.load.engine.Resource
-import com.itextpdf.text.pdf.PdfWriter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.drawerLayout
 import kotlinx.android.synthetic.main.activity_main.navView
 import kotlinx.android.synthetic.main.activity_spiz.*
 import kotlinx.android.synthetic.main.activity_recept.*
 import kotlinx.android.synthetic.main.activity_add_recept.*
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVPrinter
 import org.w3c.dom.Document
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
+import java.io.*
+import java.nio.charset.Charset
+import java.nio.charset.CharsetDecoder
+import java.nio.charset.StandardCharsets
+import java.nio.charset.StandardCharsets.ISO_8859_1
+import java.nio.charset.StandardCharsets.UTF_8
+import java.nio.file.Paths
+import java.sql.SQLData
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Arrays.fill
@@ -62,13 +70,8 @@ import kotlin.collections.ArrayList
 class ReceptActivita: AppCompatActivity() {
     lateinit var  et_pdf_data :EditText
     lateinit var toggle: ActionBarDrawerToggle
-    private val STORAGE_CODE = 1001
-    var PERMISSUIN_CODE = 101
-    var pageHeight = 1120
-    var pageWidth = 792
-    lateinit var bmp: Bitmap
-    lateinit var scaledbmp: Bitmap
     lateinit var imgPath : String
+    lateinit var gv_time : String
 
     class Myclass{
         companion object{
@@ -97,11 +100,16 @@ class ReceptActivita: AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-//                R.id.miItem2 -> {
-//                    val intent = Intent(this, ReceptActivita::class.java)
-//                    startActivity(intent)
-//                    true
-//                }
+                R.id.miItem2 -> {
+                    val where = " "
+                    var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
+                    arraySearched = DBHelper(this@ReceptActivita).selectTitleIMG(where)
+                    Intent(this@ReceptActivita,SearchedActivity::class.java).also {
+                        it.putExtra("EXTRA_SEARCHED", arraySearched)
+                        startActivity(it)
+                    }
+                    true
+                }
                 R.id.miItem0 -> {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
@@ -122,32 +130,101 @@ class ReceptActivita: AppCompatActivity() {
         iv_edit_recept.setOnClickListener{
             editaceRecept(gv_id)
         }
+        iv_recept_delete.setOnClickListener {
+            deleteRecept(gv_id)
+        }
+        iv_recept_export.setOnClickListener {
+            generateCSV(gv_id)
+        }
         btn_rec_spotreb.setOnClickListener {
             spotrevSur(gv_id)
         }
-
-
     }
 
-    private fun preparePDF() {
-        val check : Boolean = "pictures/" in imgPath
-        if (check) {
-            try {
-                var ims = getAssets().open(imgPath)
-                bmp = BitmapFactory.decodeStream(ims)
-            } catch (e: Exception) {
-                return
+    private fun deleteRecept(id: Int) {
+        val title = tvTitleRecept.text
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle("Vymazat recept $title")
+        builder.setMessage("Opravdu si přejete vymazat Recept ")
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+        builder.setPositiveButton("ANO") { dialogInterface, which ->
+            DBHelper(this).deleteRecept(id)
+            DBHelper(this).deleteSurRecept_id(id)
+            dialogInterface.dismiss()
+            SearchedActivity.SearchableMyclass.activity?.finish()
+            finish()
+            val where = " "
+            var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
+            arraySearched = DBHelper(this@ReceptActivita).selectTitleIMG(where)
+            Intent(this@ReceptActivita,SearchedActivity::class.java).also {
+                it.putExtra("EXTRA_SEARCHED", arraySearched)
+                startActivity(it)
             }
-        }else{
-            bmp = BitmapFactory.decodeFile(imgPath)
         }
+        builder.setNegativeButton("NE") { dialogInterface, which ->
+            dialogInterface.dismiss()
+        }
+        val alertDialog: androidx.appcompat.app.AlertDialog = builder.create()
+        alertDialog.setCancelable(true)
+        alertDialog.show()
+    }
 
-//        bmp = BitmapFactory.decodeResource(resources, R.id.iv_rec_Picture)
-        scaledbmp = Bitmap.createScaledBitmap(bmp, 250, 250, false)
-        if (!checkPermissions()){
-            requestPermission()
+    private fun generateCSV(id: Int){
+        val titelIN = tvTitleRecept.text.toString().trim()
+        val druh = tvType.text.toString().trim()
+        val kategorie = tvCategory.text.toString().trim()
+        var postup = tvPostuprm.text.toString().trim()
+        val cas = gv_time
+        val suroviny = getSurovinyCSV(id)
+        val portion = tv_portionR.text.toString()
+        val postup2 = postup.replace("\n", " ").replace( "\r", "").replace("\t"," ")
+//        val mFileName = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+//            .format(System.currentTimeMillis())
+        val fileName = titelIN
+        val file: File = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),  fileName + ".csv")
+        try {
+//            val fileOut =
+            var fileWriter = OutputStreamWriter(FileOutputStream(file), Charset.forName("Cp1250"))
+            var buffer = BufferedWriter(fileWriter)
+            buffer.write("Název, Druh, Kategorie, Suroviny, Čas, Postup, Porce")
+            buffer.newLine()
+            buffer.write("\"$titelIN\", \"$druh\", \"$kategorie\",\"$suroviny\", \"$cas\",\"$portion\",\"$postup2\"")
+            buffer.flush()
+            buffer.close()
+            Toast.makeText(applicationContext, "CSV soubor uložen do složky Stažené/Downloads", Toast.LENGTH_SHORT).show()
+        }catch (e:Exception){
+            Toast.makeText(applicationContext, "Soubor se nepodařilo se vygenerovat", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun getSurovinyCSV(id: Int): String {
+        val sur  = getSuroviny(id)
+        var suroviny : String = ""
+        for (item in sur){
+            suroviny = suroviny + "${item.name} | ${item.quantity}, "
+        }
+        return suroviny
+    }
+
+//    private fun preparePDF() {
+//        val check : Boolean = "pictures/" in imgPath
+//        if (check) {
+//            try {
+//                var ims = getAssets().open(imgPath)
+//                bmp = BitmapFactory.decodeStream(ims)
+//            } catch (e: Exception) {
+//                return
+//            }
+//        }else{
+//            bmp = BitmapFactory.decodeFile(imgPath)
+//        }
+//
+////        bmp = BitmapFactory.decodeResource(resources, R.id.iv_rec_Picture)
+//        scaledbmp = Bitmap.createScaledBitmap(bmp, 250, 250, false)
+//        if (!checkPermissions()){
+//            requestPermission()
+//        }
+//    }
 
 //    @RequiresApi(Build.VERSION_CODES.KITKAT)
 //    private fun generatePDF() {
@@ -193,25 +270,25 @@ class ReceptActivita: AppCompatActivity() {
 //
 //    }
 
-    private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE), PERMISSUIN_CODE
-        )
-    }
-
-    private fun checkPermissions(): Boolean {
-        var writeStoragePermission = ContextCompat.checkSelfPermission(
-            applicationContext,
-            WRITE_EXTERNAL_STORAGE
-        )
-        var readStoragePermission = ContextCompat.checkSelfPermission(
-            applicationContext,
-            READ_EXTERNAL_STORAGE
-        )
-        return writeStoragePermission == PackageManager.PERMISSION_GRANTED
-                && readStoragePermission == PackageManager.PERMISSION_GRANTED
-    }
+//    private fun requestPermission() {
+//        ActivityCompat.requestPermissions(
+//            this,
+//            arrayOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE), PERMISSUIN_CODE
+//        )
+//    }
+//
+//    private fun checkPermissions(): Boolean {
+//        var writeStoragePermission = ContextCompat.checkSelfPermission(
+//            applicationContext,
+//            WRITE_EXTERNAL_STORAGE
+//        )
+//        var readStoragePermission = ContextCompat.checkSelfPermission(
+//            applicationContext,
+//            READ_EXTERNAL_STORAGE
+//        )
+//        return writeStoragePermission == PackageManager.PERMISSION_GRANTED
+//                && readStoragePermission == PackageManager.PERMISSION_GRANTED
+//    }
 
     private fun savePDF() {
 //        val mDoc = Document()
@@ -233,6 +310,7 @@ class ReceptActivita: AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+//    nahrání obrázků pro recept
     fun loadDataFromAsset(path : String){
         var Image: ImageView
         Image = findViewById(R.id.iv_rec_Picture)
@@ -262,12 +340,7 @@ class ReceptActivita: AppCompatActivity() {
         val title = data.title
         val postup = data.postup
         val type = data.type
-//        val postup = "Maso poprašte mletou paprikou a vmasírujte ji do něj ze všech stran. Poté maso osolte a opepřete (asi 1/4 lžičkou od každého).\n" +
-//                "Ve velké hluboké pánvi rozehřejte 1 lžíci másla na středním ohni. Maso na něm opékejte nejprve z jené strany asi 3 minuty, až bude hezky dozlatova opečené. Poté maso obraťte, ztlumte na střední plamen a opékejte zase asi 3 minuty.\n" +
-//                "Poté do pánve přidejte zbylé máslo, tymián a česnek a za stálého míchání restujte asi 2 minuty.\n" +
-//                "Zalijte vínem, přiveďte k mírnému varu a nechte vařit asi 20 minut. Víno se zredukuje, pokud je potřeba, klidně ještě víno přidejte, aby v pánvi zůstala nějaká omáčka.\n" +
-//                "Na závěr přidejte do omáčky pokrájený špenát a nechte jen zavadnout. Dochuťte solí a pepřem, ujistěte se, že je maso propečené a podávejte s rýží nebo širokými nudlemi.\n" +
-//                "Prima tip: Pokud chcete, můžete půlku másla nahradit olivovým olejem.
+        gv_time = data.time
         var timeArray: List<String> = data.time.split(":")
         val time = setTime(timeArray)
         val category = data.category
@@ -275,13 +348,7 @@ class ReceptActivita: AppCompatActivity() {
         loadDataFromAsset(data.img)
         imgPath = data.img
 
-
-//        Glide.with(this)
-//            .load(imgURI)
-//            .into(ivPicture)
-
         shouwSuroREcept(id)
-
         tvTitleRecept.text = title
         tvPostuprm.text = postup
         tvType.text = type

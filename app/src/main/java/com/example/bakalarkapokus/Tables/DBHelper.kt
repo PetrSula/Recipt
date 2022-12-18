@@ -1,8 +1,7 @@
 package com.example.bakalarkapokus.Tables
 /*TODO - zavrít databáze po každém dotazu
        - select DISTINCT RECEPT.ID from recept, SUROVINY_RECEPT
-Where (SUROVINY_RECEPT.RECEPT_ID = RECEPT.ID) AND ( RECEPT.CATEGORY = 'vegetariánské') AND
-	(  SUROVINY_RECEPT.INGREDIENCE_ID = 9 or SUROVINY_RECEPT.INGREDIENCE_ID = 11)*/
+*/
 
 import android.content.ContentValues
 import android.content.Context
@@ -380,14 +379,23 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
                 recept.add(data)
             }while (cursor.moveToNext())
         }
+        DB.close()
         return recept
+
     }
 
     fun selectIDRECEPT(recept: SQLdata.Recept):ArrayList<SQLdata.Recept>{
         val DB = this.readableDatabase
         val selecQuery = "SELECT" + ID + "FROM" + TABLE_RECEPT + "WHERE"
+        DB.close()
         return ArrayList()
 
+    }
+    fun deleteRecept(id : Int){
+        val DB = this.writableDatabase
+        val contentValues = ContentValues()
+        val success = DB.delete(TABLE_RECEPT, " $ID = $id ", null)
+        DB.close()
     }
 
     fun insertSURIVONYrecept( surovinyRecept: SQLdata.SurovinyRecept ) : Long{
@@ -455,6 +463,7 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
                 suroviny.add(data)
             }while (cursor.moveToNext())
         }
+        DB.close()
         return suroviny
     }
     fun updateSur(surovinyRecept: SQLdata.SurovinyRecept ){
@@ -470,6 +479,13 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         val DB = this.writableDatabase
         val contentValues = ContentValues()
         val success = DB.delete(TABLE_SUROVINY_RECEPT, " $INGREDIENCE_ID = $id_ing and $RECEPT_ID = $id_recept", null)
+        DB.close()
+        return
+    }
+    fun deleteSurRecept_id(id_recept: Int){
+        val DB = this.writableDatabase
+        val contentValues = ContentValues()
+        val success = DB.delete(TABLE_SUROVINY_RECEPT, "  $RECEPT_ID = $id_recept", null)
         DB.close()
         return
     }

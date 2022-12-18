@@ -1,5 +1,6 @@
 package com.example.bakalarkapokus
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -24,8 +25,15 @@ import kotlinx.android.synthetic.main.activity_searched.*
 class SearchedActivity : AppCompatActivity() {
     lateinit var toggle: ActionBarDrawerToggle
 
+    class SearchableMyclass{
+        companion object{
+            var activity: Activity? = null
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        SearchableMyclass.activity = this@SearchedActivity
         val gv_title = intent.getStringExtra("EXTRA_TITLE")
         val arraySearched = intent.getSerializableExtra("EXTRA_SEARCHED") as ArrayList<SQLdata.AraySearched>
 

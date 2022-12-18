@@ -50,12 +50,16 @@ class AdvanceActivity : AppCompatActivity(){
                     startActivity(intent)
                     true
                 }
-//                R.id.miItem2 -> {
-//                    val intent = Intent(this, ReceptActivita::class.java)
-//                    finish()
-//                    startActivity(intent)
-//                    true
-//                }
+                R.id.miItem2 -> {
+                    val where = " "
+                    var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
+                    arraySearched = DBHelper(this@AdvanceActivity).selectTitleIMG(where)
+                    Intent(this@AdvanceActivity,SearchedActivity::class.java).also {
+                        it.putExtra("EXTRA_SEARCHED", arraySearched)
+                        startActivity(it)
+                    }
+                    true
+                }
                 R.id.miItem0 -> {
                     val intent = Intent(this, MainActivity::class.java)
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -122,6 +126,7 @@ class AdvanceActivity : AppCompatActivity(){
             val addOK = data_search.any { it.name == name }
             if (!addOK) {
                 id_inger = id_inger.inc()
+                pridatIngredienci(name)
                 data_search.add(SQLdata.Suroviny(id_inger,name,""))
                 val addId = DBHelper(this).sellectOneIDIngredience(name)
                 data_id.add(addId)
@@ -139,6 +144,15 @@ class AdvanceActivity : AppCompatActivity(){
             }
         }
     }
+
+    private fun pridatIngredienci(name: String) {
+            val DB = DBHelper(this)
+            val add = DB.selectINGREDIENCE(name)
+            if (add.isEmpty()){
+                DB.insertDataINGREDIENCE(SQLdata.Ingredience(0,name))
+            }
+    }
+
 
     private fun showIngred(){
         val adapter = surovinyAdapter(this, data_search)
