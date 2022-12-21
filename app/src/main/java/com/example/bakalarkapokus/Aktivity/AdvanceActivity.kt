@@ -1,4 +1,4 @@
-package com.example.bakalarkapokus
+package com.example.bakalarkapokus.Aktivity
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,12 +11,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.bakalarkapokus.Recept.surovinyAdapter
+import com.example.bakalarkapokus.Adaptery.surovinyAdapter
+import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_vyhledavani.*
-import kotlinx.android.synthetic.main.activity_add_recept.*
 
 val data_search = ArrayList<SQLdata.Suroviny>()
 val data_id     = ArrayList<Int>()
@@ -45,7 +45,7 @@ class AdvanceActivity : AppCompatActivity(){
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.miItem1 -> {
-                    val intent = Intent(this, DruhaAktivita::class.java)
+                    val intent = Intent(this, SpizAktivita::class.java)
                     finish()
                     startActivity(intent)
                     true

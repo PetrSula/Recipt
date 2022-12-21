@@ -1,4 +1,4 @@
-package com.example.bakalarkapokus
+package com.example.bakalarkapokus.Aktivity
 
 import android.app.Activity
 import android.content.Intent
@@ -11,14 +11,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.bakalarkapokus.Recept.SearchAdapter
+import com.example.bakalarkapokus.Adaptery.SearchAdapter
+import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_vyhledavani.*
-import kotlinx.android.synthetic.main.ingredience_main.*
-import kotlinx.android.synthetic.main.activity_add_recept.*
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_searched.*
 
 
@@ -57,7 +54,7 @@ class SearchedActivity : AppCompatActivity() {
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.miItem1 -> {
-                    val intent = Intent(this, DruhaAktivita::class.java)
+                    val intent = Intent(this, SpizAktivita::class.java)
                     startActivity(intent)
                     finish()
                     true

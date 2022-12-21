@@ -1,9 +1,8 @@
-package com.example.bakalarkapokus
+package com.example.bakalarkapokus.Aktivity
 
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
-import android.app.DownloadManager
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -14,11 +13,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.net.toFile
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.akexorcist.snaptimepicker.SnapTimePickerDialog
 import com.bumptech.glide.Glide
@@ -28,30 +27,26 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import com.example.bakalarkapokus.Recept.surovinyAdapter
+import com.example.bakalarkapokus.Adaptery.surovinyAdapter
+import com.example.bakalarkapokus.R
+import com.example.bakalarkapokus.RealPathUtil
 import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
 import kotlinx.android.synthetic.main.activity_add_recept.*
 import kotlinx.android.synthetic.main.dialog_img.*
-import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVParser
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
-import java.net.URI
-import java.nio.charset.Charset
 import java.util.*
 
 
 /* ToDo  - default obrázek
          - není upraveno přístup/oprava obrázku
          - vymazat surovinu při editaci
-    BUG  - přidat možnsot vyhledat jen podle části názvu
+    BUG
          - Přidání suroviny do Spíze, prázdné, červené zobrazení
-         - Toas exportovalo se úspešně
-         - odebat tla49tko na nahr8v8n9 pokud editace
          - zkontrolovat nahrávání surovin testovat
          - uvozovky při nahrávání
          - přejmenovat exportovaný soubor
@@ -82,9 +77,6 @@ class AddRecept: AppCompatActivity() {
         iv_less.setOnClickListener{
             set_portion(false)
         }
-        btn_add_Upload.setOnClickListener {
-            importCSV()
-        }
         btn_addSurivina.setOnClickListener{
             addSurovina()
         }
@@ -111,6 +103,10 @@ class AddRecept: AppCompatActivity() {
                 SnapTimePickerDialog.TAG
             )
         }
+
+        if (gv_id != 0){
+            btn_add_Upload.visibility = View.GONE
+        }
 //      pokud přístup z editace ukaž recept
         showRecept(gv_id)
 
@@ -125,22 +121,30 @@ class AddRecept: AppCompatActivity() {
 
         val adapter = surovinyAdapter(this, data)
         rv_addSuroviny.adapter = adapter
-//         adapter pro dropdouwn Suroviny druhy
-        val stringTypeQuantity = resources.getStringArray(R.array.quantity)
-        val quantityAdapter = ArrayAdapter(this,R.layout.dropdown_item, stringTypeQuantity)
-        val quantityAC = findViewById<AutoCompleteTextView>(R.id.ac_typequantity)
-        quantityAC.setAdapter(quantityAdapter)
-//        adapter pro dropdown Kategorie
+// ADaptery
+        setAdaptercategory()
+        adapterQuantity(" ")
+        adaptertype()
+
+        btn_add_Upload.setOnClickListener {
+            importCSV()
+        }
+
+    }
+
+    private fun setAdaptercategory() {
         val stringCategory = resources.getStringArray(R.array.categoryRecept)
         val categoryAdapter = ArrayAdapter(this,R.layout.dropdown_item,stringCategory)
         val categoryAC = findViewById<AutoCompleteTextView>(R.id.ac_category)
         categoryAC.setAdapter(categoryAdapter)
-        adapterQuantity(" ")
-        adaptertype()
-
-
     }
 
+//    private fun setAdapterQuantity() {
+//        val stringTypeQuantity = resources.getStringArray(R.array.quantity)
+//        val quantityAdapter = ArrayAdapter(this,R.layout.dropdown_item, stringTypeQuantity)
+//        val quantityAC = findViewById<AutoCompleteTextView>(R.id.ac_typequantity)
+//        quantityAC.setAdapter(quantityAdapter)
+//    }
 
 
     fun showRecept(id: Int){
@@ -677,7 +681,24 @@ class AddRecept: AppCompatActivity() {
 
     private fun importCSV() {
         val path : String
-
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(" Vzor náhrávání souboru CSV")
+        builder.setMessage("Pro nahrání receptu je nezbytné dodržet následující formát.\n\n" +
+                "Suroviny jako celek musí být od ostatních položek rozděleny \"\" a čárkou viz vzor recept. Jednotlivé suroviny oddělte čárkami a název s množstvím |\n\n" +
+                "RECEPT: \n"+
+                "\"Název\", \"Druh\", \"Kategorie\", \"Suroviny\", \"Čas\", \"Porce\", \"Postup\"\n\n" +
+                "SUROVINA: \n" +
+                "nazev | množství,\n\n" +
+                "Čas zadávejte pouze číselně ve formátu HH:MM")
+        builder.setPositiveButton("ROZUMÍM") { dialogInterface, which ->
+            executeImport()
+            dialogInterface.dismiss()
+        }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(true)
+        alertDialog.show()
+    }
+    fun executeImport(){
         if (hasPermission(false)) {
 //            val intent = Intent(DownloadManager.ACTION_VIEW_DOWNLOADS)
             val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -685,6 +706,14 @@ class AddRecept: AppCompatActivity() {
             startActivityForResult(Intent.createChooser(intent,"Vybrat"), REQUEST_FILE_DOWL)
 //            intent.setType("*/*")
 //            startActivityForResult(Intent.createChooser(intent,"VYBRAT SOUBOR"),1)
+        }else {
+            // Ask for one permission
+            EasyPermissions.requestPermissions(
+                this,
+                getString(R.string.rationale_camera),
+                REQUEST_CODE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+            )
         }
         var neco : Uri = Uri.EMPTY
         var file = File(getRealPathFromURI(neco))
@@ -785,7 +814,8 @@ class AddRecept: AppCompatActivity() {
 
     private fun setSuroviny(sur: String) {
         data.clear()
-        val listSur = sur.split(",")
+        val input = sur.replace("\"", "")
+        val listSur = input.split(",")
         for ( i in listSur){
             val item = i.split("|")
             if (item.size != 2){
@@ -822,6 +852,7 @@ class AddRecept: AppCompatActivity() {
         if (druh in array) {
             ac_type.setText(druh)
         }
+        adaptertype()
     }
 
     private fun setCategory(string: String) {
@@ -831,6 +862,8 @@ class AddRecept: AppCompatActivity() {
         if (category in array) {
             ac_category.setText(category)
         }
+        //        adapter pro dropdown Kategorie
+        setAdaptercategory()
     }
 
 

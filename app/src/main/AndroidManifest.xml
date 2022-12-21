@@ -21,7 +21,7 @@
             android:label="@string/title_activity_searched"
             android:theme="@style/Theme.BakalarkaPokus.NoActionBar" />
         <activity
-            android:name=".DruhaAktivita"
+            android:name=".SpizAktivita"
             android:windowSoftInputMode="stateHidden"></activity>
         <activity android:name=".ReceptActivita"></activity>
         <activity

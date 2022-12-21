@@ -1,14 +1,17 @@
-package com.example.bakalarkapokus.Recept
+package com.example.bakalarkapokus.Adaptery
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bakalarkapokus.*
+import com.example.bakalarkapokus.Aktivity.AddRecept
+import com.example.bakalarkapokus.Aktivity.AdvanceActivity
 import com.example.bakalarkapokus.Tables.SQLdata
 import kotlinx.android.synthetic.main.items_row.view.*
-import kotlinx.android.synthetic.main.activity_add_recept.view.*
 
 class surovinyAdapter (val context: Context, private val sList: ArrayList<SQLdata.Suroviny>): RecyclerView.Adapter<surovinyAdapter.ViewHolder>(){
 
@@ -33,10 +36,13 @@ class surovinyAdapter (val context: Context, private val sList: ArrayList<SQLdat
             holder.tvEdit.visibility = View.GONE
         }
         holder.tvEdit.setOnClickListener{
-            if ( context is AddRecept ){
+            if ( context is AddRecept){
                 context.editSurovinaRV(item)
             }
         }
+        DrawableCompat.setTint(
+            DrawableCompat.wrap(holder.tvEdit.drawable),
+            ContextCompat.getColor(context,R.color.third))
         holder.tvDelete.setOnClickListener {
             if (context is AddRecept ) {
                 context.deleteSurovinu(item)
@@ -44,6 +50,7 @@ class surovinyAdapter (val context: Context, private val sList: ArrayList<SQLdat
                 context.deleteSurovinu(item)
             }
         }
+        DrawableCompat.setTint(DrawableCompat.wrap(holder.tvDelete.drawable),ContextCompat.getColor(context,R.color.ikon))
 
     }
 

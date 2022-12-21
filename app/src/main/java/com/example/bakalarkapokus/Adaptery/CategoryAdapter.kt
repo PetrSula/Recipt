@@ -1,16 +1,13 @@
-package com.example.bakalarkapokus.Recept
+package com.example.bakalarkapokus.Adaptery
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bakalarkapokus.AddRecept
 import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.SQLdata
-import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.android.synthetic.main.items_category.view.*
-import kotlinx.android.synthetic.main.items_row.view.*
 
 class CategoryAdapter(private val sList: ArrayList<SQLdata.ArrayCategory>) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
     lateinit var mListener : onItemClickListener

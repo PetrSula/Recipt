@@ -1,4 +1,4 @@
-package com.example.bakalarkapokus
+package com.example.bakalarkapokus.Aktivity
 
 import android.app.Dialog
 import android.content.Context
@@ -17,14 +17,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bakalarkapokus.Tables.DBHelper
-import com.example.bakalarkapokus.Tables.ItemAdapter
+import com.example.bakalarkapokus.Adaptery.ItemAdapter
+import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.SQLdata
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.dialog_update.*
 import kotlinx.android.synthetic.main.ingredience_main.*
+import kotlinx.android.synthetic.main.ingredience_main.tvNoRecordsAvailable
 
 
-class DruhaAktivita :AppCompatActivity(){
+class SpizAktivita :AppCompatActivity(){
 
     lateinit var toggle: ActionBarDrawerToggle
 
@@ -34,7 +36,6 @@ class DruhaAktivita :AppCompatActivity(){
 
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navView = findViewById<NavigationView>(R.id.navView)
-//        val spinner: Spinner = (findViewById(R.id.sp_pridatmnozstvi))
         val autoTextView : AutoCompleteTextView = findViewById(R.id.at_pridatsurovinu)
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open,R.string.close )
@@ -46,7 +47,7 @@ class DruhaAktivita :AppCompatActivity(){
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.miItem1 -> {
-                    val intent = Intent(this, DruhaAktivita::class.java)
+                    val intent = Intent(this, SpizAktivita::class.java)
                     finish()
                     startActivity(intent)
                     true
@@ -54,8 +55,8 @@ class DruhaAktivita :AppCompatActivity(){
                 R.id.miItem2 -> {
                     val where = " "
                     var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
-                    arraySearched = DBHelper(this@DruhaAktivita).selectTitleIMG(where)
-                    Intent(this@DruhaAktivita,SearchedActivity::class.java).also {
+                    arraySearched = DBHelper(this@SpizAktivita).selectTitleIMG(where)
+                    Intent(this@SpizAktivita,SearchedActivity::class.java).also {
                         it.putExtra("EXTRA_SEARCHED", arraySearched)
                         startActivity(it)
                     }
@@ -138,6 +139,9 @@ class DruhaAktivita :AppCompatActivity(){
                 ) { dialog, which -> dialog.dismiss() }
                 alertDialog.show()
             }
+        }else{
+            Toast.makeText(applicationContext,"Nezadali jste žádnou surovinu",Toast.LENGTH_LONG).show()
+            at_pridatsurovinu.setError("Povinné")
         }
     }
 

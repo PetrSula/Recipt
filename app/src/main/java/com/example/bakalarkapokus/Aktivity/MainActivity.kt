@@ -1,29 +1,25 @@
-package com.example.bakalarkapokus
+package com.example.bakalarkapokus.Aktivity
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.bakalarkapokus.Recept.CategoryAdapter
-import com.example.bakalarkapokus.Recept.SearchAdapter
+import com.example.bakalarkapokus.Adaptery.CategoryAdapter
+import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.acSearch
 import kotlinx.android.synthetic.main.activity_main.ivSearch
-import kotlinx.android.synthetic.main.activity_add_recept.*
-import kotlinx.android.synthetic.main.activity_searched.*
 
 /* TODO - ošetřt přidávání jakéhokoliv textu s mezerami.
         - live of activity
@@ -69,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.miItem1 -> {
-                    val intent = Intent(this, DruhaAktivita::class.java)
+                    val intent = Intent(this, SpizAktivita::class.java)
                     startActivity(intent)
                     true
                 }
@@ -101,8 +97,8 @@ class MainActivity : AppCompatActivity() {
 
 //      Search on clicl listener
         ivSearch.setOnClickListener{
-//            search_handeler()
-            slide()
+            search_handeler()
+//            slide()
         }
 //        add Recept
         fbAdd.setOnClickListener {

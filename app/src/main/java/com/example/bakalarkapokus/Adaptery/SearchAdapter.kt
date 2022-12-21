@@ -1,4 +1,4 @@
-package com.example.bakalarkapokus.Recept
+package com.example.bakalarkapokus.Adaptery
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -6,20 +6,11 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.bumptech.glide.load.resource.bitmap.FitCenter
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
-import com.example.bakalarkapokus.AddRecept
 import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.SQLdata
-import kotlinx.android.synthetic.main.items_row.view.*
 import kotlinx.android.synthetic.main.items_searchable.view.*
-import kotlinx.android.synthetic.main.activity_recept.*
-import kotlinx.android.synthetic.main.activity_add_recept.*
 import java.io.File
 
 class SearchAdapter (val context: Context, private val sList: ArrayList<SQLdata.AraySearched>): RecyclerView.Adapter<SearchAdapter.ViewHolder>(){

@@ -1,17 +1,11 @@
-package com.example.bakalarkapokus
+package com.example.bakalarkapokus.Aktivity
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.MenuItem
@@ -20,44 +14,20 @@ import android.view.View.VISIBLE
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.bakalarkapokus.Recept.ReceptAdapter
+import com.example.bakalarkapokus.Adaptery.ReceptAdapter
+import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
 //import com.itextpdf.text.pdf.PdfDocument
-import android.graphics.pdf.PdfDocument
-import android.os.Environment.getExternalStoragePublicDirectory
-import android.text.StaticLayout
-import android.text.TextPaint
-import android.text.style.LineBackgroundSpan
-import com.bumptech.glide.load.engine.Resource
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.drawerLayout
 import kotlinx.android.synthetic.main.activity_main.navView
-import kotlinx.android.synthetic.main.activity_spiz.*
 import kotlinx.android.synthetic.main.activity_recept.*
-import kotlinx.android.synthetic.main.activity_add_recept.*
-import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVPrinter
-import org.w3c.dom.Document
 import java.io.*
 import java.nio.charset.Charset
-import java.nio.charset.CharsetDecoder
-import java.nio.charset.StandardCharsets
-import java.nio.charset.StandardCharsets.ISO_8859_1
-import java.nio.charset.StandardCharsets.UTF_8
-import java.nio.file.Paths
-import java.sql.SQLData
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.Arrays.fill
-import java.util.Collections.fill
 import kotlin.collections.ArrayList
 
 /* TODO - obrázek check on
@@ -96,7 +66,7 @@ class ReceptActivita: AppCompatActivity() {
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.miItem1 -> {
-                    val intent = Intent(this, DruhaAktivita::class.java)
+                    val intent = Intent(this, SpizAktivita::class.java)
                     startActivity(intent)
                     true
                 }
