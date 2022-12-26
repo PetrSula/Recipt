@@ -11,12 +11,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.bakalarkapokus.Adaptery.surovinyAdapter
+import com.example.bakalarkapokus.Adaptery.SurovinyAdapter
 import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_vyhledavani.*
+import kotlinx.android.synthetic.main.activity_search_advance.*
 
 val data_search = ArrayList<SQLdata.Suroviny>()
 val data_id     = ArrayList<Int>()
@@ -30,7 +30,7 @@ class AdvanceActivity : AppCompatActivity(){
         data_search.clear()
         data_id.clear()
 
-        setContentView(R.layout.activity_vyhledavani)
+        setContentView(R.layout.activity_search_advance)
 //        val drawerLayout = findViewById<DrawerLayout>(R.id.Dlsearch)
 //        val navView = findViewById<NavigationView>(R.id.navView)
         val drawerLayou = findViewById<DrawerLayout>(R.id.drawerLayout)
@@ -45,7 +45,7 @@ class AdvanceActivity : AppCompatActivity(){
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.miItem1 -> {
-                    val intent = Intent(this, SpizAktivita::class.java)
+                    val intent = Intent(this, SpizActivity::class.java)
                     finish()
                     startActivity(intent)
                     true
@@ -155,7 +155,7 @@ class AdvanceActivity : AppCompatActivity(){
 
 
     private fun showIngred(){
-        val adapter = surovinyAdapter(this, data_search)
+        val adapter = SurovinyAdapter(this, data_search)
         rv_addSearc.adapter = adapter
     }
 

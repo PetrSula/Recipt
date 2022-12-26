@@ -16,22 +16,22 @@
         android:requestLegacyExternalStorage="true"
         android:theme="@style/Theme.BakalarkaPokus">
         <activity
-            android:name=".SearchedActivity"
+            android:name=".Aktivity.SearchedActivity"
             android:exported="false"
             android:label="@string/title_activity_searched"
             android:theme="@style/Theme.BakalarkaPokus.NoActionBar" />
         <activity
-            android:name=".SpizAktivita"
+            android:name=".Aktivity.SpizActivity"
             android:windowSoftInputMode="stateHidden"></activity>
-        <activity android:name=".ReceptActivita"></activity>
+        <activity android:name=".Aktivity.ReceptActivity"></activity>
         <activity
-            android:name=".AddRecept"
+            android:name=".Aktivity.AddRecept"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".AdvanceActivity"
+            android:name=".Aktivity.AdvanceActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Aktivity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -87,6 +87,8 @@
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="2dp"
+                    android:layout_marginTop="4dp"
+                     android:layout_marginBottom="4dp"
                     android:background="@color/third">
 
                 </View>
@@ -251,33 +253,40 @@
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp">
 
-                    <ImageView
-                        android:id="@+id/iv_edit_recept"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                    <TextView
+                        android:id="@+id/tv_edit_recept"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:text="Editace"
+                        app:drawableTopCompat="@drawable/ic_edit"
+                        android:textSize="20dp"
                         android:layout_marginStart="30dp"
                         android:layout_marginEnd="30dp"
                         android:tint="@color/ikon"
-                        android:src="@drawable/ic_edit"/>
+                        android:drawableTint="@color/ikon"/>
 
-                    <ImageView
-                        android:id="@+id/iv_recept_delete"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                    <TextView
+                        android:id="@+id/tv_recept_delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="30dp"
                         android:layout_marginEnd="30dp"
+                        android:text="Vymazat"
                         android:tint="@color/ikon"
-                        app:srcCompat="@android:drawable/ic_menu_delete"/>
+                        app:drawableTopCompat="@android:drawable/ic_menu_delete"
+                        android:drawableTint="@color/ikon"/>
 
-                    <ImageView
+                    <TextView
                         android:id="@+id/iv_recept_export"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="30dp"
                         android:layout_marginEnd="30dp"
+                        android:text="Wxportovat"
                         android:tint="@color/ikon"
-                        app:srcCompat="@drawable/ic_archive"/>
+                        app:drawableTopCompat="@drawable/ic_archive"
+                        android:drawableTint="@color/ikon"/>
 
                 </LinearLayout>
                 <View

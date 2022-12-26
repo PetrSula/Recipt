@@ -54,7 +54,7 @@ class SearchedActivity : AppCompatActivity() {
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.miItem1 -> {
-                    val intent = Intent(this, SpizAktivita::class.java)
+                    val intent = Intent(this, SpizActivity::class.java)
                     startActivity(intent)
                     finish()
                     true
@@ -113,7 +113,7 @@ class SearchedActivity : AppCompatActivity() {
     }
 
     private fun showRecept(id: Int) {
-        Intent(this,ReceptActivita::class.java).also {
+        Intent(this,ReceptActivity::class.java).also {
             it.putExtra("EXTRA_ID", id)
             startActivity(it)
             finish()
@@ -129,7 +129,7 @@ class SearchedActivity : AppCompatActivity() {
         itemAdapter.setOnItemClickListener(object : SearchAdapter.onItemClickListener {
 
             override fun onItemClick(position: Int) {
-                Intent(this@SearchedActivity,ReceptActivita::class.java).also {
+                Intent(this@SearchedActivity,ReceptActivity::class.java).also {
                     it.putExtra("EXTRA_ID", array[position].id)
                     startActivity(it)
                 }

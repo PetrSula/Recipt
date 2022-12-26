@@ -27,7 +27,6 @@ import kotlinx.android.synthetic.main.activity_main.drawerLayout
 import kotlinx.android.synthetic.main.activity_main.navView
 import kotlinx.android.synthetic.main.activity_recept.*
 import java.io.*
-import java.nio.charset.Charset
 import kotlin.collections.ArrayList
 
 /* TODO - obrázek check on
@@ -37,7 +36,7 @@ import kotlin.collections.ArrayList
 
  */
 
-class ReceptActivita: AppCompatActivity() {
+class ReceptActivity: AppCompatActivity() {
     lateinit var  et_pdf_data :EditText
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var imgPath : String
@@ -52,7 +51,7 @@ class ReceptActivita: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recept)
-        Myclass.activity = this@ReceptActivita
+        Myclass.activity = this@ReceptActivity
 
 
         val gv_id = intent.getIntExtra("EXTRA_ID",1)
@@ -66,15 +65,15 @@ class ReceptActivita: AppCompatActivity() {
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.miItem1 -> {
-                    val intent = Intent(this, SpizAktivita::class.java)
+                    val intent = Intent(this, SpizActivity::class.java)
                     startActivity(intent)
                     true
                 }
                 R.id.miItem2 -> {
                     val where = " "
                     var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
-                    arraySearched = DBHelper(this@ReceptActivita).selectTitleIMG(where)
-                    Intent(this@ReceptActivita,SearchedActivity::class.java).also {
+                    arraySearched = DBHelper(this@ReceptActivity).selectTitleIMG(where)
+                    Intent(this@ReceptActivity,SearchedActivity::class.java).also {
                         it.putExtra("EXTRA_SEARCHED", arraySearched)
                         startActivity(it)
                     }
@@ -125,8 +124,8 @@ class ReceptActivita: AppCompatActivity() {
             finish()
             val where = " "
             var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
-            arraySearched = DBHelper(this@ReceptActivita).selectTitleIMG(where)
-            Intent(this@ReceptActivita,SearchedActivity::class.java).also {
+            arraySearched = DBHelper(this@ReceptActivity).selectTitleIMG(where)
+            Intent(this@ReceptActivity,SearchedActivity::class.java).also {
                 it.putExtra("EXTRA_SEARCHED", arraySearched)
                 startActivity(it)
             }
@@ -147,18 +146,28 @@ class ReceptActivita: AppCompatActivity() {
         val cas = gv_time
         val suroviny = getSurovinyCSV(id)
         val portion = tv_portionR.text.toString()
-        val postup2 = postup.replace("\n", " ").replace( "\r", "").replace("\t"," ")
+//        val postup2 = postup.replace("\n", " ").replace( "\r", "").replace("\t"," ")
 //        val mFileName = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
 //            .format(System.currentTimeMillis())
         val fileName = titelIN
-        val file: File = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),  fileName + ".csv")
+        val file: File = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),  fileName + ".txt")
         try {
 //            val fileOut =
-            var fileWriter = OutputStreamWriter(FileOutputStream(file), Charset.forName("Cp1250"))
+            var fileWriter = OutputStreamWriter(FileOutputStream(file))
             var buffer = BufferedWriter(fileWriter)
-            buffer.write("Název, Druh, Kategorie, Suroviny, Čas, Postup, Porce")
+            buffer.write("Název:$titelIN    ")
             buffer.newLine()
-            buffer.write("\"$titelIN\", \"$druh\", \"$kategorie\",\"$suroviny\", \"$cas\",\"$portion\",\"$postup2\"")
+            buffer.write("Druh:$druh")
+            buffer.newLine()
+            buffer.write("Kategorie: $kategorie")
+            buffer.newLine()
+            buffer.write("Suroviny: $suroviny")
+            buffer.newLine()
+            buffer.write("Čas: $cas")
+            buffer.newLine()
+            buffer.write("Porce:$portion")
+            buffer.newLine()
+            buffer.write("Postup:$postup")
             buffer.flush()
             buffer.close()
             Toast.makeText(applicationContext, "CSV soubor uložen do složky Stažené/Downloads", Toast.LENGTH_SHORT).show()
@@ -171,107 +180,9 @@ class ReceptActivita: AppCompatActivity() {
         val sur  = getSuroviny(id)
         var suroviny : String = ""
         for (item in sur){
-            suroviny = suroviny + "${item.name} | ${item.quantity}, "
+            suroviny = suroviny + "${item.name} ${item.quantity}, "
         }
         return suroviny
-    }
-
-//    private fun preparePDF() {
-//        val check : Boolean = "pictures/" in imgPath
-//        if (check) {
-//            try {
-//                var ims = getAssets().open(imgPath)
-//                bmp = BitmapFactory.decodeStream(ims)
-//            } catch (e: Exception) {
-//                return
-//            }
-//        }else{
-//            bmp = BitmapFactory.decodeFile(imgPath)
-//        }
-//
-////        bmp = BitmapFactory.decodeResource(resources, R.id.iv_rec_Picture)
-//        scaledbmp = Bitmap.createScaledBitmap(bmp, 250, 250, false)
-//        if (!checkPermissions()){
-//            requestPermission()
-//        }
-//    }
-
-//    @RequiresApi(Build.VERSION_CODES.KITKAT)
-//    private fun generatePDF() {
-//        var pdfDocument: PdfDocument = PdfDocument()
-//        var paint: Paint = Paint()
-//        var title: Paint = Paint()
-//        var text: Paint = TextPaint()
-//        var myPageInfo: PdfDocument.PageInfo? =
-//            PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create()
-//        var myPage: PdfDocument.Page = pdfDocument.startPage(myPageInfo)
-//        var canvas: Canvas = myPage.canvas
-//        val titelIN = tvTitleRecept.text.toString().trim()
-////        val postup = tvPostuprm.text.toString()
-////        var layout : StaticLayout =
-////        layout = ("1.Inventarizační kokpit UIK – \n zobrazené zůstatky jednotlivých účtů neodpovídají skutečným zůstatkům!!!",text, canvas.getWidth(), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
-////        val postup =
-//        canvas.drawBitmap(scaledbmp, 56F, 40F, paint)
-//        title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-//        title.textSize = 18F
-//        title.setColor(ContextCompat.getColor(this, R.color.primary))
-//        text.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-//        text.textSize = 15F
-//        text.setColor(ContextCompat.getColor(this,R.color.secondary))
-//        canvas.drawText(titelIN, 400F, 80F, title)
-////        canvas.drawText(postup, 300F , 100F, text)
-//        pdfDocument.finishPage(myPage)
-//        val mFileName = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
-//            .format(System.currentTimeMillis())
-////        var dowDir = Path.Combio
-//        val file: File = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),  mFileName + ".pdf")
-////        val exFile = File(getExternalFilesDir("//sdcard//Download"),"name.pdf")
-//
-//        try {
-////            val fileOutputStream = FileOutputStream
-//            pdfDocument.writeTo(FileOutputStream(file))
-//            Toast.makeText(applicationContext, "PDF uloženo do složky Stažené/Downloads", Toast.LENGTH_SHORT).show()
-//            pdfDocument.close()
-//        }catch (e: Exception){
-//            e.printStackTrace()
-//            Toast.makeText(applicationContext, "Nepodařilo se vygenerovat PDF", Toast.LENGTH_SHORT)
-//                .show()
-//        }
-//
-//    }
-
-//    private fun requestPermission() {
-//        ActivityCompat.requestPermissions(
-//            this,
-//            arrayOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE), PERMISSUIN_CODE
-//        )
-//    }
-//
-//    private fun checkPermissions(): Boolean {
-//        var writeStoragePermission = ContextCompat.checkSelfPermission(
-//            applicationContext,
-//            WRITE_EXTERNAL_STORAGE
-//        )
-//        var readStoragePermission = ContextCompat.checkSelfPermission(
-//            applicationContext,
-//            READ_EXTERNAL_STORAGE
-//        )
-//        return writeStoragePermission == PackageManager.PERMISSION_GRANTED
-//                && readStoragePermission == PackageManager.PERMISSION_GRANTED
-//    }
-
-    private fun savePDF() {
-//        val mDoc = Document()
-//        val mFileName = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
-//            .format(System.currentTimeMillis())
-//        val mFilePath = Environment.getExternalStorageDirectory().toString() + "/" + mFileName + ".pdf"
-//        try {
-//            PdfWriter.getInstance(mDoc)
-//
-//        }catch (e: Exception){
-//            Toast.makeText(this,""+e.toString(),Toast.LENGTH_SHORT).show()
-//        }
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

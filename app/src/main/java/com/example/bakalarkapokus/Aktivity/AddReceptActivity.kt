@@ -6,12 +6,15 @@ import android.app.Dialog
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.content.res.AssetManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
+import android.system.Os.read
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -27,7 +30,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import com.example.bakalarkapokus.Adaptery.surovinyAdapter
+import com.example.bakalarkapokus.Adaptery.SurovinyAdapter
 import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.RealPathUtil
 import com.example.bakalarkapokus.Tables.DBHelper
@@ -35,10 +38,8 @@ import com.example.bakalarkapokus.Tables.SQLdata
 import kotlinx.android.synthetic.main.activity_add_recept.*
 import kotlinx.android.synthetic.main.dialog_img.*
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
+import java.io.*
+import java.lang.System.`in`
 import java.util.*
 
 
@@ -51,11 +52,16 @@ import java.util.*
          - uvozovky při nahrávání
          - přejmenovat exportovaný soubor
          - co když je nahrán prázdný soubor nebo jiný formát
+         - dotaz na permisions hned po kliknutí na tlačítko při nahrávání
 */
 var data = ArrayList<SQLdata.Suroviny>()
 var data_del = ArrayList<SQLdata.Suroviny>()
+var data_none = ArrayList<SQLdata.Suroviny>()
 var id_addSurovin = 0
+var id_noneSurovin = 0
 var gv_id = 0
+var nexLine = false
+var setPostupString : String = ""
 
 
 class AddRecept: AppCompatActivity() {
@@ -119,7 +125,7 @@ class AddRecept: AppCompatActivity() {
 
         rv_addSuroviny.layoutManager = LinearLayoutManager(this)
 
-        val adapter = surovinyAdapter(this, data)
+        val adapter = SurovinyAdapter(this, data)
         rv_addSuroviny.adapter = adapter
 // ADaptery
         setAdaptercategory()
@@ -241,13 +247,25 @@ class AddRecept: AppCompatActivity() {
     }
 
     fun editSurovinaRV(sData: SQLdata.Suroviny){
-        var qunatity = sData.quantity.split(" ")
-            .dropLast(1)
-            .joinToString(" ")
-        var type = sData.quantity.substring(sData.quantity.lastIndexOf(' '))
+//        var qunatity = sData.quantity.split(" ")
+//            .dropLast(1)
+//            .joinToString(" ")
+        var numQuan =  sData.quantity.filter { it.isDigit() }
+//        val re = Regex("[^A-Za-z ]")
+//        val textQuan = re.replace(sData.quantity, "").trim()
+        var textQuan = sData.quantity.toString()
+        textQuan = textQuan.filter { it.isLetter() }
+        var type = " "
+        val array = resources.getStringArray(R.array.quantity)
+        if (textQuan in array) {
+            ac_typequantity.setText(textQuan)
+            type = textQuan
+        }else{
+            ac_typequantity.setText(type)
+            numQuan = numQuan + " " + textQuan
+        }
         at_AddSurovina.setText(sData.name)
-        et_quantyti.setText(qunatity.trim())
-        ac_typequantity.setText(type)
+        et_quantyti.setText(numQuan.trim())
         SVadd.scrollToDescendant(et_direction_to_cook)
         adapterQuantity(type)
     }
@@ -398,20 +416,27 @@ class AddRecept: AppCompatActivity() {
                     .into(iv_add_dish_image)
             }
         } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_FILE_DOWL && data != null){
+            nexLine = false
             val uri = data?.data
             if (uri != null){
                 val path = RealPathUtil.getRealPath(this,uri)
                 var inputStream = this.contentResolver.openInputStream(uri)
-                val buffer = inputStream?.bufferedReader(charset("Cp1250"))
-                var line = buffer?.readLine()
-                var line2 = buffer?.readLine()
-                if (line2 != null ){
-                        translateCSV(line2)
-                }else if (line != null ){
-                    translateCSV(line)
-                }else {
-                    Toast.makeText(this,"Soubor se nepovedlo nahrát zkontrolujte formát",Toast.LENGTH_LONG).show()
+                val buffer = inputStream?.bufferedReader()
+                var line: String = ""
+                while (line!= "end" ){
+                    line = buffer?.readLine()?:"end"
+                    translateImport(line)
                 }
+//                var line = buffer?.readLine()
+//
+//                var line2 = buffer?.readLine()
+//                if (line2 != null ){
+//                        translateCSV(line2)
+//                }else if (line != null ){
+//                    translateCSV(line)
+//                }else {
+//                    Toast.makeText(this,"Soubor se nepovedlo nahrát zkontrolujte formát",Toast.LENGTH_LONG).show()
+//                }
             }
         }
     }
@@ -419,7 +444,6 @@ class AddRecept: AppCompatActivity() {
 
 
     private fun addSurovina () {
-//        val spinner: Spinner = (findViewById(R.id.ac_typequantity))
         val typeQuantity = ac_typequantity.text.toString().trim()
         var name = at_AddSurovina.text.toString().trim()
         val quantyti = et_quantyti.text.toString().trim()
@@ -432,6 +456,12 @@ class AddRecept: AppCompatActivity() {
             if (!addOK) {
                 pridatIngredien(name)
                 id_addSurovin = id_addSurovin.inc()
+                val delNone = data_none.any { it.name == name }
+                if (delNone) {
+                    var index = data_none.indexOfFirst{ it.name == name}
+                    data_none.removeAt(index)
+                    showNoneSur()
+                }
                 data.add(SQLdata.Suroviny(id_addSurovin,name,final_quaintity))
                 showSuroviny()
             }else{
@@ -463,8 +493,20 @@ class AddRecept: AppCompatActivity() {
 
 
     private fun showSuroviny(){
-        val adapter = surovinyAdapter(this, data)
+        val adapter = SurovinyAdapter(this, data)
         rv_addSuroviny.adapter = adapter
+    }
+    private fun showNoneSur(){
+        if (data_none.isNotEmpty()) {
+            tv_addNone.visibility = View.VISIBLE
+            rv_addNoneSuroviny.visibility = View.VISIBLE
+            rv_addNoneSuroviny.layoutManager = LinearLayoutManager(this)
+            val adapter = SurovinyAdapter(this, data_none)
+            rv_addNoneSuroviny.adapter = adapter
+        }else{
+            tv_addNone.visibility = View.GONE
+            rv_addNoneSuroviny.visibility = View.GONE
+        }
     }
 
     fun deleteSurovinu(sData: SQLdata.Suroviny){
@@ -475,6 +517,12 @@ class AddRecept: AppCompatActivity() {
         builder.setPositiveButton("ANO") { dialogInterface, which ->
             if (gv_id != 0){
                 data_del.add(sData)
+            }
+            val delNone = data_none.any { it.name == sData.name }
+            if (delNone){
+                data_none.remove(sData)
+                showNoneSur()
+                dialogInterface.dismiss()
             }
             data.remove(sData)
             showSuroviny()
@@ -651,12 +699,12 @@ class AddRecept: AppCompatActivity() {
     }
 
     fun displayRecept(id:Int){
-        Intent(this,ReceptActivita::class.java).also {
+        Intent(this,ReceptActivity::class.java).also {
             it.putExtra("EXTRA_ID",id)
             if (gv_id == 0){
                 finish()
             }else{
-                ReceptActivita.Myclass.activity?.finish()
+                ReceptActivity.Myclass.activity?.finish()
                 finish()
             }
             startActivity(it)
@@ -682,16 +730,23 @@ class AddRecept: AppCompatActivity() {
     private fun importCSV() {
         val path : String
         val builder = AlertDialog.Builder(this)
-        builder.setTitle(" Vzor náhrávání souboru CSV")
+        builder.setTitle(" Vzor náhrávání Receptu")
         builder.setMessage("Pro nahrání receptu je nezbytné dodržet následující formát.\n\n" +
-                "Suroviny jako celek musí být od ostatních položek rozděleny \"\" a čárkou viz vzor recept. Jednotlivé suroviny oddělte čárkami a název s množstvím |\n\n" +
-                "RECEPT: \n"+
-                "\"Název\", \"Druh\", \"Kategorie\", \"Suroviny\", \"Čas\", \"Porce\", \"Postup\"\n\n" +
-                "SUROVINA: \n" +
-                "nazev | množství,\n\n" +
-                "Čas zadávejte pouze číselně ve formátu HH:MM")
+                "Název: Název" +
+                "Druh: Druh\n"+
+                "Kategorie: Kategorie\n" +
+                "SUROVINY: surovina množství, surovina množství\n" +
+                "Čas: HH:MM" +
+                "Porce: 0-99\n" +
+                "Postup: Postup\n" +
+                "Nový odstavec postupu\n" +
+                "Nový odstavec postupu")
         builder.setPositiveButton("ROZUMÍM") { dialogInterface, which ->
             executeImport()
+            dialogInterface.dismiss()
+        }
+        builder.setNeutralButton("ZÍSKAT VZOR"){ dialogInterface, which ->
+            DownlVzor()
             dialogInterface.dismiss()
         }
         val alertDialog: AlertDialog = builder.create()
@@ -719,6 +774,32 @@ class AddRecept: AppCompatActivity() {
         var file = File(getRealPathFromURI(neco))
 
     }
+    fun DownlVzor(){
+        val assetManager: AssetManager = this.assets
+        var files: Array<String>? = null
+        var `in`: InputStream? = null
+        var out: OutputStream? = null
+        try {
+            `in` = assetManager.open("Vzor.txt")
+            val outFile = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                        "Vzor.txt")
+            out = FileOutputStream(outFile)
+            copyFile(`in`, out)
+            `in`.close()
+            out.close()
+        } catch (e: IOException) {
+            Log.e("tag", "Failed to copy asset file:")
+        }
+    }
+
+    fun copyFile(In : InputStream, out : OutputStream) {
+        val buffer = ByteArray(1024)
+        var read: Int? = null
+        while (In?.read(buffer).also({ read = it!! }) != -1) {
+            read?.let { out.write(buffer, 0, it) }
+        }
+    }
+
     private fun getRealPathFromURI(contentURI: Uri): String? {
         val result: String?
         val cursor: Cursor? = contentResolver.query(contentURI, null, null, null, null)
@@ -733,57 +814,35 @@ class AddRecept: AppCompatActivity() {
         return result
     }
 
-    fun translateCSV(line : String){
-        val list : List<String> = line.split("\",")
-        try {
-            val title = list.get(0).replace("\"", "").trim()
-            et_title.setText(title)
-        }catch (e: Exception) {
-            return
-        }
-        try{
-            val druh = list.get(1)
-            setDruh(druh)
-        }catch (e: Exception) {
-            return
-        }
-        try {
-            val category = list.get(2)
-            setCategory(category)
-        }catch (e: Exception) {
-            return
-        }
-        try {
-            val sur = list.get(3)
-            setSuroviny(sur)
-        }catch (e: Exception) {
-            return
-        }
-        try {
-            val sur = list.get(3)
-            setSuroviny(sur)
-        }catch (e: Exception) {
-            return
-        }
-        try {
-            val cas = list.get(4)
-            setCas(cas)
-        }catch (e: Exception) {
-            return
-        }
-        try {
-            val porce = list.get(5)
-            setPorce(porce)
-        }catch (e: Exception) {
-            return
-        }
-        try {
-            val postup = list.get(6)
-            setPostup(postup)
-        }catch (e: Exception) {
-            return
+    fun translateImport(line : String){
+        val list : List<String> = line.split(":")
+        var key : String = ""
+        var value: String = list[0]
+        if (list.size >= 2 ){
+            key = list[0].lowercase()
+            value = list[1]
         }
 
+        if (key == "nazev" || key == "název" ){
+            et_title.setText(value)
+        }else if (key == "druh" ){
+            setDruh(value)
+        }else if (key == "kategorie"){
+            setCategory(value)
+        }else if (key == "suroviny"){
+            setSuroviny(value)
+        }else if (key == "cas" || key == "čas"){
+            if (list.size == 3){
+                setCas(value +":" +list[2])
+            }else {
+                setCas(value)
+            }
+        }else if (key == "porce" ){
+            setPorce(value)
+        }else if (key == "postup" || nexLine) {
+            setPostup(value)
+            nexLine = true
+        }
     }
 
     private fun setCas(string: String) {
@@ -801,6 +860,7 @@ class AddRecept: AppCompatActivity() {
     }
 
     private fun setPorce(string: String) {
+
         val porce = string.filter { it.isDigit() }
         if (porce.isNotEmpty()){
             tv_portion.setText(porce)
@@ -808,33 +868,77 @@ class AddRecept: AppCompatActivity() {
     }
 
     private fun setPostup(string: String) {
-        var postup = string.replace("\"", "")
-        et_direction_to_cook.setText(postup)
+        if (string == "end"){
+            et_direction_to_cook.setText(setPostupString)
+            return
+        }
+        if (setPostupString.isEmpty()){
+            setPostupString = string
+        }else{
+            setPostupString = setPostupString + "\n" + string
+        }
+        et_direction_to_cook.setText(setPostupString)
     }
 
     private fun setSuroviny(sur: String) {
         data.clear()
+        data_none.clear()
         val input = sur.replace("\"", "")
         val listSur = input.split(",")
         for ( i in listSur){
-            val item = i.split("|")
-            if (item.size != 2){
+            var index: Int = 0
+            val text = i.trim()
+            if (text.isEmpty()){
                 continue
             }
-            val name = item[0].trim()
-            var quantyti = item[1].trim()
-            var numberQuantity = quantyti.filter { it.isDigit() }
-            var typeQunatity = quantyti.filter { it.isLetter() }
-            val number = name.filter { it.isDigit() }
-
-            if (number.isNotEmpty() || name.isEmpty()){
-                continue
-            }else{
-                pridatIngredienci(name)
+//          získat první index čísla
+            for (j in i){
+                if (j >='0' && j <= '9'){
+                    index = i.indexOf(j)
+                    break
+                }
+            }
+//            surovina obsahuje číslo
+            if ( index != 0){
+                var name = i.substring(0,index) ?:-1
+                var quantyti = i.substring(index)
+                name = name.toString().trim()
+                quantyti = quantyti.toString().trim()
+                var numberQuantity = quantyti.filter { it.isDigit() }
+                var typeQunatity = quantyti.filter { it.isLetter() }
                 val addQuantity = numberQuantity + " " + typeQunatity
-                data.add(SQLdata.Suroviny(id_addSurovin,name,addQuantity))
-                id_addSurovin = id_addSurovin.inc()
+                val add = decideSurr(name,addQuantity)
+                if (add){                                                       //přidat pouze suroviny, které mají kmenová data v databázi
+                    data.add(SQLdata.Suroviny(id_addSurovin,name,addQuantity))
+                    id_addSurovin = id_addSurovin.inc()
+                }
+//                Surovina neobsahuje číslo
+            }else{
+                val text = i.trim()
+                val add = decideSurr(text,"")
+                if (add){
+                    data.add(SQLdata.Suroviny(id_addSurovin,text,""))
+                    id_addSurovin = id_addSurovin.inc()
+                }
             }
+
+//            if (item.size != 2){
+//                continue
+//            }
+//            val name = item[0].trim()
+//            var quantyti = item[1].trim()
+//            var numberQuantity = quantyti.filter { it.isDigit() }
+//            var typeQunatity = quantyti.filter { it.isLetter() }
+//            val number = name.filter { it.isDigit() }
+//
+//            if (number.isNotEmpty() || name.isEmpty()){
+//                continue
+//            }else{
+//                pridatIngredienci(name)
+//                val addQuantity = numberQuantity + " " + typeQunatity
+//                data.add(SQLdata.Suroviny(id_addSurovin,name,addQuantity))
+//                id_addSurovin = id_addSurovin.inc()
+//            }
 //            if (size == 0){
 //                return
 //            }else if (size == 1){
@@ -843,11 +947,24 @@ class AddRecept: AppCompatActivity() {
 //            }
         }
         showSuroviny()
+        showNoneSur()
+    }
+
+    private fun decideSurr( name :String, quantity : String):Boolean{
+        val DB = DBHelper(this)
+        val add = DB.selectINGREDIENCE(name)
+        if (add.isEmpty()){
+            data_none.add(SQLdata.Suroviny(id_noneSurovin,name,quantity))
+            id_noneSurovin = id_noneSurovin.inc()
+            return false
+        }
+        return true
     }
 
     private fun setDruh(string: String) {
         var druh = string.replace("\"", "")
-        druh = druh.capitalize().trim()
+        druh = druh.trim()
+        druh = druh.capitalize()
         val array = resources.getStringArray(R.array.typeOfRecept)
         if (druh in array) {
             ac_type.setText(druh)

@@ -17,16 +17,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bakalarkapokus.Tables.DBHelper
-import com.example.bakalarkapokus.Adaptery.ItemAdapter
+import com.example.bakalarkapokus.Adaptery.SpizAdapter
 import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.SQLdata
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.activity_spiz.*
 import kotlinx.android.synthetic.main.dialog_update.*
-import kotlinx.android.synthetic.main.ingredience_main.*
-import kotlinx.android.synthetic.main.ingredience_main.tvNoRecordsAvailable
 
 
-class SpizAktivita :AppCompatActivity(){
+
+class SpizActivity :AppCompatActivity(){
 
     lateinit var toggle: ActionBarDrawerToggle
 
@@ -47,7 +47,7 @@ class SpizAktivita :AppCompatActivity(){
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.miItem1 -> {
-                    val intent = Intent(this, SpizAktivita::class.java)
+                    val intent = Intent(this, SpizActivity::class.java)
                     finish()
                     startActivity(intent)
                     true
@@ -55,8 +55,8 @@ class SpizAktivita :AppCompatActivity(){
                 R.id.miItem2 -> {
                     val where = " "
                     var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
-                    arraySearched = DBHelper(this@SpizAktivita).selectTitleIMG(where)
-                    Intent(this@SpizAktivita,SearchedActivity::class.java).also {
+                    arraySearched = DBHelper(this@SpizActivity).selectTitleIMG(where)
+                    Intent(this@SpizActivity,SearchedActivity::class.java).also {
                         it.putExtra("EXTRA_SEARCHED", arraySearched)
                         startActivity(it)
                     }
@@ -151,7 +151,7 @@ class SpizAktivita :AppCompatActivity(){
             rv_Spiz.visibility = View.VISIBLE
             tvNoRecordsAvailable.visibility = View.GONE
             rv_Spiz.layoutManager = LinearLayoutManager(this)
-            val itemAdapter = ItemAdapter(this,getItems())
+            val itemAdapter = SpizAdapter(this,getItems())
             rv_Spiz.adapter = itemAdapter
 
         } else{

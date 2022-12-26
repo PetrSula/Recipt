@@ -13,7 +13,7 @@ import com.example.bakalarkapokus.Aktivity.AdvanceActivity
 import com.example.bakalarkapokus.Tables.SQLdata
 import kotlinx.android.synthetic.main.items_row.view.*
 
-class surovinyAdapter (val context: Context, private val sList: ArrayList<SQLdata.Suroviny>): RecyclerView.Adapter<surovinyAdapter.ViewHolder>(){
+class SurovinyAdapter (val context: Context, private val sList: ArrayList<SQLdata.Suroviny>): RecyclerView.Adapter<SurovinyAdapter.ViewHolder>(){
 
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
@@ -22,8 +22,8 @@ class surovinyAdapter (val context: Context, private val sList: ArrayList<SQLdat
         val tvEdit = view.ivEdit
         val tvDelete = view.ivDelete
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): surovinyAdapter.ViewHolder {
-        return surovinyAdapter.ViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SurovinyAdapter.ViewHolder {
+        return SurovinyAdapter.ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.items_row, parent, false)
         )
     }

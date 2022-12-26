@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.miItem1 -> {
-                    val intent = Intent(this, SpizAktivita::class.java)
+                    val intent = Intent(this, SpizActivity::class.java)
                     startActivity(intent)
                     true
                 }
@@ -151,7 +151,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
     fun showRecept(id:Int){
-        Intent(this,ReceptActivita::class.java).also {
+        Intent(this,ReceptActivity::class.java).also {
             it.putExtra("EXTRA_ID", id)
             startActivity(it)
         }

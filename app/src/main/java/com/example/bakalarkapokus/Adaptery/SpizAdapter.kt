@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bakalarkapokus.Aktivity.SpizAktivita
+import com.example.bakalarkapokus.Aktivity.SpizActivity
 import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.SQLdata
 import kotlinx.android.synthetic.main.items_row.view.*
 
-class ItemAdapter(val context: Context, val items: ArrayList<SQLdata.Spiz>):
-    RecyclerView.Adapter<ItemAdapter.ViewHolder>(){
+class SpizAdapter(val context: Context, val items: ArrayList<SQLdata.Spiz>):
+    RecyclerView.Adapter<SpizAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -31,13 +31,13 @@ class ItemAdapter(val context: Context, val items: ArrayList<SQLdata.Spiz>):
 
 
         holder.tvDelete.setOnClickListener {
-            if (context is SpizAktivita) {
+            if (context is SpizActivity) {
                 context.deleteRecord(item)
             }
         }
         DrawableCompat.setTint(DrawableCompat.wrap(holder.tvDelete.drawable),ContextCompat.getColor(context,R.color.ikon))
         holder.tvEdit.setOnClickListener {
-            if (context is SpizAktivita) {
+            if (context is SpizActivity) {
                 context.updateRecord(item)
             }
         }
