@@ -11,6 +11,7 @@ import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -49,10 +50,10 @@ import java.util.*
     BUG
          - Přidání suroviny do Spíze, prázdné, červené zobrazení
          - zkontrolovat nahrávání surovin testovat
-         - uvozovky při nahrávání
          - přejmenovat exportovaný soubor
          - co když je nahrán prázdný soubor nebo jiný formát
          - dotaz na permisions hned po kliknutí na tlačítko při nahrávání
+         - navrat po editaci není aktuální recept
 */
 var data = ArrayList<SQLdata.Suroviny>()
 var data_del = ArrayList<SQLdata.Suroviny>()
@@ -427,6 +428,7 @@ class AddRecept: AppCompatActivity() {
                     line = buffer?.readLine()?:"end"
                     translateImport(line)
                 }
+                chceckImporterd()
 //                var line = buffer?.readLine()
 //
 //                var line2 = buffer?.readLine()
@@ -441,6 +443,37 @@ class AddRecept: AppCompatActivity() {
         }
     }
 
+    private fun chceckImporterd() {
+        var check = true
+        val title = et_title.text.toString().trim()
+        val type = ac_type.text.toString().trim()
+        val category = ac_category.text.toString().trim()
+        val time = et_cooking_time.text.toString().trim()
+        val postup = et_direction_to_cook.text.toString()
+        val strPortion = tv_portion.text.toString()
+        val portion = strPortion.toInt()
+        if (title.isEmpty()){
+            til_title.setError("Povinné")
+            check = false
+        } else if (type.isEmpty()){
+            ac_type.setError("Povinné")
+            check = false
+        }else if (category.isEmpty()){
+            ac_category.setError("Povinné")
+            check = false
+        } else if (time.isEmpty()) {
+            et_cooking_time.setError("Povinné")
+            check = false
+        }else if (postup.isEmpty()){
+            til_direction_to_cook.setError("Povinné")
+            check = false
+        }
+        if (check){
+            Toast.makeText(applicationContext, "Recept úspěšně nahrán", Toast.LENGTH_LONG).show()
+        }else{
+            Toast.makeText(applicationContext, "Recept nahrán s chybami", Toast.LENGTH_LONG).show()
+        }
+    }
 
 
     private fun addSurovina () {
@@ -576,31 +609,26 @@ class AddRecept: AppCompatActivity() {
         et_cooking_time.setError(null)
 
         if (title.isEmpty()) {
-            Toast.makeText(applicationContext, "Název receptu nevyplněn", Toast.LENGTH_LONG).show()
+//            Toast.makeText(applicationContext, "Název receptu nevyplněn", Toast.LENGTH_LONG).show()
             til_title.setError("Povinné")
-            chech = false
-        } else if(data.isEmpty()){
-            Toast.makeText(applicationContext, "Není vyplněna ani jedna surovina", Toast.LENGTH_LONG).show()
+            chech = false }
+        if(data.isEmpty()){
+//            Toast.makeText(applicationContext, "Není vyplněna ani jedna surovina", Toast.LENGTH_LONG).show()
             tvAddSurovina.setError("Povinné")
-            chech = false
-        } else if (postup.isEmpty()) {
-            Toast.makeText(applicationContext, "Postup receptu nevyplněn", Toast.LENGTH_LONG).show()
-            Toast.makeText(applicationContext, "Postup receptu nevyplněn", Toast.LENGTH_LONG).show()
+            chech = false }
+        if (postup.isEmpty()) {
+//            Toast.makeText(applicationContext, "Postup receptu nevyplněn", Toast.LENGTH_LONG).show()
             til_direction_to_cook.setError("Povinné")
-            chech = false
-        }else if (type.isEmpty()){
-                Toast.makeText(applicationContext, "Druh receptu nevyplněn", Toast.LENGTH_LONG).show()
-                ac_type.setError("Povinné")
-                chech = false
-        }else if (category.isEmpty()){
-            Toast.makeText(applicationContext, "Kategorie receptu nevyplněna", Toast.LENGTH_LONG).show()
-            ac_category.setError("Povinné")
-            chech = false
-        } else if (time.isEmpty()){
-            Toast.makeText(applicationContext, "Čas přípravy receptu nevyplněn", Toast.LENGTH_LONG).show()
+            chech = false }
+        if (type.isEmpty()){
+                iv_add_type_err.visibility = View.VISIBLE
+                chech = false}
+        if (category.isEmpty()){
+            iv_add_categ_err.visibility = View.VISIBLE
+            chech = false }
+        if (time.isEmpty()){
             et_cooking_time.setError("Povinné")
-            chech = false
-        }
+            chech = false }
         if (chech){
             val status = DB.insertRECEPT(SQLdata.Recept(0,title, type,category,time, postup, quantity, portion ,img))
             //insertDataINGREDIENCE(SQLdata.Ingredience(0,name))
@@ -643,26 +671,26 @@ class AddRecept: AppCompatActivity() {
         if (title.isEmpty()) {
             Toast.makeText(applicationContext, "Název receptu nevyplněn", Toast.LENGTH_LONG).show()
             til_title.setError("Povinné")
-            chech = false
-        } else if(data.isEmpty()){
+            chech = false        }
+        if(data.isEmpty()){
             Toast.makeText(applicationContext, "Není vyplněna ani jedna surovina", Toast.LENGTH_LONG).show()
             tvAddSurovina.setError("Povinné")
-            chech = false
-        } else if (postup.isEmpty()){
+            chech = false        }
+        if (postup.isEmpty()){
             Toast.makeText(applicationContext, "Postup receptu nevyplněn", Toast.LENGTH_LONG).show()
             til_direction_to_cook.setError("Povinné")
-            chech = false
-        }else if (time.isEmpty()){
+            chech = false }
+        if (time.isEmpty()){
             Toast.makeText(applicationContext, "Čas přípravy receptu nevyplněn", Toast.LENGTH_LONG).show()
             et_cooking_time.setError("Povinné")
-            chech = false
-        }else if (type.isEmpty()){
+            chech = false        }
+        if (type.isEmpty()){
             Toast.makeText(applicationContext, "Druh receptu nevyplněn", Toast.LENGTH_LONG).show()
-            ac_type.setError("Povinné")
-            chech = false
-        }else if (category.isEmpty()){
+            iv_add_type_err.visibility = View.VISIBLE
+            chech = false }
+        if (category.isEmpty()){
             Toast.makeText(applicationContext, "Kategorie receptu nevyplněna", Toast.LENGTH_LONG).show()
-            ac_category.setError("Povinné")
+            iv_add_categ_err.visibility = View.VISIBLE
             chech = false}
         if (chech){
             val status = DB.updateRecept(SQLdata.Recept(id,title, type,category,time,postup,quantity,portion,img))

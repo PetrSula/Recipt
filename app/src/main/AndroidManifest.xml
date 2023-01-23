@@ -30,6 +30,8 @@
         <activity
             android:name=".Aktivity.AdvanceActivity"
             android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Aktivity.CalendarActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".Aktivity.MainActivity"
             android:exported="true">

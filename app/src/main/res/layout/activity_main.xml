@@ -46,26 +46,26 @@
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="16dp"
+                        android:layout_weight="0.9"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="10dp"
-                        app:cardElevation="0dp"
-                        android:layout_weight="0.9">
+                        app:cardElevation="0dp">
 
                         <AutoCompleteTextView
                             android:id="@+id/acSearch"
                             android:layout_width="280dp"
                             android:layout_height="wrap_content"
-                            android:padding="10dp"
+                            android:background="@android:color/transparent"
                             android:drawablePadding="10dp"
                             android:gravity="center_vertical"
-                            android:background="@android:color/transparent"
                             android:hint="vyhledat recept"
                             android:iconifiedByDefault="false"
+                            android:padding="10dp"
                             android:textColor="@color/black" />
 
                         <!--                    <ListView-->
-<!--                        android:drawableStart="@drawable/ic_search"-->
-<!--                        android:drawableLeft="@drawable/ic_search"-->
+                        <!--                        android:drawableStart="@drawable/ic_search"-->
+                        <!--                        android:drawableLeft="@drawable/ic_search"-->
                         <!--                        android:id="@+id/listsearch"-->
                         <!--                        android:layout_width="fill_parent"-->
                         <!--                        android:layout_height="fill_parent"-->

@@ -31,9 +31,12 @@
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/border.xml" value="0.146" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_add.xml" value="0.1235" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_add_a_photo.xml" value="0.1235" />
+        <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_archive.xml" value="0.188" />
+        <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_back.xml" value="0.188" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.1915" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_baseline_dining_24.xml" value="0.146" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_baseline_horizontal_rule_24.xml" value="0.1235" />
+        <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_calendar.xml" value="0.188" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_camera.xml" value="0.1235" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_check_circle.xml" value="0.2155" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_check_circle_outline.xml" value="0.1965" />
@@ -42,11 +45,14 @@
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_gallery.xml" value="0.1235" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_house.xml" value="0.217" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1235" />
+        <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_local_dining.xml" value="0.188" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_minus.xml" value="0.1235" />
+        <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_next.xml" value="0.188" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_not_in.xml" value="0.1965" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_storefront.xml" value="0.146" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/drawable/ic_time.xml" value="0.174" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/activity_add_recept.xml" value="0.33967391304347827" />
+        <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/activity_jidenicek.xml" value="0.264" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/activity_recept.xml" value="0.176" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/activity_search_advance.xml" value="0.35104166666666664" />
@@ -57,8 +63,10 @@
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/dialog_img.xml" value="0.2" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/dialog_update.xml" value="0.21693840579710144" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/dropdown_item.xml" value="0.2" />
+        <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/fragment_day.xml" value="0.23369565217391305" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/fragment_items_search.xml" value="0.20885416666666667" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/fragment_searched_recepts.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/fragment_week.xml" value="0.23369565217391305" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/ingredience_main.xml" value="0.21354166666666666" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/items_category.xml" value="0.24365942028985507" />
         <entry key="..\:/Users/petr.sula/AndroidStudioProjects/Recipt/app/src/main/res/layout/items_recept_suroviny.xml" value="0.31145833333333334" />

@@ -96,10 +96,10 @@ class ReceptActivity: AppCompatActivity() {
         }
         loadDataFromAsset("pictures/baseMeal.webp")
         showRecept(gv_id)
-        iv_edit_recept.setOnClickListener{
+        tv_edit_recept.setOnClickListener{
             editaceRecept(gv_id)
         }
-        iv_recept_delete.setOnClickListener {
+        tv_recept_delete.setOnClickListener {
             deleteRecept(gv_id)
         }
         iv_recept_export.setOnClickListener {

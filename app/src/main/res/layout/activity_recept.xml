@@ -260,7 +260,6 @@
                         android:layout_gravity="center"
                         android:text="Editace"
                         app:drawableTopCompat="@drawable/ic_edit"
-                        android:textSize="20dp"
                         android:layout_marginStart="30dp"
                         android:layout_marginEnd="30dp"
                         android:tint="@color/ikon"
@@ -283,7 +282,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="30dp"
                         android:layout_marginEnd="30dp"
-                        android:text="Wxportovat"
+                        android:text="Exportovat"
                         android:tint="@color/ikon"
                         app:drawableTopCompat="@drawable/ic_archive"
                         android:drawableTint="@color/ikon"/>
