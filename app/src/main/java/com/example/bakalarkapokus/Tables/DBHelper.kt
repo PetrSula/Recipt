@@ -17,7 +17,7 @@ import java.io.FileOutputStream
 const val dbName = "MyDB.db"
 
 
-class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null,8) {
+class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null,9) {
     private var dataBase: SQLiteDatabase? = null
 
     init {
@@ -116,6 +116,16 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
                                                 IMG + " TEXT" +")"
             db!!.execSQL(drop_table_RECEPT)
             db.execSQL(Create_table_RECEPT)
+        }
+        if (newVersion == 9){
+            val Create_table_CALENDAR =
+                "CREATE TABLE $TABLE_CALENDAR ($ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "$YEAR INTEGER," +
+                    "$MONTH INTEGER," +
+                    "$DAY INTEGER," +
+                        "$RECEPT_ID INTEGER," +
+                        "$TYPE TEXT)"
+            db!!.execSQL(Create_table_CALENDAR)
         }
 
     }
@@ -225,6 +235,7 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         DB.close()
         return success
     }
+
     fun deleteSpizByName(name: String){
         val DB = this.writableDatabase
         val contentValues = ContentValues()
@@ -391,6 +402,7 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         return ArrayList()
 
     }
+
     fun deleteRecept(id : Int){
         val DB = this.writableDatabase
         val contentValues = ContentValues()
@@ -410,6 +422,7 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         DB.close()
         return succes
     }
+
     fun selectOneSurRecept(int: Int): SQLdata.RvSurovinyRecept{
         val DB = this.readableDatabase
         val selecQuery = "SELECT "+ TABLE_SUROVINY_RECEPT+"."+ID+", " + TABLE_INGREDIENCE+"."+ NAME + ", " + TABLE_SUROVINY_RECEPT + "." + QUANTITY +
@@ -466,6 +479,7 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         DB.close()
         return suroviny
     }
+
     fun updateSur(surovinyRecept: SQLdata.SurovinyRecept ){
         val db = this.writableDatabase
         val contentValues = ContentValues()
@@ -475,6 +489,7 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         db.update(TABLE_SUROVINY_RECEPT,contentValues,"ID=${surovinyRecept.id}", arrayOf())
         db.close()
     }
+
     fun deleteSurRecept(id_ing: Int, id_recept : Int){
         val DB = this.writableDatabase
         val contentValues = ContentValues()
@@ -482,6 +497,7 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         DB.close()
         return
     }
+
     fun deleteSurRecept_id(id_recept: Int){
         val DB = this.writableDatabase
         val contentValues = ContentValues()
@@ -512,6 +528,7 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         }
         return coun
     }
+
     fun selectByTitle(title:String) : ArrayList<SQLdata.AraySearched>{
         var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
         val selecQuery = "SELECT $ID, $TITLE, $IMG FROM $TABLE_RECEPT WHERE $TITLE like '%$title%'"
@@ -577,12 +594,61 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         db.close()
     }
 
+    fun insertCalendar( Calendar: SQLdata.Calendar) : Long{
+        val DB = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(YEAR,Calendar.year)
+        contentValues.put(MONTH,Calendar.month)
+        contentValues.put(DAY,Calendar.day)
+        contentValues.put(RECEPT_ID,Calendar.recept_id)
+        contentValues.put(TYPE,Calendar.type)
+
+        val succes = DB.insert(TABLE_CALENDAR,null,contentValues)
+        DB.close()
+        return succes
+    }
+
+    fun selectCalendarDay(date : SQLdata.date) : ArrayList<SQLdata.Calendar> {
+        var arraySearched: ArrayList<SQLdata.Calendar> = ArrayList<SQLdata.Calendar>()
+        var year = date.year
+        var month = date.month
+        var day = date.day
+        val selecQuery = "SELECT * FROM $TABLE_CALENDAR WHERE $YEAR = $year and" +
+                                                                    " $MONTH = $month and" +
+                                                                    " $DAY = $day"
+        val DB = this.readableDatabase
+        var cursor: Cursor? = null
+        var recept_id : Int
+        var type: String
+        var id: Int = 0
+        try {
+            cursor = DB.rawQuery(selecQuery, null)
+        } catch (e: SQLiteException) {
+            DB.execSQL(selecQuery)
+            return ArrayList()
+        }
+        if (cursor.moveToFirst()) {
+            do {
+                id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
+                year = cursor.getInt(cursor.getColumnIndexOrThrow(YEAR))
+                month = cursor.getInt(cursor.getColumnIndexOrThrow(MONTH))
+                day = cursor.getInt(cursor.getColumnIndexOrThrow(DAY))
+                recept_id = cursor.getInt(cursor.getColumnIndexOrThrow(RECEPT_ID))
+                type = cursor.getString(cursor.getColumnIndexOrThrow(TYPE))
+                val data = SQLdata.Calendar(id, year, month, day, recept_id, type)
+                arraySearched.add(data)
+            } while (cursor.moveToNext())
+        }
+        return arraySearched
+    }
+
     companion object{
         private val DATABASE_NAME = "MyDB.db"
         private val TABLE_SPIZ = "SPIZ"
         private val TABLE_RECEPT = "RECEPT"
         private val TABLE_INGREDIENCE = "INGREDIENCE"
         private val TABLE_SUROVINY_RECEPT = "SUROVINY_RECEPT"
+        private val TABLE_CALENDAR = "CALENDAR"
         private val ID = "ID"
         private val INGREDIENCE_ID = "INGREDIENCE_ID"
         private val TITLE = "TITLE"
@@ -595,6 +661,9 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         private val PORTION = "PORTION"
         private val TIME = "TIME"
         private val CATEGORY = "CATEGORY"
+        private val YEAR = "YEAR"
+        private val MONTH = "MONTH"
+        private val DAY = "DAY"
 
 
     }

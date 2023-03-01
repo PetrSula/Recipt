@@ -24,6 +24,9 @@ import kotlinx.android.synthetic.main.activity_main.ivSearch
 /* TODO - ošetřt přidávání jakéhokoliv textu s mezerami.
         - live of activity
         - přenesení SQL lite a její rozšíření případné
+        - TextChangedListener automatikcá změna po naúsaání textu pro RV k receptům
+        - naplnit úřidávání jíeelníčku základními daty. Den a recept pokud se řichází z receptu
+        - ošetřit životnost Activity Jídelníček
 
  */
 fun hideKeyboard(activity: Activity) {

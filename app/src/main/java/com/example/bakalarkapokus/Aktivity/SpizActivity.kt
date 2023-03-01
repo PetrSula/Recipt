@@ -74,7 +74,11 @@ class SpizActivity :AppCompatActivity(){
                     intent.putExtra("EXIT",true)
                     startActivity(intent)
                     true
-                }
+                }R.id.miItem4 ->{
+                val intent = Intent(this, CalendarActivity::class.java)
+                startActivity(intent)
+                true
+            }
                 else -> false
             }
         }

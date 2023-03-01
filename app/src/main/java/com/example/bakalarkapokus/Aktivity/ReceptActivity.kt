@@ -105,6 +105,9 @@ class ReceptActivity: AppCompatActivity() {
         iv_recept_export.setOnClickListener {
             generateCSV(gv_id)
         }
+        iv_recept_calendar.setOnClickListener {
+            startCalendat()
+        }
         btn_rec_spotreb.setOnClickListener {
             spotrevSur(gv_id)
         }
@@ -278,6 +281,7 @@ class ReceptActivity: AppCompatActivity() {
             startActivity(it)
         }
     }
+
     fun spotrevSur(id:Int){
         val spis= DBHelper(this).selectSpiz()
         val builder = AlertDialog.Builder(this)
@@ -340,6 +344,12 @@ class ReceptActivity: AppCompatActivity() {
         }
         return
     }
+    private fun startCalendat() {
+        Intent(this,AddCalendarActivity::class.java).also {
+            startActivity(it)
+        }
+    }
+
 
 //    override fun onRequestPermissionsResult(
 //        requestCode: Int,

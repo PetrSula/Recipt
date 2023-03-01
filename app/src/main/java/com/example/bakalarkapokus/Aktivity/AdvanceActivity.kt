@@ -71,7 +71,11 @@ class AdvanceActivity : AppCompatActivity(){
                     val intent = Intent(this, AdvanceActivity::class.java)
                     startActivity(intent)
                     true
-                }
+                }R.id.miItem4 ->{
+                val intent = Intent(this, CalendarActivity::class.java)
+                startActivity(intent)
+                true
+            }
                 else -> false
             }
         }

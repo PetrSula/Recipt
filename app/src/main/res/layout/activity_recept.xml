@@ -260,8 +260,8 @@
                         android:layout_gravity="center"
                         android:text="Editace"
                         app:drawableTopCompat="@drawable/ic_edit"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginEnd="30dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
                         android:tint="@color/ikon"
                         android:drawableTint="@color/ikon"/>
 
@@ -269,8 +269,8 @@
                         android:id="@+id/tv_recept_delete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginEnd="30dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
                         android:text="Vymazat"
                         android:tint="@color/ikon"
                         app:drawableTopCompat="@android:drawable/ic_menu_delete"
@@ -280,11 +280,21 @@
                         android:id="@+id/iv_recept_export"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginEnd="30dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
                         android:text="Exportovat"
                         android:tint="@color/ikon"
                         app:drawableTopCompat="@drawable/ic_archive"
+                        android:drawableTint="@color/ikon"/>
+                    <TextView
+                        android:id="@+id/iv_recept_calendar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="0dp"
+                        android:text="Jídelniček"
+                        android:tint="@color/ikon"
+                        app:drawableTopCompat="@drawable/ic_calendar"
                         android:drawableTint="@color/ikon"/>
 
                 </LinearLayout>

@@ -8,6 +8,6 @@ import android.view.ViewGroup
 import com.example.bakalarkapokus.R
 
 
-class WeekFragment : Fragment(R.layout.fragment_day) {
+class WeekFragment : Fragment(R.layout.fragment_week) {
 
 }

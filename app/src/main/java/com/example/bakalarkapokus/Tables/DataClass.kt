@@ -1,6 +1,7 @@
 package com.example.bakalarkapokus.Tables
 
 import java.io.Serializable
+import java.time.Month
 
 
 sealed class SQLdata {
@@ -54,4 +55,18 @@ sealed class SQLdata {
         val img: Int,
 
     )
+    data class Calendar(
+        val id: Int,
+        val year: Int,
+        val month: Int,
+        val day: Int,
+        val recept_id: Int,
+        val type: String,
+    )
+    data class date(
+        val year: Int,
+        val month: Int,
+        val day: Int,
+    )
+
 }
