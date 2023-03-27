@@ -475,7 +475,6 @@ class AddRecept: AppCompatActivity() {
         }
     }
 
-
     private fun addSurovina () {
         val typeQuantity = ac_typequantity.text.toString().trim()
         var name = at_AddSurovina.text.toString().trim()

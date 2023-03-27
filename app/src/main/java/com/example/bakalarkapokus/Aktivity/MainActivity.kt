@@ -10,6 +10,7 @@ import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bakalarkapokus.Adaptery.CategoryAdapter
@@ -27,6 +28,9 @@ import kotlinx.android.synthetic.main.activity_main.ivSearch
         - TextChangedListener automatikcá změna po naúsaání textu pro RV k receptům
         - naplnit úřidávání jíeelníčku základními daty. Den a recept pokud se řichází z receptu
         - ošetřit životnost Activity Jídelníček
+        - Odebrání klávesnice po ukončení přidávání receptu do jídleníčku
+        - výběr data u week framentu a day fragmentu přes ikonku kalendáře
+        - omezení délky textu receptu
 
  */
 fun hideKeyboard(activity: Activity) {
@@ -70,6 +74,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.miItem1 -> {
                     val intent = Intent(this, SpizActivity::class.java)
                     startActivity(intent)
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.miItem2 -> {
@@ -80,16 +85,19 @@ class MainActivity : AppCompatActivity() {
                         it.putExtra("EXTRA_SEARCHED", arraySearched)
                         startActivity(it)
                     }
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.miItem3 ->{
                     val intent = Intent(this, AdvanceActivity::class.java)
                     startActivity(intent)
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }R.id.miItem4 ->{
                     val intent = Intent(this, CalendarActivity::class.java)
-                    startActivity(intent)
-                    true
+                startActivity(intent)
+                drawerLayout.closeDrawer(GravityCompat.START)
+                true
                 }
                 else -> false
             }

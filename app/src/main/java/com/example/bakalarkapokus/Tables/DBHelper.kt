@@ -642,6 +642,46 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         return arraySearched
     }
 
+    fun selectCalendarID(id: Int ) : ArrayList<SQLdata.Calendar> {
+        var arraySearched: ArrayList<SQLdata.Calendar> = ArrayList<SQLdata.Calendar>()
+        val selecQuery = "SELECT * FROM $TABLE_CALENDAR WHERE $ID = $id"
+        val DB = this.readableDatabase
+        var cursor: Cursor? = null
+        var year : Int
+        var month : Int
+        var day : Int
+        var recept_id : Int
+        var type: String
+        var id: Int = 0
+        try {
+            cursor = DB.rawQuery(selecQuery, null)
+        } catch (e: SQLiteException) {
+            DB.execSQL(selecQuery)
+            return ArrayList()
+        }
+        if (cursor.moveToFirst()) {
+            do {
+                id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
+                year = cursor.getInt(cursor.getColumnIndexOrThrow(YEAR))
+                month = cursor.getInt(cursor.getColumnIndexOrThrow(MONTH))
+                day = cursor.getInt(cursor.getColumnIndexOrThrow(DAY))
+                recept_id = cursor.getInt(cursor.getColumnIndexOrThrow(RECEPT_ID))
+                type = cursor.getString(cursor.getColumnIndexOrThrow(TYPE))
+                val data = SQLdata.Calendar(id, year, month, day, recept_id, type)
+                arraySearched.add(data)
+            } while (cursor.moveToNext())
+        }
+        return arraySearched
+    }
+
+    fun deleteCalendarDay(id:Int) : Int{
+        val DB = this.writableDatabase
+        val contentValues = ContentValues()
+        val success = DB.delete(TABLE_CALENDAR, "  $ID = $id", null)
+        DB.close()
+        return success
+    }
+
     companion object{
         private val DATABASE_NAME = "MyDB.db"
         private val TABLE_SPIZ = "SPIZ"

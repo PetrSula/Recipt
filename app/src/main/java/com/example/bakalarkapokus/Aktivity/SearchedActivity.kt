@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bakalarkapokus.Adaptery.SearchAdapter
@@ -57,6 +58,7 @@ class SearchedActivity : AppCompatActivity() {
                     val intent = Intent(this, SpizActivity::class.java)
                     startActivity(intent)
                     finish()
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
 //                R.id.miItem2 -> {
@@ -68,6 +70,7 @@ class SearchedActivity : AppCompatActivity() {
                     val intent = Intent(this, AdvanceActivity::class.java)
                     startActivity(intent)
                     finish()
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.miItem0 -> {
@@ -75,14 +78,20 @@ class SearchedActivity : AppCompatActivity() {
                 startActivity(intent)
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.putExtra("EXIT",true)
+                drawerLayout.closeDrawer(GravityCompat.START)
                 true
             }R.id.miItem4 ->{
                 val intent = Intent(this, CalendarActivity::class.java)
                 startActivity(intent)
+                drawerLayout.closeDrawer(GravityCompat.START)
                 true
             }
                 else -> false
             }
+        }
+        fb_search_Add.setOnClickListener {
+            val intent = Intent(this, AddRecept::class.java)
+            startActivity(intent)
         }
 //                 AutoCoplitetextView
         val autoTextView : AutoCompleteTextView = findViewById(R.id.ac_Srch_Search)
@@ -114,6 +123,10 @@ class SearchedActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, "Zadané hodnotě neodpovídá žádný recept", Toast.LENGTH_LONG).show()
             return
         }
+    }
+    fun edit(){
+        Toast.makeText(applicationContext, "Něco se děje", Toast.LENGTH_LONG).show()
+        return
     }
 
     private fun showRecept(id: Int) {

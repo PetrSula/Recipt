@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bakalarkapokus.Adaptery.SurovinyAdapter
@@ -58,6 +59,7 @@ class AdvanceActivity : AppCompatActivity(){
                         it.putExtra("EXTRA_SEARCHED", arraySearched)
                         startActivity(it)
                     }
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.miItem0 -> {
@@ -65,15 +67,18 @@ class AdvanceActivity : AppCompatActivity(){
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     intent.putExtra("EXIT",true)
                     startActivity(intent)
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.miItem3 ->{
                     val intent = Intent(this, AdvanceActivity::class.java)
                     startActivity(intent)
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }R.id.miItem4 ->{
                 val intent = Intent(this, CalendarActivity::class.java)
                 startActivity(intent)
+                drawerLayout.closeDrawer(GravityCompat.START)
                 true
             }
                 else -> false

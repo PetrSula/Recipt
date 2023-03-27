@@ -34,15 +34,39 @@
                 app:tint="@color/primary" />
 
             <TextView
-                android:id="@+id/tv_weekfrag_day"
+                android:id="@+id/tv_weekfrag_frsday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_weekfrag_lstday"
                 app:layout_constraintStart_toEndOf="@+id/Iv_weekfrag_prew"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_weekfrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="-"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tv_weekfrag_lstday"
+                app:layout_constraintStart_toEndOf="@+id/tv_weekfrag_frsday"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_weekfrag_lstday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/app_name"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/Iv_weekfrag_next"
+                app:layout_constraintStart_toEndOf="@+id/tv_weekfrag_frsday"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -65,6 +89,7 @@
                 android:text="Pondělí"
                 android:textSize="24dp"
                 android:textStyle="bold"
+                android:textColor="@color/primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Iv_weekfrag_next" />
 
@@ -86,6 +111,7 @@
                 android:text="Úterý"
                 android:textSize="24dp"
                 android:textStyle="bold"
+                android:textColor="@color/primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_weekfrag_po" />
 
@@ -107,6 +133,7 @@
                 android:text="Středa"
                 android:textSize="24dp"
                 android:textStyle="bold"
+                android:textColor="@color/primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_weekfrag_ut" />
 
@@ -128,6 +155,7 @@
                 android:text="Čtvrtek"
                 android:textSize="24dp"
                 android:textStyle="bold"
+                android:textColor="@color/primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_weekfrag_st" />
 
@@ -149,6 +177,7 @@
                 android:text="Pátek"
                 android:textSize="24dp"
                 android:textStyle="bold"
+                android:textColor="@color/primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_weekfrag_ct" />
 
@@ -170,6 +199,7 @@
                 android:text="Sobota"
                 android:textSize="24dp"
                 android:textStyle="bold"
+                android:textColor="@color/primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_weekfrag_pa" />
 
@@ -191,6 +221,7 @@
                 android:text="Neděle"
                 android:textSize="24dp"
                 android:textStyle="bold"
+                android:textColor="@color/primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_weekfrag_so" />
 
@@ -204,5 +235,44 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_weekfrag_ne" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fb_week_Add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/secondary"
+            android:visibility="gone"
+            android:src="@drawable/ic_edit"
+            app:fabSize="mini"
+            android:layout_margin="4dp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fb_week_Edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/secondary"
+            android:visibility="gone"
+            android:src="@drawable/ic_add"
+            app:fabSize="mini"
+            android:layout_margin="4dp" />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fb_week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/secondary"
+            android:layout_margin="8dp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.DBHelper
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.security.AccessController.getContext
 import java.text.DateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class AddCalendarActivity : AppCompatActivity() {
     val c = Calendar.getInstance()
@@ -25,8 +27,19 @@ class AddCalendarActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_calendar)
-        val gv_datum = intent.getStringExtra("EXTRA_DATE")
+        val gv_datum    = intent.getStringExtra("EXTRA_DATE")
+        val gv_id       = intent.getIntExtra("EXTRA_ID",0)
 
+        val gv_title = intent.getStringExtra("EXTRA_TITLE")
+
+        if (gv_id != 0){
+            set_item(gv_id)
+        }
+        if (gv_title != null){
+            ac_Search_caladd.setText(gv_title)
+        }
+
+        setday(gv_datum)
         adaptertype()
         Iv_caladd_calendar.setOnClickListener {
             var datum = gv_datum
@@ -62,6 +75,46 @@ class AddCalendarActivity : AppCompatActivity() {
         autoTextView.setAdapter(Autoadapter)
     }
 
+    private fun set_item(id : Int){
+        val DB = DBHelper(this)
+        val calendar = DB.selectCalendarID(id)
+        val recept : ArrayList<SQLdata.Recept>
+        if (calendar != null){
+            recept = DB.selectRECEPT(id)
+            val year = calendar[0].year.toString()
+            val month = calendar[0].month.toString()
+            val day = calendar[0].day.toString()
+            val string = "$year-$month-$day"
+            setday(string)
+            if (recept != null){
+                ac_type_caladd.setText(calendar[0].type)
+                ac_Search_caladd.setText(recept[0].title)
+            }
+        }
+
+    }
+
+    private fun setday(datum: String?) {
+        var p_datum = datum
+        var year : Int
+        var month: Int
+        var day : Int
+        if (p_datum == null){
+            year = c.get(Calendar.YEAR)
+            month  = c.get(Calendar.MONTH)
+            day    = c.get(Calendar.DAY_OF_MONTH)
+        }else{
+            var list :List<String> = p_datum.split("-")
+            year = list[0].toInt()
+            month = list[1].toInt()
+            day   = list[2].toInt()
+        }
+        c.set(year,month,day)
+        val time = c.time
+        val dateInfo = DateFormat.getDateInstance(DateFormat.FULL).format(time)
+        Tv_caladd_calendar.text = dateInfo
+    }
+
     private fun addCalendarCheck() {
         var insert : SQLdata.Calendar
         var check = false
@@ -83,9 +136,19 @@ class AddCalendarActivity : AppCompatActivity() {
         if (arraySearched.size != 1){
             Toast.makeText(applicationContext, "Vyberte jeden recept", Toast.LENGTH_LONG).show()
             return
-        }else{
-            addCalendarSQL(arraySearched[0].id)
         }
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Přidat záznam do jídelníčku")
+        builder.setMessage("Opravdu si přejete přidat záznam do Jídelníčku ")
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+        builder.setPositiveButton("ANO") { dialogInterface, which ->
+            addCalendarSQL(arraySearched[0].id)}
+        builder.setNegativeButton("NE") { dialogInterface, which ->
+            dialogInterface.dismiss()
+        }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(true)
+        alertDialog.show()
     }
 
     private fun addCalendarSQL(recept_id : Int) {

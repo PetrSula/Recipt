@@ -68,5 +68,11 @@ sealed class SQLdata {
         val month: Int,
         val day: Int,
     )
+    data class Week(
+        val id: Int,
+        val title: String,
+        val img: String,
+        val type: String
+    )
 
 }

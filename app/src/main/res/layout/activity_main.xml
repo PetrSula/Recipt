@@ -164,7 +164,7 @@
 
         </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navView"

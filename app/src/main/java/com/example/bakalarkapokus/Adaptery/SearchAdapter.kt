@@ -1,15 +1,24 @@
 package com.example.bakalarkapokus.Adaptery
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.view.menu.MenuView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.bakalarkapokus.Aktivity.AddCalendarActivity
+import com.example.bakalarkapokus.Aktivity.AdvanceActivity
+import com.example.bakalarkapokus.Aktivity.CalendarActivity
+import com.example.bakalarkapokus.Aktivity.SearchedActivity
 import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.SQLdata
+import com.example.bakalarkapokus.fragments.DayFragment
+import kotlinx.android.synthetic.main.items_row.view.*
 import kotlinx.android.synthetic.main.items_searchable.view.*
 import java.io.File
 
@@ -28,6 +37,7 @@ class SearchAdapter (val context: Context, private val sList: ArrayList<SQLdata.
     class ViewHolder(view: View, listener: SearchAdapter.onItemClickListener) : RecyclerView.ViewHolder(view){
         val tvName = view.tvTitle
         val ivIMG = view.ivRecept
+
 
         init {
             itemView.setOnClickListener{
@@ -57,6 +67,12 @@ class SearchAdapter (val context: Context, private val sList: ArrayList<SQLdata.
 //            .load(imgURI)
 //            .apply (requestOptions)
 //            .into(holder.ivIMG)
+//        if (context !is CalendarActivity){
+//            holder.ivEdit.visibility = View.GONE
+//            holder.ivDelete.visibility = View.GONE
+//        }
+
+
 
         val path = item.img
         val check : Boolean = "pictures/" in path
@@ -77,11 +93,13 @@ class SearchAdapter (val context: Context, private val sList: ArrayList<SQLdata.
         }
     }
 
-    fun loadDataFromAsset(holder: SearchAdapter.ViewHolder,path : String){
 
-    }
 
     override fun getItemCount(): Int {
         return sList.size
+    }
+
+    interface MyFragmentCallback {
+        fun onFragmentClick(fragment: DayFragment)
     }
 }

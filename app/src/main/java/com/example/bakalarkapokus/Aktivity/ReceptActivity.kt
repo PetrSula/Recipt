@@ -22,6 +22,7 @@ import com.example.bakalarkapokus.Adaptery.ReceptAdapter
 import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
+import kotlinx.android.synthetic.main.activity_add_recept.*
 //import com.itextpdf.text.pdf.PdfDocument
 import kotlinx.android.synthetic.main.activity_main.drawerLayout
 import kotlinx.android.synthetic.main.activity_main.navView
@@ -90,6 +91,10 @@ class ReceptActivity: AppCompatActivity() {
                     val intent = Intent(this, AdvanceActivity::class.java)
                     startActivity(intent)
                     true
+                }R.id.miItem4 ->{
+                val intent = Intent(this, CalendarActivity::class.java)
+                startActivity(intent)
+                true
                 }
                 else -> false
             }
@@ -345,7 +350,9 @@ class ReceptActivity: AppCompatActivity() {
         return
     }
     private fun startCalendat() {
+        var title = tvTitleRecept.text.toString().trim()
         Intent(this,AddCalendarActivity::class.java).also {
+            it.putExtra("EXTRA_TITLE", title)
             startActivity(it)
         }
     }
