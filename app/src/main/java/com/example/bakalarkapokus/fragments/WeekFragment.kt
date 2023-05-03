@@ -1,5 +1,6 @@
 package com.example.bakalarkapokus.fragments
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -27,44 +28,50 @@ val c = Calendar.getInstance()
 var fabVisible = false
 
 
-class WeekFragment : Fragment(R.layout.fragment_week) {
+class WeekFragment (string: String) : Fragment(R.layout.fragment_week) {
 
+    val gv_date = string
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         set_dates()
         getRecepies()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
         Iv_weekfrag_next.setOnClickListener {
             change_date(true) }
         Iv_weekfrag_prew.setOnClickListener {
             change_date(false)        }
-
-        fb_week.setOnClickListener {
-            showmenu(fabVisible)
+        iv_weekfrag_cal.setOnClickListener {
+            val activity = getContext()
+            val pickerDialog = DatePickerDialog(
+                activity!!,
+                { view, year, monthOfYear, dayOfMonth ->
+                    c.set(year,monthOfYear,dayOfMonth)
+                    set_dates()
+                    getRecepies()
+                },
+                year,
+                month,
+                day
+            )
+            pickerDialog.show()
         }
 
 
         fb_week_Add.setOnClickListener {
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+            val date = year.toString() + "-" + month.toString() + "-" + day.toString()
             val activity = getContext()
-            val intent = Intent(activity, AddCalendarActivity::class.java)
-            startActivity(intent)
+            Intent(activity, AddCalendarActivity::class.java).also {
+                it.putExtra("EXTRA_DATE", date)
+                startActivity(it)
+            }
             }
         }
-    fun showmenu(visible : Boolean){
-        if (!visible){
-            fb_week_Add.show()
-            fb_week_Edit.show()
-            fb_week_Edit.visibility = View.VISIBLE
-            fb_week_Add.visibility = View.VISIBLE
-            fabVisible = true
-        }else{
 
-            fb_week_Add.hide()
-            fb_week_Edit.hide()
-            fb_week_Edit.visibility = View.GONE
-            fb_week_Add.visibility = View.GONE
-            fabVisible = false
-        }
-    }
 
     fun set_dates(){
         val year = c.get(Calendar.YEAR)
@@ -118,8 +125,9 @@ class WeekFragment : Fragment(R.layout.fragment_week) {
         }
 
     }
+
     private fun getWhere(recept_id : Int) : String{
-        var where  = "AND RECEPT.ID = $recept_id "
+        var where  = " RECEPT.ID = $recept_id "
         return where
     }
 
@@ -127,10 +135,15 @@ class WeekFragment : Fragment(R.layout.fragment_week) {
         var dataAdapter = ArrayList<SQLdata.Week>()
         val activity = getContext()
         val DB = DBHelper(activity!!)
+        var title : String
         for (i in recepies){
             val where = getWhere(i.recept_id)
             val recept = DB.selectTitleIMG(where)
-            dataAdapter.add(SQLdata.Week(i.id,recept[0].title,recept[0].img,i.type))
+            title = recept[0].title
+            if (title.length > 30){
+                title = title.substring(0, 30) + "..."
+            }
+            dataAdapter.add(SQLdata.Week(i.id,title,recept[0].img,i.type))
         }
         rv_weekfrag_po.layoutManager = LinearLayoutManager(activity!!)
         var Adapter = weekAdapter(activity!!,dataAdapter,"WeekFragment")
@@ -172,10 +185,15 @@ class WeekFragment : Fragment(R.layout.fragment_week) {
         var dataAdapter = ArrayList<SQLdata.Week>()
         val activity = getContext()
         val DB = DBHelper(activity!!)
+        var title : String
         for (i in recepies){
             val where = getWhere(i.recept_id)
             val recept = DB.selectTitleIMG(where)
-            dataAdapter.add(SQLdata.Week(i.id,recept[0].title,recept[0].img,i.type))
+            title = recept[0].title
+            if (title.length > 30){
+                title = title.substring(0, 30) + "..."
+            }
+            dataAdapter.add(SQLdata.Week(i.id,title,recept[0].img,i.type))
         }
         rv_weekfrag_ut.layoutManager = LinearLayoutManager(activity!!)
         var Adapter = weekAdapter(activity!!,dataAdapter,"WeekFragment")
@@ -216,10 +234,15 @@ class WeekFragment : Fragment(R.layout.fragment_week) {
         var dataAdapter = ArrayList<SQLdata.Week>()
         val activity = getContext()
         val DB = DBHelper(activity!!)
+        var title : String
         for (i in recepies){
             val where = getWhere(i.recept_id)
             val recept = DB.selectTitleIMG(where)
-            dataAdapter.add(SQLdata.Week(i.id,recept[0].title,recept[0].img,i.type))
+            title = recept[0].title
+            if (title.length > 30){
+                title = title.substring(0, 30) + "..."
+            }
+            dataAdapter.add(SQLdata.Week(i.id,title,recept[0].img,i.type))
         }
         rv_weekfrag_st.layoutManager = LinearLayoutManager(activity!!)
         var Adapter = weekAdapter(activity!!,dataAdapter,"WeekFragment")
@@ -260,10 +283,15 @@ class WeekFragment : Fragment(R.layout.fragment_week) {
         var dataAdapter = ArrayList<SQLdata.Week>()
         val activity = getContext()
         val DB = DBHelper(activity!!)
+        var title : String
         for (i in recepies){
             val where = getWhere(i.recept_id)
             val recept = DB.selectTitleIMG(where)
-            dataAdapter.add(SQLdata.Week(i.id,recept[0].title,recept[0].img,i.type))
+            title = recept[0].title
+            if (title.length > 30){
+                title = title.substring(0, 30) + "..."
+            }
+            dataAdapter.add(SQLdata.Week(i.id,title,recept[0].img,i.type))
         }
         rv_weekfrag_ct.layoutManager = LinearLayoutManager(activity!!)
         var Adapter = weekAdapter(activity!!,dataAdapter,"WeekFragment")
@@ -304,10 +332,15 @@ class WeekFragment : Fragment(R.layout.fragment_week) {
         var dataAdapter = ArrayList<SQLdata.Week>()
         val activity = getContext()
         val DB = DBHelper(activity!!)
+        var title : String
         for (i in recepies){
             val where = getWhere(i.recept_id)
             val recept = DB.selectTitleIMG(where)
-            dataAdapter.add(SQLdata.Week(i.id,recept[0].title,recept[0].img,i.type))
+            title = recept[0].title
+            if (title.length > 30){
+                title = title.substring(0, 30) + "..."
+            }
+            dataAdapter.add(SQLdata.Week(i.id,title,recept[0].img,i.type))
         }
         rv_weekfrag_pa.layoutManager = LinearLayoutManager(activity!!)
         var Adapter = weekAdapter(activity!!,dataAdapter,"WeekFragment")
@@ -348,10 +381,15 @@ class WeekFragment : Fragment(R.layout.fragment_week) {
         var dataAdapter = ArrayList<SQLdata.Week>()
         val activity = getContext()
         val DB = DBHelper(activity!!)
+        var title : String
         for (i in recepies){
             val where = getWhere(i.recept_id)
             val recept = DB.selectTitleIMG(where)
-            dataAdapter.add(SQLdata.Week(i.id,recept[0].title,recept[0].img,i.type))
+            title = recept[0].title
+            if (title.length > 30){
+                title = title.substring(0, 30) + "..."
+            }
+            dataAdapter.add(SQLdata.Week(i.id,title,recept[0].img,i.type))
         }
         rv_weekfrag_so.layoutManager = LinearLayoutManager(activity!!)
         var Adapter = weekAdapter(activity!!,dataAdapter,"WeekFragment")
@@ -392,10 +430,15 @@ class WeekFragment : Fragment(R.layout.fragment_week) {
         var dataAdapter = ArrayList<SQLdata.Week>()
         val activity = getContext()
         val DB = DBHelper(activity!!)
+        var title : String
         for (i in recepies){
             val where = getWhere(i.recept_id)
             val recept = DB.selectTitleIMG(where)
-            dataAdapter.add(SQLdata.Week(i.id,recept[0].title,recept[0].img,i.type))
+            title = recept[0].title
+            if (title.length > 30){
+                title = title.substring(0, 30) + "..."
+            }
+            dataAdapter.add(SQLdata.Week(i.id,title,recept[0].img,i.type))
         }
         rv_weekfrag_ne.layoutManager = LinearLayoutManager(activity!!)
         var Adapter = weekAdapter(activity!!,dataAdapter,"WeekFragment")

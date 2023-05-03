@@ -7,8 +7,12 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bakalarkapokus.Adaptery.CategoryAdapter
 import com.example.bakalarkapokus.Adaptery.SearchAdapter
@@ -17,6 +21,8 @@ import com.example.bakalarkapokus.Aktivity.*
 import com.example.bakalarkapokus.R
 import com.example.bakalarkapokus.Tables.DBHelper
 import com.example.bakalarkapokus.Tables.SQLdata
+import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.activity_add_calendar.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dropdown_item.*
 import kotlinx.android.synthetic.main.fragment_day.*
@@ -30,40 +36,51 @@ import java.time.format.TextStyle
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DayFragment : Fragment(R.layout.fragment_day) {
+class DayFragment (string: String) : Fragment(R.layout.fragment_day) {
     val c = Calendar.getInstance()
     lateinit var tv_date: TextView
+    private val sharedViewModel: SharedViewModel by activityViewModels()
     lateinit var recepies_Snidane: ArrayList<SQLdata.AraySearched>
     lateinit var recepies_Obed: ArrayList<SQLdata.AraySearched>
     lateinit var recepies_Svacina: ArrayList<SQLdata.AraySearched>
     lateinit var recepies_Vecere: ArrayList<SQLdata.AraySearched>
     var fabVisible = false
+    lateinit var toggle: ActionBarDrawerToggle
+    var gv_date = string
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null) {
+            gv_date = savedInstanceState.getString("my_string_argument", "")
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tv_date = view.findViewById(R.id.tv_dayfrag_day)
+        val activity = getActivity()
 
+        sharedViewModel.sharedData.observe(viewLifecycleOwner){ data -> gv_date}
+
+        setday(gv_date)
 //      Change date
         var iv_plus = view.findViewById<ImageView>(R.id.Iv_dayfrag_next)
         var iv_minus = view.findViewById<ImageView>(R.id.Iv_dayfrag_prew)
-//      Set floting button
-        fb_day.setOnClickListener {
-            showmenu(fabVisible)
-        }
+
 //        val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
-        val date = year.toString() + "-" + month.toString() + "-" + day.toString()
-//        var dayOfWeek = sdf.format(date)
-//        var dayOfWeek = getWeekDayName(date)
-
-        val calendar = Calendar.getInstance()
-        val time = c.time
-        val dateInfo = DateFormat.getDateInstance(DateFormat.FULL).format(time)
-        tv_date.text = dateInfo
+//        val date = year.toString() + "-" + month.toString() + "-" + day.toString()
+////        var dayOfWeek = sdf.format(date)
+////        var dayOfWeek = getWeekDayName(date)
+//
+//        val calendar = Calendar.getInstance()
+//        val time = c.time
+//        val dateInfo = DateFormat.getDateInstance(DateFormat.FULL).format(time)
+//        tv_date.text = gv_date
 //        získat všechyn recepty na daný den
-        getRecepies(year, month, day)
+//        getRecepies(year, month, day)
 
 //        val Monday = DayOfWeek.MONDAY.getDisplayName(TextStyle.FULL, Locale.getDefault())
 //        tv_date.text = Monday
@@ -74,13 +91,14 @@ class DayFragment : Fragment(R.layout.fragment_day) {
             change_date(view, false)
         }
 
-        tv_date.setOnClickListener {
+        iv_dayfrag_cal.setOnClickListener {
             val activity = getContext()
             val pickerDialog = DatePickerDialog(
                 activity!!,
                 { view, year, monthOfYear, dayOfMonth ->
-                    tv_date.text =
-                        (dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year)
+                    setday(year.toString() + "-" + monthOfYear.toString() + "-" + dayOfMonth.toString())
+//                    tv_date.text =
+//                        (dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year)
                 },
                 year,
                 month,
@@ -90,27 +108,60 @@ class DayFragment : Fragment(R.layout.fragment_day) {
         }
 
         fb_day_Add.setOnClickListener {
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+            val date = year.toString() + "-" + month.toString() + "-" + day.toString()
             val activity = getContext()
-            val intent = Intent(activity, AddCalendarActivity::class.java)
-            startActivity(intent)
+            Intent(activity, AddCalendarActivity::class.java).also {
+                it.putExtra("EXTRA_DATE", date)
+                startActivity(it)
+            }
         }
     }
-    fun showmenu(visible : Boolean){
-        if (!visible){
-            fb_day_Add.show()
-            fb_day_Edit.show()
-            fb_day_Edit.visibility = View.VISIBLE
-            fb_day_Add.visibility = View.VISIBLE
-            fabVisible = true
-        }else{
 
-            fb_day_Add.hide()
-            fb_day_Edit.hide()
-            fb_day_Edit.visibility = View.GONE
-            fb_day_Add.visibility = View.GONE
-            fabVisible = false
-        }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("my_string_argument", gv_date)
     }
+    private fun setday(datum: String?) {
+        var p_datum = datum
+        var year : Int
+        var month: Int
+        var day : Int
+        if (p_datum == "0000-00-00"){
+            year = c.get(Calendar.YEAR)
+            month  = c.get(Calendar.MONTH)
+            day    = c.get(Calendar.DAY_OF_MONTH)
+        }else{
+            var list :List<String> = p_datum!!.split("-")
+            year = list[0].toInt()
+            month = list[1].toInt()
+            day   = list[2].toInt()
+        }
+        c.set(year,month,day)
+        getRecepies(year, month, day)
+        sendDataToFragment(year.toString() + "-" + month.toString() + "-" + day.toString())
+        val time = c.time
+        val dateInfo = DateFormat.getDateInstance(DateFormat.FULL).format(time)
+        tv_date.text = dateInfo
+    }
+//    fun showmenu(visible : Boolean){
+//        if (!visible){
+//            fb_day_Add.show()
+//            fb_day_Edit.show()
+//            fb_day_Edit.visibility = View.VISIBLE
+//            fb_day_Add.visibility = View.VISIBLE
+//            fabVisible = true
+//        }else{
+//
+//            fb_day_Add.hide()
+//            fb_day_Edit.hide()
+//            fb_day_Edit.visibility = View.GONE
+//            fb_day_Add.visibility = View.GONE
+//            fabVisible = false
+//        }
+//    }
 
     private fun getRecepies(year: Int, month: Int, day : Int) {
         val activity = getContext()
@@ -139,10 +190,15 @@ class DayFragment : Fragment(R.layout.fragment_day) {
         var dataAdapter = ArrayList<SQLdata.Week>()
         val activity = getContext()
         val DB = DBHelper(activity!!)
+        var title : String
         for (i in recepies){
             val where = getWhere(i.recept_id)
             val recept = DB.selectTitleIMG(where)
-            dataAdapter.add(SQLdata.Week(i.id,recept[0].title,recept[0].img,i.type))
+            title = recept[0].title
+            if (title.length > 30){
+                title.substring(0, 30) + "..."
+            }
+            dataAdapter.add(SQLdata.Week(i.id,title,recept[0].img,i.type))
         }
 
         rv_dayfrag_snidane.layoutManager = LinearLayoutManager(activity!!)
@@ -185,10 +241,15 @@ class DayFragment : Fragment(R.layout.fragment_day) {
         var dataAdapter = ArrayList<SQLdata.Week>()
         val activity = getContext()
         val DB = DBHelper(activity!!)
+        var title : String
         for (i in recepies){
             val where = getWhere(i.recept_id)
             val recept = DB.selectTitleIMG(where)
-            dataAdapter.add(SQLdata.Week(i.id,recept[0].title,recept[0].img,i.type))
+            title = recept[0].title
+            if (title.length > 30){
+                title.substring(0, 30) + "..."
+            }
+            dataAdapter.add(SQLdata.Week(i.id,title,recept[0].img,i.type))
         }
 
         rv_dayfrag_obed.layoutManager = LinearLayoutManager(activity!!)
@@ -231,10 +292,15 @@ class DayFragment : Fragment(R.layout.fragment_day) {
         var dataAdapter = ArrayList<SQLdata.Week>()
         val activity = getContext()
         val DB = DBHelper(activity!!)
+        var title : String
         for (i in recepies){
             val where = getWhere(i.recept_id)
             val recept = DB.selectTitleIMG(where)
-            dataAdapter.add(SQLdata.Week(i.id,recept[0].title,recept[0].img,i.type))
+            title = recept[0].title
+            if (title.length > 30){
+                title.substring(0, 30) + "..."
+            }
+            dataAdapter.add(SQLdata.Week(i.id,title,recept[0].img,i.type))
         }
 
         rv_dayfrag_svacina.layoutManager = LinearLayoutManager(activity!!)
@@ -277,10 +343,15 @@ class DayFragment : Fragment(R.layout.fragment_day) {
         var dataAdapter = ArrayList<SQLdata.Week>()
         val activity = getContext()
         val DB = DBHelper(activity!!)
+        var title : String
         for (i in recepies){
             val where = getWhere(i.recept_id)
             val recept = DB.selectTitleIMG(where)
-            dataAdapter.add(SQLdata.Week(i.id,recept[0].title,recept[0].img,i.type))
+            title = recept[0].title
+            if (title.length > 30){
+                title = title.substring(0, 30) + "..."
+            }
+            dataAdapter.add(SQLdata.Week(i.id,title,recept[0].img,i.type))
         }
 
         rv_dayfrag_vecere.layoutManager = LinearLayoutManager(activity!!)
@@ -334,6 +405,7 @@ class DayFragment : Fragment(R.layout.fragment_day) {
             tv_date.text = dateInfo
             getRecepies( c.get(Calendar.YEAR),c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH))
         }
+        sendDataToFragment(c.get(Calendar.YEAR).toString() + "-" + c.get(Calendar.MONTH).toString() + "-" + c.get(Calendar.DAY_OF_MONTH).toString())
         return
     }
     private fun getWhere(recept_id : Int):String{
@@ -353,7 +425,7 @@ class DayFragment : Fragment(R.layout.fragment_day) {
 //        }
 //        where = where+")"
 //        return where
-        var where  = "AND RECEPT.ID = $recept_id "
+        var where  = " RECEPT.ID = $recept_id "
         return where
     }
 
@@ -386,6 +458,10 @@ class DayFragment : Fragment(R.layout.fragment_day) {
         }else{
             Toast.makeText(activity!!, "Nepodařilo se vymazat záznam", Toast.LENGTH_LONG).show()
         }
+    }
+
+    fun sendDataToFragment(data: String) {
+        sharedViewModel.sharedData.value = data
     }
 }
 

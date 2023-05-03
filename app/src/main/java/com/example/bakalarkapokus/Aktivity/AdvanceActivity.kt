@@ -3,6 +3,7 @@ package com.example.bakalarkapokus.Aktivity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
@@ -52,7 +53,7 @@ class AdvanceActivity : AppCompatActivity(){
                     true
                 }
                 R.id.miItem2 -> {
-                    val where = " "
+                    val where = " RECEPT.ID <> 0 "
                     var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
                     arraySearched = DBHelper(this@AdvanceActivity).selectTitleIMG(where)
                     Intent(this@AdvanceActivity,SearchedActivity::class.java).also {
@@ -125,6 +126,13 @@ class AdvanceActivity : AppCompatActivity(){
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (currentFocus != null){
+            hideKeyboard(this)
+        }
+        return super.dispatchTouchEvent(ev)
     }
 //    fun resize
 
@@ -210,38 +218,50 @@ class AdvanceActivity : AppCompatActivity(){
         val typ = ac_typeAV.text.toString()
         val category = ac_categoryAV.text.toString()
         if (typ.isNotEmpty()){
-            where = where + "AND ( RECEPT.TYPE = '$typ' ) "
+            where = where + " ( RECEPT.TYPE = '$typ' ) "
         }
         if (category.isNotEmpty()){
-            where = where + "AND ( RECEPT.CATEGORY ='$category'  )"
+            if (where.length > 1) {
+                where = where + " ( RECEPT.CATEGORY ='$category'  )"
+            }else{
+                where = where + "AND ( RECEPT.CATEGORY ='$category'  )"
+            }
         }
 //        val type = ac_type.text.toString()
 //        val category = ac_category.
         if (data_id.isNotEmpty()){
             val sur = getWhereSur()
-            where = where + " AND " + sur
+            if (where.length < 2){
+                where = where + " " + sur
+            }else{
+                where = where + " AND " + sur
+            }
         }
 //        val sur = " AND " + getWhereSur()
         return where
     }
     fun getWhereSur(): String{
-        var where : String = "("
+        var where : String = " SUROVINY_RECEPT.INGREDIENCE_ID IN ("
         var first = true
         for (i in data_id){
             if (first){
                 first = false
-                where = where + "SUROVINY_RECEPT.INGREDIENCE_ID = " + i
+                where = where + i
                 continue
             }
-            where = where + " or SUROVINY_RECEPT.INGREDIENCE_ID = " + i
+            where = where +","+ i
         }
-        where = where+")"
+        where = where+" )"
         return where
     }
 
     fun callActivity(where:String){
+        var text = where
+        if (where.isEmpty()){
+            text = " RECEPT.ID <> 0 "
+        }
         var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
-        arraySearched = DBHelper(this@AdvanceActivity).selectTitleIMG(where)
+        arraySearched = DBHelper(this@AdvanceActivity).selectTitleIMG(text)
         if (arraySearched.isNotEmpty()) {
             Intent(this@AdvanceActivity, SearchedActivity::class.java).also {
                 it.putExtra("EXTRA_SEARCHED", arraySearched)

@@ -22,6 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+
+
             <ImageView
                 android:id="@+id/Iv_weekfrag_prew"
                 android:layout_width="wrap_content"
@@ -33,16 +35,28 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/primary" />
 
+            <ImageView
+                android:id="@+id/iv_weekfrag_cal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_calendar"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintEnd_toStartOf="@+id/tv_weekfrag_frsday"
+                app:layout_constraintStart_toEndOf="@+id/Iv_weekfrag_prew"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/tv_weekfrag_frsday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/app_name"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/tv_weekfrag_lstday"
-                app:layout_constraintStart_toEndOf="@+id/Iv_weekfrag_prew"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -62,11 +76,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/app_name"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/Iv_weekfrag_next"
-                app:layout_constraintStart_toEndOf="@+id/tv_weekfrag_frsday"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -95,9 +109,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_weekfrag_po"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_weekfrag_po" />
@@ -117,9 +131,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_weekfrag_ut"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_weekfrag_ut" />
@@ -139,9 +153,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_weekfrag_st"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_weekfrag_st" />
@@ -161,9 +175,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_weekfrag_ct"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_weekfrag_ct" />
@@ -183,9 +197,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_weekfrag_pa"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_weekfrag_pa" />
@@ -205,9 +219,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_weekfrag_so"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_weekfrag_so" />
@@ -227,10 +241,11 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_weekfrag_ne"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:paddingBottom="100dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_weekfrag_ne" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -251,28 +266,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/secondary"
-            android:visibility="gone"
-            android:src="@drawable/ic_edit"
-            app:fabSize="mini"
-            android:layout_margin="4dp"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fb_week_Edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/secondary"
-            android:visibility="gone"
             android:src="@drawable/ic_add"
-            app:fabSize="mini"
-            android:layout_margin="4dp" />
-
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fb_week"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/secondary"
-            android:layout_margin="8dp" />
+            android:layout_margin="4dp"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

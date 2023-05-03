@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.bakalarkapokus.Adaptery.ReceptAdapter
@@ -68,14 +69,17 @@ class ReceptActivity: AppCompatActivity() {
                 R.id.miItem1 -> {
                     val intent = Intent(this, SpizActivity::class.java)
                     startActivity(intent)
+                    finish()
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.miItem2 -> {
-                    val where = " "
+                    val where = "  RECEPT.ID <> 0 "
                     var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
                     arraySearched = DBHelper(this@ReceptActivity).selectTitleIMG(where)
                     Intent(this@ReceptActivity,SearchedActivity::class.java).also {
                         it.putExtra("EXTRA_SEARCHED", arraySearched)
+                        finish()
                         startActivity(it)
                     }
                     true
@@ -90,10 +94,12 @@ class ReceptActivity: AppCompatActivity() {
                 R.id.miItem3 ->{
                     val intent = Intent(this, AdvanceActivity::class.java)
                     startActivity(intent)
+                    finish()
                     true
                 }R.id.miItem4 ->{
                 val intent = Intent(this, CalendarActivity::class.java)
                 startActivity(intent)
+                finish()
                 true
                 }
                 else -> false
@@ -130,7 +136,7 @@ class ReceptActivity: AppCompatActivity() {
             dialogInterface.dismiss()
             SearchedActivity.SearchableMyclass.activity?.finish()
             finish()
-            val where = " "
+            val where = " RECEPT.ID <> 0 "
             var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
             arraySearched = DBHelper(this@ReceptActivity).selectTitleIMG(where)
             Intent(this@ReceptActivity,SearchedActivity::class.java).also {

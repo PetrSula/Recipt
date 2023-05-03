@@ -26,11 +26,14 @@ import kotlinx.android.synthetic.main.activity_main.ivSearch
         - live of activity
         - přenesení SQL lite a její rozšíření případné
         - TextChangedListener automatikcá změna po naúsaání textu pro RV k receptům
-        - naplnit úřidávání jíeelníčku základními daty. Den a recept pokud se řichází z receptu
         - ošetřit životnost Activity Jídelníček
         - Odebrání klávesnice po ukončení přidávání receptu do jídleníčku
         - výběr data u week framentu a day fragmentu přes ikonku kalendáře
         - omezení délky textu receptu
+        - Když v receptu měním surovinu (např. množství) , zobrazí se: „Surovina se již nachází v receptu, přejte si ji změnit.“ To je trochu zavádějící oznámení.
+        - ulož surovinu může být zavádějící a neuloží recept
+        - BUG - změna datumů v fragmentech
+         - futura přeskaovaní mezi tab Calendat by mohlo měnit datumy
 
  */
 fun hideKeyboard(activity: Activity) {
@@ -78,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.miItem2 -> {
-                    val where = " "
+                    val where = " RECEPT.ID <> 0 "
                     var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
                     arraySearched = DBHelper(this@MainActivity).selectTitleIMG(where)
                     Intent(this@MainActivity,SearchedActivity::class.java).also {
@@ -204,7 +207,7 @@ class MainActivity : AppCompatActivity() {
 //                val intent = Intent(this@MainActivity,SearchedActivity::class.java).also {
 //                    it.putExtra("EXTRA_SEARCHED",arraySearched)
 //                    startActivity(it)
-                val where = "AND (RECEPT.CATEGORY = " + "'"+category[position].string+"')"
+                val where = " (RECEPT.CATEGORY = " + "'"+category[position].string+"')"
                 var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
                 arraySearched = DBHelper(this@MainActivity).selectTitleIMG(where)
                 Intent(this@MainActivity,SearchedActivity::class.java).also {
@@ -243,7 +246,7 @@ class MainActivity : AppCompatActivity() {
 //                val intent = Intent(this@MainActivity,SearchedActivity::class.java).also {
 //                    it.putExtra("EXTRA_SEARCHED",arraySearched)
 //                    startActivity(it)
-                val where = " AND RECEPT.TYPE = " + "'"+type[position].string+"'"
+                val where = " RECEPT.TYPE = " + "'"+type[position].string+"'"
                 var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
                 arraySearched = DBHelper(this@MainActivity).selectTitleIMG(where)
                 Intent(this@MainActivity,SearchedActivity::class.java).also {

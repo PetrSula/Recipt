@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bakalarkapokus.Tables.DBHelper
@@ -50,22 +51,26 @@ class SpizActivity :AppCompatActivity(){
                     val intent = Intent(this, SpizActivity::class.java)
                     finish()
                     startActivity(intent)
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.miItem2 -> {
-                    val where = " "
+                    val where = " RECEPT.ID <> 0 "
                     var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
                     arraySearched = DBHelper(this@SpizActivity).selectTitleIMG(where)
                     Intent(this@SpizActivity,SearchedActivity::class.java).also {
                         it.putExtra("EXTRA_SEARCHED", arraySearched)
                         startActivity(it)
+                        finish()
+                        drawerLayout.closeDrawer(GravityCompat.START)
                     }
                     true
                 }
                 R.id.miItem3 ->{
-                    finish()
                     val intent = Intent(this, AdvanceActivity::class.java)
                     startActivity(intent)
+                    finish()
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.miItem0 -> {
@@ -73,10 +78,14 @@ class SpizActivity :AppCompatActivity(){
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     intent.putExtra("EXIT",true)
                     startActivity(intent)
+                    finish()
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }R.id.miItem4 ->{
                 val intent = Intent(this, CalendarActivity::class.java)
                 startActivity(intent)
+                finish()
+                drawerLayout.closeDrawer(GravityCompat.START)
                 true
             }
                 else -> false

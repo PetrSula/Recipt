@@ -83,6 +83,10 @@ class weekAdapter ( val context: Context, val items: ArrayList<SQLdata.Week>,val
         holder.ivEdit.setOnClickListener {
             mListener.imageEditClick(item.id)
         }
+        DrawableCompat.setTint(
+            DrawableCompat.wrap(holder.ivEdit.drawable),
+            ContextCompat.getColor(context,R.color.third))
+        DrawableCompat.setTint(DrawableCompat.wrap(holder.ivDel.drawable),ContextCompat.getColor(context,R.color.ikon))
     }
 
     override fun getItemCount(): Int {

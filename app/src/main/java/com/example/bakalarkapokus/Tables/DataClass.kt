@@ -19,7 +19,6 @@ sealed class SQLdata {
         val category: String,
         val time: String,
         val postup: String,
-        val quantity: String = "",
         val portion: Int,
         val img: String
     )

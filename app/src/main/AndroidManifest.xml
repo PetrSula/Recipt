@@ -17,26 +17,36 @@
         <activity
             android:name=".Aktivity.AddCalendarActivity"
             android:exported="false"
-            android:label="@string/title_activity_add_calendar"
-            android:theme="@style/Theme.BakalarkaPokus.NoActionBar" />
+            android:label="Přidat do Jídelníčku"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Aktivity.SearchedActivity"
             android:exported="false"
             android:label="@string/title_activity_searched"
-            android:theme="@style/Theme.BakalarkaPokus.NoActionBar" />
+            android:theme="@style/Theme.BakalarkaPokus.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Aktivity.SpizActivity"
-            android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".Aktivity.ReceptActivity" />
+            android:windowSoftInputMode="stateHidden"
+            android:label="Spíž"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Aktivity.ReceptActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Aktivity.AddRecept"
-            android:windowSoftInputMode="stateHidden" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BakalarkaPokus.NoActionBar"/>
         <activity
             android:name=".Aktivity.AdvanceActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:label="Rozšířené vyhledávání"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Aktivity.CalendarActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:label=" Jídelníček "
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Aktivity.MainActivity"
             android:exported="true">

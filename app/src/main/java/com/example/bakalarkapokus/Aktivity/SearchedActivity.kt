@@ -124,10 +124,6 @@ class SearchedActivity : AppCompatActivity() {
             return
         }
     }
-    fun edit(){
-        Toast.makeText(applicationContext, "Něco se děje", Toast.LENGTH_LONG).show()
-        return
-    }
 
     private fun showRecept(id: Int) {
         Intent(this,ReceptActivity::class.java).also {

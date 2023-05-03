@@ -45,6 +45,16 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/iv_dayfrag_cal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_calendar"
+                app:layout_constraintEnd_toStartOf="@+id/tv_dayfrag_day"
+                app:layout_constraintStart_toEndOf="@+id/Iv_dayfrag_prew"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
                 android:id="@+id/Iv_dayfrag_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -60,6 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
                 android:text="Snídaně"
                 android:textSize="24dp"
                 android:textStyle="bold"
@@ -68,7 +79,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_dayfrag_snidane"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
@@ -77,7 +88,7 @@
 
             <TextView
                 android:id="@+id/tv_dayfrag_obed"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
@@ -89,7 +100,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_dayfrag_obed"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
@@ -110,7 +121,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_dayfrag_svacina"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
@@ -131,10 +142,11 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_dayfrag_vecere"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
+                android:paddingBottom="100dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_dayfrag_vecere" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -157,28 +169,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/secondary"
-            android:src="@drawable/ic_edit"
-            app:fabSize="mini"
-            android:visibility="gone"
+            android:src="@drawable/ic_add"
             android:layout_margin="8dp"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fb_day_Edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/secondary"
-            android:src="@drawable/ic_add"
-            app:fabSize="mini"
-            android:visibility="gone"
-            android:layout_margin="8dp" />
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/fb_day_Edit"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:backgroundTint="@color/secondary"-->
+<!--            android:src="@drawable/ic_add"-->
+<!--            app:fabSize="mini"-->
+<!--            android:visibility="gone"-->
+<!--            android:layout_margin="8dp" />-->
 
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fb_day"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/secondary"
-            android:layout_margin="8dp" />
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/fb_day"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:backgroundTint="@color/secondary"-->
+<!--            android:layout_margin="8dp" />-->
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

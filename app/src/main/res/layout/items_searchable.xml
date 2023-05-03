@@ -35,13 +35,13 @@
 
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:paddingStart="16dp"
+            android:layout_width="310dp"
+            android:layout_height="83dp"
             android:layout_alignParentEnd="true"
             android:layout_toRightOf="@+id/view_img"
             android:gravity="fill_vertical"
             android:hint="Recept"
+            android:paddingStart="16dp"
             android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/view_img"

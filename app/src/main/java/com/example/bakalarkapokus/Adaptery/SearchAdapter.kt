@@ -73,7 +73,6 @@ class SearchAdapter (val context: Context, private val sList: ArrayList<SQLdata.
 //        }
 
 
-
         val path = item.img
         val check : Boolean = "pictures/" in path
         if (check) {
@@ -92,7 +91,6 @@ class SearchAdapter (val context: Context, private val sList: ArrayList<SQLdata.
                 .into(holder.ivIMG)
         }
     }
-
 
 
     override fun getItemCount(): Int {

@@ -16,7 +16,9 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.system.Os.read
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -74,6 +76,7 @@ class AddRecept: AppCompatActivity() {
         gv_id = intent.getIntExtra("EXTRA_ID",0)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_recept)
+        et_direction_to_cook.movementMethod = ScrollingMovementMethod.getInstance()
 
         iv_add_dish_image.setOnClickListener{
             customImageSelectionDialog()
@@ -136,7 +139,12 @@ class AddRecept: AppCompatActivity() {
         btn_add_Upload.setOnClickListener {
             importCSV()
         }
-
+    }
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (currentFocus != null){
+            hideKeyboard(this)
+        }
+        return super.dispatchTouchEvent(ev)
     }
 
     private fun setAdaptercategory() {
@@ -523,7 +531,6 @@ class AddRecept: AppCompatActivity() {
         }
     }
 
-
     private fun showSuroviny(){
         val adapter = SurovinyAdapter(this, data)
         rv_addSuroviny.adapter = adapter
@@ -629,7 +636,7 @@ class AddRecept: AppCompatActivity() {
             et_cooking_time.setError("Povinné")
             chech = false }
         if (chech){
-            val status = DB.insertRECEPT(SQLdata.Recept(0,title, type,category,time, postup, quantity, portion ,img))
+            val status = DB.insertRECEPT(SQLdata.Recept(0,title, type,category,time, postup,  portion ,img))
             //insertDataINGREDIENCE(SQLdata.Ingredience(0,name))
             if (status > 0){
                 Toast.makeText(applicationContext, "Přidáno", Toast.LENGTH_LONG).show()
@@ -692,7 +699,7 @@ class AddRecept: AppCompatActivity() {
             iv_add_categ_err.visibility = View.VISIBLE
             chech = false}
         if (chech){
-            val status = DB.updateRecept(SQLdata.Recept(id,title, type,category,time,postup,quantity,portion,img))
+            val status = DB.updateRecept(SQLdata.Recept(id,title, type,category,time,postup,portion,img))
             updateSurovinyRecept(id)
             displayRecept(id)
         }

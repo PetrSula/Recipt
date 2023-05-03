@@ -17,7 +17,7 @@ import java.io.FileOutputStream
 const val dbName = "MyDB.db"
 
 
-class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null,9) {
+class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABASE_NAME,null,11) {
     private var dataBase: SQLiteDatabase? = null
 
     init {
@@ -117,7 +117,7 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
             db!!.execSQL(drop_table_RECEPT)
             db.execSQL(Create_table_RECEPT)
         }
-        if (newVersion == 9){
+        if (newVersion == 11){
             val Create_table_CALENDAR =
                 "CREATE TABLE $TABLE_CALENDAR ($ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "$YEAR INTEGER," +
@@ -126,6 +126,19 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
                         "$RECEPT_ID INTEGER," +
                         "$TYPE TEXT)"
             db!!.execSQL(Create_table_CALENDAR)
+        }
+        if (newVersion == 10){
+            val drop_table_RECEPT = "DROP TABLE " + TABLE_RECEPT
+            val Create_table_RECEPT = "CREATE TABLE " + TABLE_RECEPT + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                    TITLE+" TEXT,"+
+                    TYPE +" TEXT," +
+                    CATEGORY + " TEXT," +
+                    TIME + " TEXT," +
+                    POSTUP + " TEXT,"+
+                    PORTION + " INTEGER,"+
+                    IMG + " TEXT" +")"
+            db!!.execSQL(drop_table_RECEPT)
+            db.execSQL(Create_table_RECEPT)
         }
 
     }
@@ -345,7 +358,7 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         contentValues.put(CATEGORY,recept.category)
         contentValues.put(TIME,recept.time)
         contentValues.put(POSTUP,recept.postup)
-        contentValues.put(QUANTITY,recept.quantity)
+//        contentValues.put(QUANTITY,recept.quantity)
         contentValues.put(PORTION,recept.portion)
         contentValues.put(IMG,recept.img)
 
@@ -373,7 +386,6 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         var type : String
         var category : String
         var time : String
-        var quantity : String
         var portion : Int
         var id:Int
         if (cursor.moveToFirst()){
@@ -383,10 +395,9 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
                 category = cursor.getString(cursor.getColumnIndexOrThrow(CATEGORY))
                 time = cursor.getString(cursor.getColumnIndexOrThrow(TIME))
                 postup = cursor.getString(cursor.getColumnIndexOrThrow(POSTUP))
-                quantity = cursor.getString(cursor.getColumnIndexOrThrow(QUANTITY))
                 portion = cursor.getInt(cursor.getColumnIndexOrThrow(PORTION))
                 img = cursor.getString(cursor.getColumnIndexOrThrow(IMG))
-                val data = SQLdata.Recept(0,title,type,category,time,postup,quantity,portion, img)
+                val data = SQLdata.Recept(0,title,type,category,time,postup,portion, img)
                 recept.add(data)
             }while (cursor.moveToNext())
         }
@@ -553,12 +564,41 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         }
         return arraySearched
     }
+    fun selectExactTitle(title:String) : ArrayList<SQLdata.AraySearched>{
+        var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
+        val selecQuery = "SELECT $ID, $TITLE, $IMG FROM $TABLE_RECEPT WHERE $TITLE = '$title'"
+        val DB = this.readableDatabase
+        var cursor: Cursor? = null
+        var title:String
+        var img:String
+        var id:Int = 0
+        try {
+            cursor = DB.rawQuery(selecQuery, null)
+        } catch (e: SQLiteException) {
+            DB.execSQL(selecQuery)
+            return ArrayList()
+        }
+        if (cursor.moveToFirst()) {
+            do {id = cursor.getInt(cursor.getColumnIndexOrThrow(ID))
+                title = cursor.getString(cursor.getColumnIndexOrThrow(TITLE))
+                img = cursor.getString(cursor.getColumnIndexOrThrow(IMG))
+                val data = SQLdata.AraySearched(id,title,img)
+                arraySearched.add(data)
+            }while (cursor.moveToNext())
+        }
+        return arraySearched
+    }
 
     fun selectTitleIMG(where : String) : ArrayList<SQLdata.AraySearched>{
         var arraySearched:ArrayList<SQLdata.AraySearched> = ArrayList<SQLdata.AraySearched>()
         val DB = this.readableDatabase
-        val selecQuery = "SELECT DISTINCT $TABLE_RECEPT."+ ID+", $TABLE_RECEPT."+ TITLE+", $TABLE_RECEPT."+ IMG +
-                " FROM "+ TABLE_RECEPT+", "+ TABLE_SUROVINY_RECEPT + " WHERE (SUROVINY_RECEPT.RECEPT_ID = RECEPT.ID) " + where
+        val selecQuery = "SELECT $TABLE_RECEPT.$ID, $TABLE_RECEPT.$TITLE, $TABLE_RECEPT.$IMG," +
+                " COUNT(DISTINCT $TABLE_SUROVINY_RECEPT.$INGREDIENCE_ID) AS ingredient_count" +
+                " FROM $TABLE_RECEPT" +
+                " JOIN $TABLE_SUROVINY_RECEPT ON $TABLE_RECEPT.$ID = $TABLE_SUROVINY_RECEPT.$RECEPT_ID" +
+                " WHERE"  + where +
+                " GROUP BY $TABLE_RECEPT.$ID, $TABLE_RECEPT.$TITLE" +
+                " ORDER BY ingredient_count DESC"
         var title:String
         var img:String
         var id:Int = 0
@@ -587,7 +627,6 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         contentValues.put(CATEGORY,recept.category)
         contentValues.put(TIME,recept.time)
         contentValues.put(POSTUP,recept.postup)
-        contentValues.put(QUANTITY,recept.quantity)
         contentValues.put(PORTION,recept.portion)
         contentValues.put(IMG,recept.img)
         db.update(TABLE_RECEPT,contentValues,"ID=${recept.id}", arrayOf())
@@ -680,6 +719,17 @@ class DBHelper (private val context: Context) :SQLiteOpenHelper(context, DATABAS
         val success = DB.delete(TABLE_CALENDAR, "  $ID = $id", null)
         DB.close()
         return success
+    }
+    fun updateCalendar(calendar: SQLdata.Calendar){
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(TYPE,calendar.type)
+        contentValues.put(DAY,calendar.day)
+        contentValues.put(MONTH,calendar.month)
+        contentValues.put(YEAR,calendar.year)
+        contentValues.put(RECEPT_ID,calendar.recept_id)
+        db.update(TABLE_CALENDAR,contentValues,"ID=${calendar.id}", arrayOf())
+        db.close()
     }
 
     companion object{
