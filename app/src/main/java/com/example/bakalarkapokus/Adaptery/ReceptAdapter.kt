@@ -38,11 +38,11 @@ class ReceptAdapter(val context: Context, private val sList: ArrayList<SQLdata.R
         val addOK = spis.any { it.name == item.name }
         if (addOK){
 
-            DrawableCompat.setTint(DrawableCompat.wrap(holder.ivCkeckon.drawable),ContextCompat.getColor(context,R.color.ikon))
+            DrawableCompat.setTint(DrawableCompat.wrap(holder.ivCkeckon.drawable),ContextCompat.getColor(context,R.color.black))
         }
         else{val drawable = ContextCompat.getDrawable(context,R.drawable.ic_not_in)
             holder.ivCkeckon.setImageDrawable(drawable)
-            DrawableCompat.setTint(DrawableCompat.wrap(holder.ivCkeckon.drawable),ContextCompat.getColor(context,R.color.third))
+            DrawableCompat.setTint(DrawableCompat.wrap(holder.ivCkeckon.drawable),ContextCompat.getColor(context,R.color.secondary))
         }
 //        var color = Color.parseColor("#000000")
 //        holder.ivCkeckon.drawable.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_ATOP)

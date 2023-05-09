@@ -35,13 +35,13 @@ class SpizAdapter(val context: Context, val items: ArrayList<SQLdata.Spiz>):
                 context.deleteRecord(item)
             }
         }
-        DrawableCompat.setTint(DrawableCompat.wrap(holder.tvDelete.drawable),ContextCompat.getColor(context,R.color.ikon))
+        DrawableCompat.setTint(DrawableCompat.wrap(holder.tvDelete.drawable),ContextCompat.getColor(context,R.color.black))
         holder.tvEdit.setOnClickListener {
             if (context is SpizActivity) {
                 context.updateRecord(item)
             }
         }
-        DrawableCompat.setTint(DrawableCompat.wrap(holder.tvEdit.drawable),ContextCompat.getColor(context,R.color.third))
+        DrawableCompat.setTint(DrawableCompat.wrap(holder.tvEdit.drawable),ContextCompat.getColor(context,R.color.secondary))
     }
 
 

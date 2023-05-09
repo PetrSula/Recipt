@@ -262,6 +262,7 @@ class SpizActivity :AppCompatActivity(){
 
                     setupListofDataIntoRecyclerView()
                 }
+                updateDialog.dismiss()
             }else{
                 Toast.makeText(
                     applicationContext,"Něco se nepovedlo", Toast.LENGTH_LONG).show()

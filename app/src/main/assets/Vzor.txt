@@ -1,7 +1,7 @@
 Název: Název
 Druh: Druh
 Kategorie: Kategorie
-Suroviny : surovina množství, surovina množství
+Suroviny: surovina množství, surovina množství
 Čas: HH:MM
 Porce: 0-99
 Postup: Postup

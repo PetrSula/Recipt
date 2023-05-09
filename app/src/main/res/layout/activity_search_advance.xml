@@ -94,24 +94,24 @@
 
                 <Button
                     android:id="@+id/btn_addItem"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:layout_marginStart="32dp"
                     android:backgroundTint="@color/secondary"
                     android:text="Přidat Surovinu"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvAddSearched" />
 
                 <Button
                     android:id="@+id/btn_addAll"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:layout_marginStart="32dp"
                     android:backgroundTint="@color/secondary"
                     android:text="Vše ze spíže"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btn_addItem" />
@@ -167,12 +167,12 @@
 
                 <Button
                     android:id="@+id/btn_advadnceSerch"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:layout_marginStart="32dp"
                     android:backgroundTint="@color/secondary"
                     android:text="Vyhledat"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/til_category" />

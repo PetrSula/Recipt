@@ -172,13 +172,13 @@
                     android:id="@+id/tvTimeminutes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="94dp"
                     android:paddingStart="0dp"
                     android:text=""
                     android:textColor="?attr/text"
                     android:textSize="18dp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tvTime"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -210,6 +210,7 @@
                     android:layout_marginStart="8dp"
                     android:textSize="18dp"
                     android:textStyle="bold"
+                    android:paddingStart="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv_portionR"
@@ -250,8 +251,8 @@
                         app:drawableTopCompat="@drawable/ic_edit"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
-                        android:tint="@color/ikon"
-                        android:drawableTint="@color/ikon"/>
+                        android:tint="@color/secondary"
+                        android:drawableTint="@color/primary"/>
 
                     <TextView
                         android:id="@+id/tv_recept_delete"
@@ -262,7 +263,7 @@
                         android:text="Vymazat"
                         android:tint="@color/ikon"
                         app:drawableTopCompat="@android:drawable/ic_menu_delete"
-                        android:drawableTint="@color/ikon"/>
+                        android:drawableTint="@color/primary"/>
 
                     <TextView
                         android:id="@+id/iv_recept_export"
@@ -273,7 +274,7 @@
                         android:text="Exportovat"
                         android:tint="@color/ikon"
                         app:drawableTopCompat="@drawable/ic_archive"
-                        android:drawableTint="@color/ikon"/>
+                        android:drawableTint="@color/primary"/>
                     <TextView
                         android:id="@+id/iv_recept_calendar"
                         android:layout_width="wrap_content"
@@ -283,7 +284,7 @@
                         android:text="Jídelniček"
                         android:tint="@color/ikon"
                         app:drawableTopCompat="@drawable/ic_calendar"
-                        android:drawableTint="@color/ikon"/>
+                        android:drawableTint="@color/primary"/>
 
                 </LinearLayout>
                 <View

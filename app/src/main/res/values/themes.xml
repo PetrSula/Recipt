@@ -3,14 +3,14 @@
     <style name="Theme.BakalarkaPokus" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryVariant">@color/header</item>
+        <item name="colorPrimaryVariant">@color/primary</item>
         <item name="colorOnPrimary">#f6f5ee</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/primary</item>
-        <item name="colorSecondaryVariant">@color/third</item>
+        <item name="colorSecondaryVariant">@color/white</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="android:colorBackground">@color/third</item>
-        <item name="rv_color">#FFF07A</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="rv_color">@color/white</item>
         <item name="text">@color/black</item>        <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->

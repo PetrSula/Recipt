@@ -196,7 +196,7 @@ class DayFragment (string: String) : Fragment(R.layout.fragment_day) {
             val recept = DB.selectTitleIMG(where)
             title = recept[0].title
             if (title.length > 30){
-                title.substring(0, 30) + "..."
+                title =title.substring(0, 30) + "..."
             }
             dataAdapter.add(SQLdata.Week(i.id,title,recept[0].img,i.type))
         }
@@ -247,7 +247,7 @@ class DayFragment (string: String) : Fragment(R.layout.fragment_day) {
             val recept = DB.selectTitleIMG(where)
             title = recept[0].title
             if (title.length > 30){
-                title.substring(0, 30) + "..."
+                title =title.substring(0, 25) + "..."
             }
             dataAdapter.add(SQLdata.Week(i.id,title,recept[0].img,i.type))
         }
@@ -298,7 +298,7 @@ class DayFragment (string: String) : Fragment(R.layout.fragment_day) {
             val recept = DB.selectTitleIMG(where)
             title = recept[0].title
             if (title.length > 30){
-                title.substring(0, 30) + "..."
+                title =title.substring(0, 30) + "..."
             }
             dataAdapter.add(SQLdata.Week(i.id,title,recept[0].img,i.type))
         }

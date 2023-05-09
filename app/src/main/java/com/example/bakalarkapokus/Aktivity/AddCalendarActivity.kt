@@ -301,7 +301,7 @@ class AddCalendarActivity : AppCompatActivity() {
                     startActivity(it)
                 }
             }else{
-                Toast.makeText(applicationContext,"Zázanam se nepovedlo upravit",Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext,"Zázanam se nepovedlo přidat",Toast.LENGTH_LONG).show()
             }
         }else {
             val status = DB.insertCalendar(SQLdata.Calendar(0,year, month, day, recept_id, type))

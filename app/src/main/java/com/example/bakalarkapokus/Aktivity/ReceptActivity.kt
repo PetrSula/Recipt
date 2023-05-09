@@ -237,7 +237,7 @@ class ReceptActivity: AppCompatActivity() {
         val type = data.type
         gv_time = data.time
         var timeArray: List<String> = data.time.split(":")
-        val time = setTime(timeArray)
+        val time = setTime(timeArray).trim()
         val category = data.category
         val portion = data.portion.toString()
         loadDataFromAsset(data.img)

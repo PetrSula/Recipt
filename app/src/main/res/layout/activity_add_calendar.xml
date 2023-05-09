@@ -38,6 +38,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Dnes"
+            android:textSize="18dp"
+            android:paddingTop="16dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,6 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_calendar"
+        android:paddingTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/Tv_caladd_calendar"
         app:layout_constraintTop_toTopOf="@+id/Tv_caladd_calendar" />
@@ -77,17 +80,24 @@
             android:textColor="?attr/text"
             android:textSize="15dp" />
     </com.google.android.material.textfield.TextInputLayout>
-
+<!--    <View-->
+<!--        android:id="@+id/viewHead"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="80dp"-->
+<!--        android:background="@color/secondary"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/til_type"/>-->
     <AutoCompleteTextView
         android:id="@+id/ac_Search_caladd"
-        android:layout_width="280dp"
+        android:layout_width="380dp"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/third"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
         android:hint="vyhledat recept"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
         android:iconifiedByDefault="false"
         android:padding="10dp"
@@ -103,10 +113,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ac_Search_caladd"
         android:background="?attr/rv_color"
-        android:paddingStart="16dp"
-        android:paddingTop="8dp"
+        android:paddingStart="24dp"
+        android:paddingTop="24dp"
         android:paddingEnd="16dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/ac_Search_caladd"
         app:layout_constraintEnd_toEndOf="parent"
         tools:visibility="gone" />
@@ -121,6 +131,7 @@
         android:textColor="?attr/text"
         android:textSize="26sp"
         android:visibility="gone"
+        android:paddingTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rv_Sear_meat"
@@ -132,7 +143,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginStart="16dp"
-        android:text="Náhlaed Jídelníčku"
+        android:text="Náhled do Jídelníčku"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvNoRecordsAvailable" />
 

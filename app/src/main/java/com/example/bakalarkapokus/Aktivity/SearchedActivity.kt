@@ -3,6 +3,7 @@ package com.example.bakalarkapokus.Aktivity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
@@ -34,16 +35,19 @@ class SearchedActivity : AppCompatActivity() {
         SearchableMyclass.activity = this@SearchedActivity
         val gv_title = intent.getStringExtra("EXTRA_TITLE")
         val arraySearched = intent.getSerializableExtra("EXTRA_SEARCHED") as ArrayList<SQLdata.AraySearched>
+        val actionBar = supportActionBar
+//        SET TITLE
+        if (gv_title.isNullOrBlank()){
+            actionBar?.title = "Recepty"
+            }
+        else{
+            actionBar?.title = gv_title
+        }
 
 
         setContentView(R.layout.activity_searched)
-        //        SET TITLE
-        val title = findViewById<TextView>(R.id.tvtitleSelected)
-        if (gv_title.isNullOrBlank()) {
-            title.text= ""
-        }else{
-            title.text = gv_title
-        }
+
+
         val drawerLayout = findViewById<DrawerLayout>(R.id.Dlsearch)
         val navView = findViewById<NavigationView>(R.id.navView)
 
@@ -61,11 +65,15 @@ class SearchedActivity : AppCompatActivity() {
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
-//                R.id.miItem2 -> {
-//                    val intent = Intent(this, ReceptActivita::class.java)
-//                    startActivity(intent)
-//                    true
-//                }
+                R.id.miItem2 -> {
+                    val where = "  RECEPT.ID <> 0 "
+                    actionBar?.title = "Recepty"
+                    var array = DBHelper(this).selectTitleIMG(where)
+                    setupListofDataIntoRecyclerView(array)
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    true
+
+                }
                 R.id.miItem3 ->{
                     val intent = Intent(this, AdvanceActivity::class.java)
                     startActivity(intent)
@@ -104,6 +112,12 @@ class SearchedActivity : AppCompatActivity() {
         }
         setupListofDataIntoRecyclerView(arraySearched)
 
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(toggle.onOptionsItemSelected(item)){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun search_handeler() {

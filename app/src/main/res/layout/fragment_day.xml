@@ -74,6 +74,7 @@
                 android:text="Snídaně"
                 android:textSize="24dp"
                 android:textStyle="bold"
+                android:textColor="@color/primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Iv_dayfrag_next" />
 
@@ -95,6 +96,7 @@
                 android:text="Oběd"
                 android:textSize="24dp"
                 android:textStyle="bold"
+                android:textColor="@color/primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_dayfrag_snidane" />
 
@@ -116,6 +118,7 @@
                 android:text="Svačina"
                 android:textSize="24dp"
                 android:textStyle="bold"
+                android:textColor="@color/primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_dayfrag_obed" />
 
@@ -137,6 +140,7 @@
                 android:text="Večeře"
                 android:textSize="24dp"
                 android:textStyle="bold"
+                android:textColor="@color/primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_dayfrag_svacina" />
 

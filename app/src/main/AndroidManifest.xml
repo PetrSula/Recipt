@@ -23,7 +23,6 @@
             android:name=".Aktivity.SearchedActivity"
             android:exported="false"
             android:label="@string/title_activity_searched"
-            android:theme="@style/Theme.BakalarkaPokus.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".Aktivity.SpizActivity"

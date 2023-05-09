@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Update Record"
+        android:text="Editovat Záznam"
         android:textColor="?attr/text"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -25,7 +25,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.25"
-            android:text="Name"
+            android:text="Název"
             android:textColor="?attr/text"
             android:textSize="18sp" />
 
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.75"
             android:textColor="?attr/text"
-            android:hint="Enter Name" />
+            android:hint="Surovina" />
     </LinearLayout>
 
     <LinearLayout
@@ -52,8 +52,8 @@
             android:foreground="?attr/selectableItemBackground"
             android:gravity="center"
             android:padding="10dp"
-            android:text="UPDATE"
-            android:textColor="@android:color/holo_red_dark"
+            android:text="EDITOVAT"
+            android:textColor="@color/primary"
             android:textStyle="bold" />
 
         <TextView
@@ -64,7 +64,7 @@
             android:gravity="center"
             android:inputType="textEmailAddress"
             android:padding="10dp"
-            android:text="CANCEL"
+            android:text="ZRUŠIT"
             android:textColor="?attr/text"
             android:textStyle="bold" />
 

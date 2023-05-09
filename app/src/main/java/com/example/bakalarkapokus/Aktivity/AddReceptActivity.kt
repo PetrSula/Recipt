@@ -44,6 +44,7 @@ import pub.devrel.easypermissions.EasyPermissions
 import java.io.*
 import java.lang.System.`in`
 import java.util.*
+import java.util.Collections.max
 
 
 /* ToDo  - default obrázek
@@ -275,7 +276,7 @@ class AddRecept: AppCompatActivity() {
         }
         at_AddSurovina.setText(sData.name)
         et_quantyti.setText(numQuan.trim())
-        SVadd.scrollToDescendant(et_direction_to_cook)
+        SVadd.scrollToDescendant(et_quantyti)
         adapterQuantity(type)
     }
 
@@ -464,10 +465,10 @@ class AddRecept: AppCompatActivity() {
             til_title.setError("Povinné")
             check = false
         } else if (type.isEmpty()){
-            ac_type.setError("Povinné")
+            iv_add_type_err.visibility = View.VISIBLE
             check = false
         }else if (category.isEmpty()){
-            ac_category.setError("Povinné")
+            iv_add_categ_err.visibility = View.VISIBLE
             check = false
         } else if (time.isEmpty()) {
             et_cooking_time.setError("Povinné")
@@ -777,6 +778,7 @@ class AddRecept: AppCompatActivity() {
                 "Nový odstavec postupu")
         builder.setPositiveButton("ROZUMÍM") { dialogInterface, which ->
             executeImport()
+            setPostupString = ""
             dialogInterface.dismiss()
         }
         builder.setNeutralButton("ZÍSKAT VZOR"){ dialogInterface, which ->

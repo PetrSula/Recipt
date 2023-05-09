@@ -42,7 +42,7 @@ class SurovinyAdapter (val context: Context, private val sList: ArrayList<SQLdat
         }
         DrawableCompat.setTint(
             DrawableCompat.wrap(holder.tvEdit.drawable),
-            ContextCompat.getColor(context,R.color.third))
+            ContextCompat.getColor(context,R.color.secondary))
         holder.tvDelete.setOnClickListener {
             if (context is AddRecept ) {
                 context.deleteSurovinu(item)
@@ -50,7 +50,7 @@ class SurovinyAdapter (val context: Context, private val sList: ArrayList<SQLdat
                 context.deleteSurovinu(item)
             }
         }
-        DrawableCompat.setTint(DrawableCompat.wrap(holder.tvDelete.drawable),ContextCompat.getColor(context,R.color.ikon))
+        DrawableCompat.setTint(DrawableCompat.wrap(holder.tvDelete.drawable),ContextCompat.getColor(context,R.color.black))
 
     }
 

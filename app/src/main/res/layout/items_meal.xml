@@ -42,7 +42,7 @@
 
     <TextView
         android:id="@+id/tvTitle"
-        android:layout_width="185dp"
+        android:layout_width="170dp"
         android:layout_height="80dp"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
@@ -50,6 +50,7 @@
         android:gravity="fill_vertical"
         android:hint="Recept"
         android:textSize="20dp"
+        android:textColor="@color/secondary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/view_img"
